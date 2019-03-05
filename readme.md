@@ -1,4 +1,4 @@
-<p align="center"><img src="http://drive.google.com/uc?export=view&id=1Xuh0U9ArzGk1QtcrMmmgI9f77kwJ13Po" width="256" height="300" onclick="false"></p>
+<p align="center"><img src="http://drive.google.com/uc?export=view&id=1PVrupg82ff6II69Mk7s50k5Vp2q3FrxY" width="256" height="300" onclick="false"></p>
 
 ## About Go語
 
