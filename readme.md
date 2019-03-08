@@ -15,7 +15,7 @@
 - **[Our Trello](https://trello.com/b/jK7QedcP/capston)**
 
 ## Applied technology
-
+- **[Vue.js](https://vuejs.org/)**
 - **[Laravel](https://laravel.com/)**
 - **HTML5 Web Player**
 - **[Python](https://www.python.org/)**
