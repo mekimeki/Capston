@@ -9,7 +9,7 @@
 - **TeamLeader : [Lee Sujae](https://github.com/must012)**
 - **[Kim Somin](https://github.com/KSMING94)**
 - **[Choi Chanmin](https://github.com/dnfltkxkd123)**
-- **[Kim Seunyeon](https://github.com/kimseungyeon2)**
+- **[Kim Seunyeon:よろしくお願いいたします。](https://github.com/kimseungyeon2)**
 - **[Joe Hyekyeong](https://github.com/joehyekyeong)**
 
 - **[Our Trello](https://trello.com/b/jK7QedcP/capston)**

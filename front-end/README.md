@@ -27,3 +27,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+------------
+-진행사항
+1.vue-router 설치함
+2.axios 설치함
