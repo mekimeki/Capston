@@ -28,7 +28,7 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-------------
--진행사항
-1.vue-router 설치함
-2.axios 설치함
+-進行現況-
+1.vue-router設置 npm install vue-router 2019-03-05
+2.axios設置　npm install --save axios 2019-03-05
+3.video-player css 2019-03-09
