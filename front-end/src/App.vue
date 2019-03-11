@@ -10,6 +10,9 @@
 export default {
   name: 'app',
   components: {
+  },
+  created:function(){
+    console.log(this.$store.state.counter);//vuex check
   }
 }
 </script>

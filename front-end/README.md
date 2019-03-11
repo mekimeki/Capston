@@ -32,3 +32,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 1.vue-router設置 npm install vue-router 2019-03-05
 2.axios設置　npm install --save axios 2019-03-05
 3.video-player css 2019-03-09
+4.vuex 設置　npm install vuex --save and store.js create 2019-03-11
