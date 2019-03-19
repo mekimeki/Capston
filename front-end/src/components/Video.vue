@@ -4,7 +4,7 @@
     <hr>
     <div id="videoplayer">
       <video id="video" width="500" v-on:timeupdate="seek_timeupdate()">
-        <source v-bind:src="videoLink" type="video/mp4">
+        <source src="@/components/test.mp4" type="video/mp4">
       </video>
       <div id="videoController">
         <input id="seekBar" type="range" name="" value="0"
@@ -22,18 +22,16 @@
         </span>
       </div>
     </div>
-    <div id="videoCapture">
-      <button type="button" name="button">Capture</button>
-      {{watch_time}}
-      {{first_loop_time}}
-      {{last_loop_time}}
-      <canvas id="canvas" width="300" height="300"></canvas>
-    </div>
+      Wathch-time:{{watch_time}}
+      first-time:{{first_loop_time}}
+      last-time:{{last_loop_time}}
   </div>
 </template>
 
 <script>
+
 export default {
+  name:"video_",
   data() {
     return {
       //video values
@@ -75,11 +73,8 @@ export default {
       this.video.play();
     },
     seek_timeupdate(){
-      console.log("A");
       this.move_time = (100/ this.video.duration) * this.video.currentTime;
       this.seek_bar.value = this.move_time;
-      // // let charge = 80-this.seek_bar.value;
-      // this.seek_bar.style.paddingRigth = charge+"%";
       if(this.loop_check){
       this.watch_time = this.video.currentTime;
       }
@@ -144,10 +139,14 @@ export default {
     //speed
     this.speed_bar = document.getElementById("speedBar");//speed bar
     this.speed_btn = document.getElementById("speedBtn");//speedn btn
+
+    this.$store.dispatch('video_action',this.video);//vuex actions
+    console.log("stateCheck",this.$store.state.video);//check
   },
   beforeUpdate: function() {
     console.log("beforeUpdate");
     this.video = document.getElementById("video");//video
+    console.log(this.video);
   },
   updated: function(){
     console.log("update");
@@ -177,7 +176,6 @@ export default {
     border-radius: 15px;
   }
   #videoController{
-    background: black;
     border: 5px solid rgb(47, 7, 186);
     width:500px;
     border-radius: 15px;
@@ -211,7 +209,6 @@ export default {
   #seekBar{
     -webkit-appearance:none;
     background: white;
-    /* background-clip: content-box; */
     width:80%;
     height:10px;
   }
