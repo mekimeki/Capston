@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-import video from './components/Video';
+// import video from './components/Video';
+import video_see from './views/Video_see';
 
 export default new Router({
   mode:'history',//#を消す。
@@ -10,7 +11,7 @@ export default new Router({
     {
       path:'/video',
       name:'video',
-      component:video,
+      component:video_see,
     },
   ]
 });
