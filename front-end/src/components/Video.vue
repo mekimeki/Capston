@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 
 export default {
   name:"video_",
@@ -56,6 +57,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['video_action']),
     play(){
       if (this.video.paused){
         console.log("play");
@@ -140,7 +142,8 @@ export default {
     this.speed_bar = document.getElementById("speedBar");//speed bar
     this.speed_btn = document.getElementById("speedBtn");//speedn btn
 
-    this.$store.dispatch('video_action',this.video);//vuex actions
+    // this.$store.dispatch('video_action',this.video);//vuex actions
+    this.video_action(this.video);
     console.log("stateCheck",this.$store.state.video);//check
   },
   beforeUpdate: function() {
