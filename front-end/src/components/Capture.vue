@@ -2,7 +2,9 @@
   <div>
     <button type="button" name="button" v-on:click="capture()">Capture</button>
     <canvas id="canvasd" width="1300" height="1000"></canvas>
-      <img id="image" v-bind:src="image_view" alt="" width="250" hegith="250">
+    <img id="image" v-bind:src="image_view" alt="" width="250" hegith="250">
+    <p v-if="imageText">SAVE</p>
+    <p v-else>NOT SAVE</p>
   </div>
 </template>
 
@@ -19,26 +21,30 @@ export default {
       image:"",
       image_view:"",
       imageText:"",
+      capture_check:true,
     }
   },
-  ...mapGetters({
-    v_getter:'video_getter',
-  }),
-  ...mapState(['video']),
   methods:{
     capture(){
-      console.log("capture");
-      this.image.style.display = "block";
-      this.ctx = this.canvas.getContext("2d");
-      this.video_img = this.$store.getters.video_getter;
-      this.ctx.drawImage(this.video_img, 10, 10);
-      this.image_view = this.canvas.toDataURL("image/png");
-      this.imageText = "저장됨";
-      setTimeout(function(){
-        console.log("setTimeout");
-        this.imageText = "";
-        this.image.style.display = "none";
-      }, 3000);
+      console.log(this.capture_check);
+      if(this.capture_check){
+        this.capture_check = false;
+        this.image.style.display = "block";
+        this.ctx = this.canvas.getContext("2d");
+        this.video_img = this.v_getter;//video store.js getter
+        this.ctx.drawImage(this.video_img, 10, 10);
+        this.image_view = this.canvas.toDataURL("image/png");
+        this.imageText = true;
+
+        setTimeout(()=>{
+          console.log("setTimeout");
+          this.capture_check = true;
+          this.imageText = false;
+          this.image.style.display = "none";
+        }, 3000);
+      }else{
+
+      }
     },
     save(){
 
@@ -57,6 +63,21 @@ export default {
   updated:function(){
 
   },
+  computed:{
+    ...mapGetters({
+      v_getter:'video_getter',
+    }),
+    ...mapState(['video']),
+  },
+  watch:{
+    imageText: function(data){
+      if(data){
+        // alert("저장됨");
+      }else{
+        // alert("저장안됨");
+      }
+    }
+  }
 }
 </script>
 
