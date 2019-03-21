@@ -37,7 +37,6 @@ export default {
         this.imageText = true;
 
         setTimeout(()=>{
-          console.log("setTimeout");
           this.capture_check = true;
           this.imageText = false;
           this.image.style.display = "none";
@@ -58,10 +57,10 @@ export default {
     this.image = document.getElementById("image");
   },
   beforeUpdate:function(){
-
+    console.log("capture beforeUpdate");
   },
   updated:function(){
-
+    console.log("capture update");
   },
   computed:{
     ...mapGetters({

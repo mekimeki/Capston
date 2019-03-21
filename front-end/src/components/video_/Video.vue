@@ -144,15 +144,13 @@ export default {
 
     // this.$store.dispatch('video_action',this.video);//vuex actions
     this.video_action(this.video);
-    console.log("stateCheck",this.$store.state.video);//check
   },
   beforeUpdate: function() {
-    console.log("beforeUpdate");
+    console.log("video beforeUpdate");
     this.video = document.getElementById("video");//video
-    console.log(this.video);
   },
   updated: function(){
-    console.log("update");
+    console.log("video update");
   },
   watch: {//loop
     watch_time: function(data){
