@@ -31,16 +31,16 @@ export default {
       this.subtitle_action(res.data);//store.js action
       this.subtitle = this.s_getter;
       setInterval(()=>{
-        console.log("setInterval");
+        // console.log("setInterval");
         this.video_time_check = this.video.currentTime;
       },150);
     });
   },
   beforeUpdate:function(){
-    console.log("subtitle beforeUpdate");
+    //console.log("subtitle beforeUpdate");
   },
   updated:function(){
-    console.log("subtitle update");
+    // console.log("subtitle update");
   },
   computed:{
     ...mapGetters({
