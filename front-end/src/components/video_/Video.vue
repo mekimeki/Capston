@@ -5,12 +5,18 @@
     <div id="videoplayer">
       <video id="video" width="500" v-on:timeupdate="seek_timeupdate()">
         <source src="@/components/test.mp4" type="video/mp4">
+        <track kind="subtitles" src="@/components/word.vtt" srclang="en">
       </video>
       <div id="videoController">
         <input id="seekBar" type="range" name="" value="0"
           v-on:change="seek_change()"
           v-on:dblclick="video_loop(true)"
-          v-on:click="video_loop(false)">
+          v-on:click="video_loop(false)"
+          v-on:mousedown="mouse_down()"
+          v-on:mouseover="mouse_over()"
+          v-on:mouseup="mouse_up()"
+        >
+          <!-- 버그 seek bar 에서 click 이나 dbclick 눌렀을때 버그가 일어남 -->
         <button class="btn" id="playBtn" type="button" name="button" v-on:click="play()">Play</button>
         <span id="videoAudio">
           <input id="audioBar" type="range" name="" value="100" v-on:change="audio()">
@@ -29,14 +35,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex'//vuex actions import
 
 export default {
-  name:"video_",
+  name:"video_",//component name
   data() {
     return {
       //video values
-      videoLink: "/media/test.6397655f.mp4",
+      videoLink: "/media/test.6397655f.mp4",//video src
       video: "",//play video
       play_btn : "",//play button
       seek_bar : "", // play bar
@@ -46,21 +52,20 @@ export default {
       audio_bar:"",//audo range
       audio_btn: "",//audio button
       //speed values
-      speed_bar:"",
-      speed_btn:"",
-      speed:"",
-      //video Loop
-      first_loop_time: "",
-      last_loop_time: "",
-      watch_time: "",
-      loop_check: false,
+      speed_bar:"",//speed range
+      speed_btn:"",//speed button
+      speed:"",//speed
+      //video Loop values
+      first_loop_time: "",//first loop time
+      last_loop_time: "",//last loop time
+      watch_time: "",//video play time
+      loop_check: false,//loop Check
     }
   },
   methods: {
-    ...mapActions(['video_action']),
-    play(){
+    ...mapActions(['video_action']),//vuex actions connect
+    play(){//play on/off
       if (this.video.paused){
-        console.log("play");
         this.video.play();
         this.play_btn.style.background = "red";
       }else{
@@ -68,24 +73,40 @@ export default {
         this.play_btn.style.background = "green";
       }
     },
-    seek_change(){
-      console.log("seek_change");
+    seek_change(){//play input[range]bar reflection
       this.move_time = this.video.duration * (this.seek_bar.value / 100);
       this.video.currentTime = this.move_time;
-      this.video.play();
+
     },
-    seek_timeupdate(){
-      this.move_time = (100/ this.video.duration) * this.video.currentTime;
-      this.seek_bar.value = this.move_time;
-      if(this.loop_check){
-      this.watch_time = this.video.currentTime;
+    seek_timeupdate(){//play video reflection
+      if(!this.video.paused){
+        this.move_time = (100/ this.video.duration) * this.video.currentTime;
+        this.seek_bar.value = this.move_time;
+        if(this.loop_check){//this.loop_check true is start
+          this.watch_time = this.video.currentTime;
+        }
       }
     },
-    audio(){
-      console.log("audio");
+    mouse_down(){
+      if(this.video.paused){
+
+      }else{
+        this.video.pause();
+      }
+    },
+    mouse_up(){
+      if(this.video.paused){
+        this.video.play();
+      }else{
+
+      }
+    },
+    mouse_over(){
+    },
+    audio(){//audio volume control
       this.video.volume = this.audio_bar.value /100;
     },
-    audioOn_off(){
+    audioOn_off(){//audio volume on/off
       if(this.video.muted === false){
         this.firstValue_audio = this.audio_bar.value;
         this.video.muted = true;
@@ -109,26 +130,28 @@ export default {
       this.video.play();
     },
     video_loop(check){
-      if(check){
-        this.video.pause();
+      if(check){//check true -> dblclick
         this.first_loop_time = this.video.currentTime;
-      }else {
-        if(this.loop_check){
-          this.loop_check = false;
-        }else{
-          this.loop_check = true;
+        console.log("dblclcik");
+        this.video.pause();
+      }else{//check false -> click
+        if(this.first_loop_time!= ""){
+          if(this.last_loop_time!= ""){
+            this.last_loop_time = 0;
+            this.first_loop_time = 0;
+            this.loop_check = false;
+          }else{
+            this.last_loop_time = this.video.currentTime;
+            this.loop_check = true;
+          }
         }
-        this.last_loop_time = this.video.currentTime;
-        this.video.play();
       }
-      console.log(this.first_loop_time);
-      console.log(this.last_loop_time);
     }
   },
   created: function() {
   },
   beforeMount: function(){
-    console.log("beforeMout");
+    // console.log("beforeMout");
   },
   mounted: function() {
     //video
@@ -142,33 +165,31 @@ export default {
     this.speed_bar = document.getElementById("speedBar");//speed bar
     this.speed_btn = document.getElementById("speedBtn");//speedn btn
 
-    // this.$store.dispatch('video_action',this.video);//vuex actions
-    this.video_action(this.video);
+    // this.$store.dispatch('video_action',this.video);//vuex actions test
+    this.video_action(this.video);//vuex actions
   },
   beforeUpdate: function() {
-    console.log("video beforeUpdate");
-    this.video = document.getElementById("video");//video
+    // console.log("video beforeUpdate");
+    // this.video = document.getElementById("video");//video
   },
   updated: function(){
-    console.log("video update");
+    // console.log("video update");
   },
-  watch: {//loop
+  watch: {
+    //loop
     watch_time: function(data){
+      console.log("video watch");
       if(this.loop_check === true){
         if(Math.floor(this.last_loop_time) === Math.floor(data)){
           this.video.currentTime = this.first_loop_time;
-        }else{
-
         }
-      }else{
-
       }
     },
   },
 }
 </script>
-
 <style lang="css" scoped>
+/* video css scoped is now file only css*/
   #videoplayer{
     float:left;
     padding:1em 1em .5em;
@@ -212,6 +233,7 @@ export default {
     background: white;
     width:80%;
     height:10px;
+    cursor: pointer;
   }
   #seekBar::-webkit-slider-thumb{
     -webkit-appearance:none;
