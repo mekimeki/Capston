@@ -30,11 +30,12 @@ export default {
     axios.get(url).then((res)=>{
       this.subtitle_action(res.data);//store.js action
       this.subtitle = this.s_getter;
+      console.log(this.subtitle);
       setInterval(()=>{
         // console.log("setInterval");
         this.video_time_check = this.video.currentTime;
       },150);
-    });
+    },(error)=>{alert("연결을 확인해 주세요")});
   },
   beforeUpdate:function(){
     //console.log("subtitle beforeUpdate");
@@ -52,9 +53,10 @@ export default {
     video_time_check: function(data){
       for (let i = 0; i < this.subtitle.length; i++) {
         if(this.video.currentTime.toFixed(1) === this.subtitle[i][1][0].toFixed(1)){
-          for (let s = 2; s < this.subtitle[i].length; s++) {
-            this.subtitle_open= this.subtitle_open + "|" + this.subtitle[i][s];
-          }
+          this.subtitle_open = this.subtitle[i][2];
+          // for (let s = 2; s < this.subtitle[i].length; s++) { // 이부분만 고치면 됨
+          //   this.subtitle_open= this.subtitle_open + "|" + this.subtitle[i][s];
+          // }
         }
         else if(this.video.currentTime.toFixed(1) === this.subtitle[i][1][1].toFixed(1)){
           this.subtitle_open = "";
