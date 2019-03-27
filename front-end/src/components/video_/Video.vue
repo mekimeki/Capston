@@ -10,7 +10,9 @@
         <input id="seekBar" type="range" name="" value="0"
           v-on:change="seek_change()"
           v-on:dblclick="video_loop(true)"
-          v-on:click="video_loop(false)">
+          v-on:click="video_loop(false)"
+          v-on:mousedown="mouse_down()"
+          v-on:mouseup="mouse_up()">
         <button class="btn" id="playBtn" type="button" name="button" v-on:click="play()">Play</button>
         <span id="videoAudio">
           <input id="audioBar" type="range" name="" value="100" v-on:change="audio()">
@@ -25,6 +27,9 @@
       Wathch-time:{{watch_time}}
       first-time:{{first_loop_time}}
       last-time:{{last_loop_time}}
+      <hr>
+      video:
+      {{video_times}}
   </div>
 </template>
 
@@ -35,6 +40,8 @@ export default {
   name:"video_",
   data() {
     return {
+      interval:"",//seek bar update setinterval
+      video_times:[],//video_times;
       //video values
       videoLink: "/media/test.6397655f.mp4",
       video: "",//play video
@@ -58,6 +65,13 @@ export default {
   },
   methods: {
     ...mapActions(['video_action']),
+    seek_bar_update(start,end){
+      this.video_times.push({
+        'start':start,
+        'end':this.video.duration,
+        'now':this.video.currentTime,
+      });
+    },
     play(){
       if (this.video.paused){
         console.log("play");
@@ -69,16 +83,32 @@ export default {
       }
     },
     seek_change(){
-      console.log("seek_change");
       this.move_time = this.video.duration * (this.seek_bar.value / 100);
       this.video.currentTime = this.move_time;
-      this.video.play();
     },
     seek_timeupdate(){
-      this.move_time = (100/ this.video.duration) * this.video.currentTime;
-      this.seek_bar.value = this.move_time;
+      if(!this.video.paused){
+        this.move_time = (100/ this.video.duration) * this.video.currentTime;
+        this.seek_bar.value = this.move_time;
+        this.video_times[0].now = this.move_time;
+      }
       if(this.loop_check){
-      this.watch_time = this.video.currentTime;
+        this.watch_time = this.video.currentTime;
+      }
+    },
+    mouse_down(){
+      if(this.video.paused){
+
+      }else{
+        this.video.pause();
+      }
+    },
+    mouse_up(){
+      if(this.video.paused){
+        console.log("up");
+        this.video.play();
+      }else{
+
       }
     },
     audio(){
@@ -109,20 +139,21 @@ export default {
       this.video.play();
     },
     video_loop(check){
-      if(check){
-        this.video.pause();
+      if(check){//dblclick
         this.first_loop_time = this.video.currentTime;
-      }else {
-        if(this.loop_check){
-          this.loop_check = false;
-        }else{
-          this.loop_check = true;
+        this.video.pause();
+      }else {//click
+        if(this.first_loop_time!= ""){
+          if(this.last_loop_time != ""){
+            this.last_loop_time = 0;
+            this.first_loop_time = 0;
+            this.loop_check = false;
+          }else{
+            this.last_loop_time = this.video.currentTime;
+            this.loop_check = true;
+          }
         }
-        this.last_loop_time = this.video.currentTime;
-        this.video.play();
       }
-      console.log(this.first_loop_time);
-      console.log(this.last_loop_time);
     }
   },
   created: function() {
@@ -144,24 +175,47 @@ export default {
 
     // this.$store.dispatch('video_action',this.video);//vuex actions
     this.video_action(this.video);
+    //video start , end time -> seek bar seek
+    this.interval = setInterval(()=>{//setInterval start
+      if(this.video.readyState === 4){
+        this.seek_bar_update(0,this.video.duration);
+        clearInterval(this.interval);//setInterval stop
+      }
+    }, 300);// video start tiem end time check
+
   },
   beforeUpdate: function() {
-    console.log("video beforeUpdate");
-    this.video = document.getElementById("video");//video
+    // this.video = document.getElementById("video");//혹시나 해서.
+    // console.log("video beforeUpdate");
   },
   updated: function(){
-    console.log("video update");
+    // console.log("video update");
+  },
+  computed:{
+    video_first_time(){
+      // if(this.video_times){
+      //   return this.video_times[0].start;
+      // }
+    },
+    video_last_time(){
+      // if(this.video_times){
+      //   if(Math.floor((this.video.duration/60)/60) === 0){//minute
+      //     this.video.first_time = this.video.duration/60;
+      //   }else if(Math.floor(end/60) === 0){//second
+      //     this.video.first_time = this.video.duration;
+      //   }else{//hours
+      //     this.video.first_time = (this.video.duration/60)/60;
+      //   }
+      //   return this.video_times[0].end;
+      // }
+    },
   },
   watch: {//loop
     watch_time: function(data){
       if(this.loop_check === true){
         if(Math.floor(this.last_loop_time) === Math.floor(data)){
           this.video.currentTime = this.first_loop_time;
-        }else{
-
         }
-      }else{
-
       }
     },
   },
