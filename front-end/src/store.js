@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state:{
     video:"",
     subtitle:[],
+    subtitle_buffer:[],
   },
   getters:{
     video_getter: (state) => {
@@ -14,7 +15,10 @@ export default new Vuex.Store({
     },
     subtitle_getter: (state) =>{
       return state.subtitle;
-    }
+    },
+    subtitle_buffer_getter: (state) =>{
+      return state.subtitle_buffer;
+    },
   },
   mutations:{
     video_mutation: (state, payload) => {
@@ -22,7 +26,10 @@ export default new Vuex.Store({
     },
     subtitle_mutation: (state, payload) => {
       state.subtitle = payload;
-    }
+    },
+    subtitle_buffer_mutation: (state, payload) => {
+      state.subtitle_buffer = payload;
+    },
   },
   actions:{
     video_action: ({commit},payload) => {
@@ -30,6 +37,9 @@ export default new Vuex.Store({
     },
     subtitle_action:({commit},payload) => {
       commit('subtitle_mutation',payload);
-    }
+    },
+    subtitle_buffer_action:({commit},payload) => {
+      commit('subtitle_buffer_mutation',payload);
+    },
   }
 });

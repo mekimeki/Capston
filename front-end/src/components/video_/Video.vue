@@ -1,5 +1,8 @@
 <template lang="html">
   <div class="">
+    <!--
+        video 총시간 구하기
+    -->
     <input type="text" name="" value="" v-model="videoLink">
     <hr>
     <div id="videoplayer">
@@ -7,6 +10,11 @@
         <source src="@/components/test.mp4" type="video/mp4">
         <track kind="subtitles" src="@/components/word.vtt" srclang="en">
       </video>
+
+      <!-- <video id="video" class="video-js vjs-default-skin" preload="auto" width="500" height="360" data-setup='{}' v-on:timeupdate="seek_timeupdate()">
+        <source src="http://172.26.3.246/storage/streamable_videos/53.m3u8" type="application/x-mpegURL">
+      </video> -->
+
       <div id="videoController">
         <input id="seekBar" type="range" name="" value="0"
           v-on:change="seek_change()"
@@ -16,7 +24,6 @@
           v-on:mouseover="mouse_over()"
           v-on:mouseup="mouse_up()"
         >
-          <!-- 버그 seek bar 에서 click 이나 dbclick 눌렀을때 버그가 일어남 -->
         <button class="btn" id="playBtn" type="button" name="button" v-on:click="play()">Play</button>
         <span id="videoAudio">
           <input id="audioBar" type="range" name="" value="100" v-on:change="audio()">
@@ -36,6 +43,7 @@
 
 <script>
 import { mapActions } from 'vuex'//vuex actions import
+import axios from 'axios';//axios import
 
 export default {
   name:"video_",//component name
@@ -155,6 +163,13 @@ export default {
   },
   mounted: function() {
     //video
+    // axios video streming
+    // let url = "http://172.26.3.246/test";
+    //
+    // axios.get(url).then((res)=>{
+    //   alert("axios",res.data);
+    // },(error)=>{alert("연결을 확인해 주세요")});
+
     this.video = document.getElementById("video");//video
     this.play_btn = document.getElementById("playBtn");//play
     this.seek_bar = document.getElementById("seekBar");//seek bar
