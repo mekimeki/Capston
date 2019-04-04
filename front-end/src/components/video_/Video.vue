@@ -71,7 +71,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['video_action']),//vuex actions connect
+    ...mapActions(['video_action','seek_bar_action']),//vuex actions connect
     play(){//play on/off
       if (this.video.paused){
         this.video.play();
@@ -182,6 +182,7 @@ export default {
 
     // this.$store.dispatch('video_action',this.video);//vuex actions test
     this.video_action(this.video);//vuex actions
+    this.seek_bar_action(this.seek_bar);
   },
   beforeUpdate: function() {
     // console.log("video beforeUpdate");
