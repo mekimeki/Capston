@@ -5,7 +5,8 @@ Vue.use(Router)
 import main from './views/Main';
 import video_see from './views/Video_see';
 import subtitle_create from './views/Subtitle_create';
-import test from './components/testVideo';
+import upload_page from './views/Upload_page';
+import video_create from './views/Video_create';
 export default new Router({
   mode:'history',//#を消す。
   routes:[
@@ -25,9 +26,14 @@ export default new Router({
       component:subtitle_create,
     },
     {
-      path:'/test',
-      name:test,
-      component:test,
-    }
+      path:'/upload',
+      name:'upload',
+      component:upload_page,
+    },
+    {
+      path:'/videocreate',
+      name:'videoCreate',
+      component:video_create,
+    },
   ]
 });
