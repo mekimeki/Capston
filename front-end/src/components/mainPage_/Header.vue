@@ -1,6 +1,6 @@
 <template lang="html">
   <v-layout pt-5>
-    
+
     <v-navigation-drawer
       v-model="drawer"
       fixed
@@ -69,17 +69,21 @@
           append-icon="search"
           color="gray"
           hide-details
-                   
+
         ></v-text-field>
            <v-layout justify-space-around>
-            <v-icon color="gray darken-2">video_call</v-icon>
+            <router-link to="">
+              <v-icon color="gray darken-2">video_call</v-icon>
+            </router-link>
             <v-icon color="gray darken-2">notifications</v-icon>
-            <v-icon color="gray darken-2">account_circle</v-icon>
+            <router-link to="/login">
+              <v-icon color="gray darken-2">account_circle</v-icon>
+            </router-link>
           </v-layout>
       </v-layout>
     </v-toolbar>
 
-    
+
   </v-layout>
 </template>
 
@@ -97,9 +101,8 @@
         { text: '성적 관리', icon: 'insert_chart', link:'video' }
       ],
     }),
-      
     props: {
       source: String
-    }
+    },
   }
 </script>

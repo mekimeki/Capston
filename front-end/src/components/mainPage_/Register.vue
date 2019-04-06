@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container pt-5 fluid grid-list-md>
     <v-layout row wrap>
-      <v-flex xs6 sm4>
+      <v-flex xs12 sm4>
         <v-card>
           <v-container >
             <span>등록한 채널</span>
@@ -20,9 +20,9 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
-      <v-flex xs6 sm4>
+      <v-flex xs12 sm4>
         <v-card>
           <v-container >
             <span>등록한 채널</span>
@@ -41,9 +41,9 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
-      <v-flex xs6 sm4>
+      <v-flex xs12 sm4>
         <v-card>
           <v-container >
             <span>등록한 채널</span>
@@ -62,9 +62,9 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
-      
+
     </v-layout>
   </v-container>
 </template>

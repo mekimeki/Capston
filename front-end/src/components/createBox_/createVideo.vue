@@ -10,16 +10,15 @@
     </div>
     <div v-show="check == true">
       <img src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-3/3/72-512.png" alt="" width="200" height="200">
-      <video src="videofile.ogg" autoplay poster="posterimage.jpg" controls>
-      </video>
       <v-btn color="success" v-on:click="cancel()">취소</v-btn>
-      <v-btn color="success" >업로드</v-btn>
+      <v-btn color="success" v-on:click="upload()">업로드</v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';//vuex actions import
+import { mapGetters, mapActions } from 'vuex';//vuex actions import
+import axios from 'axios';
 export default {
   data(){
     return{
@@ -35,9 +34,9 @@ export default {
     }
   },
   methods:{
+    ...mapActions(['video_cut_actions']),
     mousedown_firstTime(){
       this.check_time.firstTime = this.video.currentTime;
-      console.log("firstTime",this.check_time.firstTime);
     },
     mouseup_lastTime(){
       this.check_time.lastTime = this.video.duration * (this.seek_bar.value / 100);
@@ -47,7 +46,6 @@ export default {
         this.check_time.lastTime = "";
       }
       this.video.play();
-      console.log("lastTime",this.check_time.lastTime);
     },
     cut(){
       if(this.check_time.firstTime && this.check_time.lastTime ){
@@ -60,6 +58,9 @@ export default {
       this.check = false;
       this.check_time.firstTime = "";
       this.check_time.lastTime = "";
+    },
+    upload(){
+      this.video_cut_actions(this.check_time);
     }
   },
   mounted:function(){
@@ -67,12 +68,10 @@ export default {
     this.seek_bar = this.seb_getter;//seek_bar element
 
     this.seek_bar.addEventListener("mousedown",() =>{
-      console.log("down");
       this.mousedown_firstTime();
     });
 
     this.seek_bar.addEventListener("mouseup",() =>{
-      console.log("up");
       this.mouseup_lastTime();
     });
   },

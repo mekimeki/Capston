@@ -156,7 +156,6 @@ export default {
 <style lang="css" scoped>
 #scroll_div{
   overflow: scroll;
-  width:700px;
   height:300px;
 }
 </style>

@@ -2,11 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-import main from './views/Main';
-import video_see from './views/Video_see';
-import subtitle_create from './views/Subtitle_create';
-import upload_page from './views/Upload_page';
-import video_create from './views/Video_create';
+import main from '@/views/Main';
+import video_see from '@/views/Video_see';
+import subtitle_create from '@/views/Subtitle_create';
+import create from '@/views/Create';
+import login_page from '@/views/Login_page';
+
 export default new Router({
   mode:'history',//#を消す。
   routes:[
@@ -26,14 +27,14 @@ export default new Router({
       component:subtitle_create,
     },
     {
-      path:'/upload',
-      name:'upload',
-      component:upload_page,
+      path:'/create',
+      name:'create',
+      component:create,
     },
     {
-      path:'/videocreate',
-      name:'videoCreate',
-      component:video_create,
+      path:'/login',
+      name:'login_page',
+      component:login_page,
     },
   ]
 });
