@@ -1,6 +1,6 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-layout   v-for="i in 2" :key="`4${i}`" xs4 row wrap>
+    <v-layout   v-for="i in 4" :key="`4${i}`" xs4 row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card color="purple" dark>
           <v-card-title primary class="title">Lorem</v-card-title>
