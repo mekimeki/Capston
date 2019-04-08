@@ -20,8 +20,8 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-footer
-        white
+        <v-layout
+         white
          fixed
          :height="10"
         >
@@ -30,8 +30,9 @@
         tile
         class="black--text text-xs-center"
       >
+        <v-divider></v-divider>
+        <v-card-text>メキメキ組</v-card-text>
         <v-card-text>
-          メキメキ組
           이수재,
           김소민,
           김승연,
@@ -39,12 +40,11 @@
           최찬민
         </v-card-text>
         <v-divider></v-divider>
-
         <v-card-text class="black--text">
           2019年Capston Project<strong>Go語</strong>
         </v-card-text>
       </v-card>
-    </v-footer>
+    </v-layout>
 
       </v-list>
     </v-navigation-drawer>
@@ -95,7 +95,7 @@
          { text: '마이페이지', icon: 'face' , link:'video' },
         { text: '영상 관리', icon: 'video_library', link:'video' },
         { text: '영상 제작', icon: 'video_call', link:'video' },
-        { text: '퀴즈', icon: 'border_color', link:'video' },
+        { text: '퀴즈', icon: 'border_color', link:'qselect' },
         { text: '좋아하는 영상', icon: 'favorite', link:'video' },
         { text: 'Go語집', icon: 'import_contacts', link:'video' },
         { text: '성적 관리', icon: 'insert_chart', link:'video' }

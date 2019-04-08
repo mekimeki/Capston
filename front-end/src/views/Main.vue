@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <header_></header_>
-    <v-container >
+    <v-container>
     <register_></register_>
     <recommend_></recommend_>
     </v-container>
