@@ -20,7 +20,7 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
       <v-flex xs12 sm3>
         <v-card>
@@ -41,7 +41,7 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
       <v-flex xs12 sm3>
         <v-card>
@@ -62,9 +62,9 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>  
+        </v-card>
       </v-flex>
-      
+
     </v-layout>
   </v-container>
 </template>
