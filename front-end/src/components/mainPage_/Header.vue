@@ -21,9 +21,9 @@
         </v-list-tile>
 
         <v-layout
-         white
-         fixed
-         :height="10"
+        white
+        fixed
+        :height="10"
         >
       <v-card
         flat
@@ -57,7 +57,7 @@
       app
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-           <v-toolbar-title class="mr-5 align-center">
+        <v-toolbar-title class="mr-5 align-center">
         <span class="title">GO語</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -71,14 +71,15 @@
           hide-details
 
         ></v-text-field>
-           <v-layout justify-space-around>
-            <router-link to="">
-              <v-icon color="gray darken-2">video_call</v-icon>
-            </router-link>
+          <v-layout justify-center > 
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">video_call</v-icon>
+            <v-spacer></v-spacer>
             <v-icon color="gray darken-2">notifications</v-icon>
-            <router-link to="/login">
-              <v-icon color="gray darken-2">account_circle</v-icon>
-            </router-link>
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">account_circle</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">account_circle</v-icon>
           </v-layout>
       </v-layout>
     </v-toolbar>
@@ -92,7 +93,7 @@
     data: () => ({
       drawer: null,
       items: [
-         { text: '마이페이지', icon: 'face' , link:'video' },
+        { text: '홈페이지', icon: 'home' , link:'/' },
         { text: '영상 관리', icon: 'video_library', link:'video' },
         { text: '영상 제작', icon: 'video_call', link:'video' },
         { text: '퀴즈', icon: 'border_color', link:'qselect' },
