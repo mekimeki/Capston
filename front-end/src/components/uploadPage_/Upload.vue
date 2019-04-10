@@ -48,14 +48,11 @@
         <span>{{subtitle_file_name}}</span>
       </div>
     </div>
-    <router-link to="" v-if="up_getters.subtitle"> 다음 단계로 </router-link>
-    //원래
-    <!-- v-if="up_getters.video && up_getters.subtitle" -->
   </div>
 </template>
 
 <script>
-import {mapState,mapGetters,mapActions} from 'vuex';
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -77,7 +74,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['upload_actions']),
     on_drop(evt){//on drop methods
       evt.stopPropagation();
       evt.preventDefault();
@@ -140,38 +136,36 @@ export default {
     },
 
     file_upload(){//다시
-      // let form = new FormData();
+      let form = new FormData();
       if (this.video_file_name) {
         if (this.files.length) {
-          this.upload_actions(this,files[0],true);
-          // form.append("video",this.files[0]);
+          form.append("video",this.files[0]);
         }
       }else if(this.subtitle_file_name){
         if (this.files.length) {
-          this.upload_actions(this.files[0],false);
-          // form.append("subtitle",this.files[0]);
+          form.append("subtitle",this.files[0]);
         }
       }
-      // let url_token = "http://172.26.3.246/get-token"
-      // // let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestUpload.php";
-      // let url = "http://172.26.3.246/upload"
-      // axios.get(url_token).then((res)=>{
-      //   //
-      //   console.log(res.data);
-      //   if (res.data) {
-      //     form.append("_token",res.data);
-      //     console.log(form);
-      //     axios.post(url,form).then((res) => {
-      //       console.log("성공",res.data);
-      //     }).catch( error => {
-      //       console.log('failed', error);
-      //     });
-      //   }
-      //   //
-      // }).catch( error => {
-      //   console.log('failed',error);
-      // });
-    }//
+      let url_token = "http://172.26.3.246/get-token"
+      // let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestUpload.php";
+      let url = "http://172.26.3.246/upload"
+      axios.get(url_token).then((res)=>{
+        //
+        console.log(res.data);
+        if (res.data) {
+          form.append("_token",res.data);
+          console.log(form);
+          axios.post(url,form).then((res) => {
+            console.log("성공",res.data);
+          }).catch( error => {
+            console.log('failed', error);
+          });
+        }
+        //
+      }).catch( error => {
+        console.log('failed',error);
+      });
+    }
   },
   mounted:function(){
     this.input_video = document.getElementById("videoInput");
@@ -182,11 +176,6 @@ export default {
     // }).catch( error => {
     //   console.log('failed', error);
     // });
-  },
-  computed:{
-    ...mapGetters({
-      up_getters:'upload_getters',
-    })
   }
 
 }
