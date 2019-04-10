@@ -3,8 +3,8 @@
     <!--
         video 총시간 구하기
     -->
-    <input type="text" name="" value="" v-model="videoLink">
-    <hr>
+    <!-- <input type="text" name="" value="" v-model="videoLink">
+    <hr> -->
     <div id="videoplayer">
       <video id="video" width="500" v-on:timeupdate="seek_timeupdate()">
         <source src="@/components/test.mp4" type="video/mp4">
@@ -35,9 +35,9 @@
         </span>
       </div>
     </div>
-      Wathch-time:{{watch_time}}
+      <!-- Wathch-time:{{watch_time}}
       first-time:{{first_loop_time}}
-      last-time:{{last_loop_time}}
+      last-time:{{last_loop_time}} -->
   </div>
 </template>
 
@@ -71,14 +71,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['video_action']),//vuex actions connect
+    ...mapActions(['video_action','seek_bar_action']),//vuex actions connect
     play(){//play on/off
       if (this.video.paused){
         this.video.play();
-        this.play_btn.style.background = "red";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/playstop.jpg')+")";
       }else{
         this.video.pause();
-        this.play_btn.style.background = "green";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/play.jpg')+")";
       }
     },
     seek_change(){//play input[range]bar reflection
@@ -119,11 +119,11 @@ export default {
         this.firstValue_audio = this.audio_bar.value;
         this.video.muted = true;
         this.audio_bar.value = 1;
-        this.audio_btn.style.background = "blue";
+        this.audio_btn.style.backgroundImage = "url("+require('@/assets/audiostop.png')+")";
       }else{
         video.muted = false;
         this.audio_bar.value = this.firstValue_audio;
-        this.audio_btn.style.background = "red";
+        this.audio_btn.style.backgroundImage = "url("+require('@/assets/audio.png')+")";
       }
     },
     speed_change(){
@@ -182,6 +182,7 @@ export default {
 
     // this.$store.dispatch('video_action',this.video);//vuex actions test
     this.video_action(this.video);//vuex actions
+    this.seek_bar_action(this.seek_bar);
   },
   beforeUpdate: function() {
     // console.log("video beforeUpdate");
@@ -208,15 +209,15 @@ export default {
   #videoplayer{
     float:left;
     padding:1em 1em .5em;
-    background-color: white;
-    border: 5px solid rgb(47,7,186);
-    border-radius: 15px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    border-radius: 10px;
   }
   #videoController{
-    border: 5px solid rgb(47, 7, 186);
+    padding: 1px;
+    border: 1px solid white;
     width:500px;
-    border-radius: 15px;
-    visibility: hidden;
+    /* visibility: hidden; */
     position:absolute;
     top:260px;
   }
@@ -228,26 +229,32 @@ export default {
   /* buttons css */
   .btn{
     text-indent:-10000px;
-    width:15px;
-    height:15px;
+    width:20px;
+    height:20px;
     border:none;
     cursor:pointer;
   }
   #playBtn{
-    background:green;
+    background-size: 20px;
+    background-image:url("../../assets/play.jpg");
+    margin:5px;
   }
   #audioBtn{
-    background:red;
+    background-size:20px;
+    background-image:url("../../assets/audio.png");
+    margin:5px;
   }
   #speedBtn{
-    background:blue;
+    background-size:20px;
+    background-image:url("../../assets/speed.jpg");
+    margin:5px;
   }
   /* seekbar css */
   #seekBar{
     -webkit-appearance:none;
     background: white;
     width:80%;
-    height:10px;
+    height:5px;
     cursor: pointer;
   }
   #seekBar::-webkit-slider-thumb{
@@ -255,6 +262,7 @@ export default {
     width:15px;
     height:15px;
     background:rgb(47,7,186);
+    border-radius: 10px;
     cursor:pointer;
   }
   /* audioBar css */
@@ -263,10 +271,10 @@ export default {
     -webkit-appearance:none;
     background:white;
     width:30%;
-    height:10px;
+    height:5px;
     position:absolute;
-    top:-77px;
-    left:343px;
+    top:-71px;
+    left:368px;
     visibility: hidden;
   }
   #audioBar::-webkit-slider-thumb{
@@ -274,6 +282,7 @@ export default {
     width:15px;
     height:15px;
     background: rgb(47,7,186);
+    border-radius: 10px;
     cursor:pointer;
   }
   #videoAudio:hover #audioBar{
@@ -285,10 +294,10 @@ export default {
     -webkit-appearance:none;
     background:white;
     width:30%;
-    height:10px;
+    height:5px;
     position:absolute;
-    top:-77px;
-    left:358px;
+    top:-70px;
+    left:398px;
     visibility: hidden;
   }
 
@@ -297,6 +306,7 @@ export default {
     width:15px;
     height: 15px;
     background: rgb(47,7,186);
+    border-radius: 10px;
   }
 
   #videoSpeed:hover #speedBar{

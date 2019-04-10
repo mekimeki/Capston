@@ -1,26 +1,23 @@
 <template lang="html">
-  <div class="">
+  <div>
+    <header_></header_>
     <v-container>
-      <nav_></nav_>
-      <section_></section_>
-      <search_></search_>
+    <register_></register_>
+    <recommend_></recommend_>
     </v-container>
-    <footer_></footer_>
   </div>
 </template>
 
 <script>
-import nav_ from '@/components/mainPage_/Nav';
-import section_ from '@/components/mainPage_/Section';
-import footer_ from '@/components/mainPage_/Footer';
-import search_ from '@/components/mainPage_/Search';
+import header_ from '@/components/mainPage_/Header';
+import recommend_ from '@/components/mainPage_/Recommend';
+import register_ from '@/components/mainPage_/Register';
 
 export default {
   components:{
-    nav_,
-    section_,
-    footer_,
-    search_,
+    header_,
+    recommend_,
+    register_,
   },
   data(){
     return{

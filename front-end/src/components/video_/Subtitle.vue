@@ -1,6 +1,12 @@
 <template lang="html">
   <div class="">
-    자막:{{subtitle_open}}
+    <button type="button" name="button"
+    v-on:click="select(subtitle_open)"
+    >자막:{{subtitle_open}}</button>
+    <div class="" v-for="line in subtitle_line">
+      <button type="button" name="button"
+      >{{line['text']['content']}}</button>
+    </div>
   </div>
 </template>
 
@@ -14,10 +20,22 @@ export default {
       subtitle:[],
       video_time_check:"",
       subtitle_open:"",
+      subtitle_line:[],
     }
   },
   methods:{
     ...mapActions(['subtitle_action']),
+    select(subtitle){
+      let form = new FormData();
+      form.append("data",subtitle);
+      let url = "http://localhost/Capstone_practice/project_videoPlayer/api/test2.php";
+      axios.post(url,form).then((res) => {
+        this.subtitle_line = res.data;
+        console.log("성공",this.subtitle_line[0]['text']['content']);
+      }).catch( error => {
+        console.log('failed', error);
+      });
+    },
   },
   beforeCreate:function(){},
   created:function(){},
@@ -30,7 +48,6 @@ export default {
     axios.get(url).then((res)=>{
       this.subtitle_action(res.data);//store.js action
       this.subtitle = this.s_getter;
-      console.log(this.subtitle);
       setInterval(()=>{
         // console.log("setInterval");
         this.video_time_check = this.video.currentTime;
