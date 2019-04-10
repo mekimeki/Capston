@@ -1,6 +1,6 @@
 <template lang="html">
   <v-layout pt-5>
-    
+
     <v-navigation-drawer
       v-model="drawer"
       fixed
@@ -84,7 +84,7 @@
       </v-layout>
     </v-toolbar>
 
-    
+
   </v-layout>
 </template>
 
@@ -102,9 +102,8 @@
         { text: '성적 관리', icon: 'insert_chart', link:'video' }
       ],
     }),
-      
     props: {
       source: String
-    }
+    },
   }
 </script>
