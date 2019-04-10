@@ -1,10 +1,12 @@
 <template>
 <v-app>
-<v-layout justify-center align-center>
-  <v-flex xs12 sm12 md9>
-    <v-toolbar color="indigo" dark >
+<v-layout justify-center align-center >
+  <v-flex xs12 sm12 md9 text-xs-center>
+
+
+    <v-container color="#00BFA5"  grid-list-xl text-xs-center>
       <v-toolbar-title>QUIZ TEST</v-toolbar-title>
-    </v-toolbar>
+    </v-container>
     
       <v-container
         fluid
