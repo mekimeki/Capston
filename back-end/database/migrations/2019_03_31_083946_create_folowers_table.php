@@ -14,9 +14,10 @@ class CreateFolowersTable extends Migration
     public function up()
     {
         Schema::create('folower_tb', function (Blueprint $table) {
-            $table->increments('m_id');
-            $table->integer('folower_id');
+            $table->integer('m_id')->unsigned();;
+            $table->integer('folower_id')->unsigned();;
             $table->foreign('m_id')->references('member_pk')->on('member_tb');
+            $table->foreign('folower_id')->references('member_pk')->on('member_tb');
         });
     }
 

@@ -16,7 +16,7 @@ class CreateVTestResultsTable extends Migration
         Schema::create('votest_result_tb', function (Blueprint $table) {
             $table->increments('votest_result_pk');
             $table->integer('m_id')->unsigned();
-            $table->timestamp('test)dt');
+            $table->timestamp('test_dt');
             $table->string('test_add');
             $table->integer('test_score');
             $table->foreign('m_id')->references('member_pk')->on('member_tb');

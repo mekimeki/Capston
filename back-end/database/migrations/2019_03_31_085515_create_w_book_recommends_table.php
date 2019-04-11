@@ -16,7 +16,7 @@ class CreateWBookRecommendsTable extends Migration
         Schema::create('wbook_recommend_tb', function (Blueprint $table) {
             $table->integer('wbook_id')->unsigned();
             $table->integer('m_id')->unsigned();
-            $table->char('wbook_rec',1);
+            $table->char('wbook_rec',1)->default('F');
             $table->foreign('wbook_id')->references('wbook_pk')->on('wbook_tb');
             $table->foreign('m_id')->references('m_id')->on('wbook_tb');
         });

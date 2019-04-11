@@ -5,27 +5,9 @@
         <h3 class="text-center">
             Videos
         </h3>
-        <video src="/storage/Rtli8xKmJkF3CVGF.mp4"
-                               class="w-100"
-                               controls></video>
-        @foreach($videos as $video)
-            <div class="row mt-5">
-                <div class="video" >
-                    <div class="title">
-                        <h4>
-                            {{$video->title}}
-                        </h4>
-                    </div>
-                    
-                    @if($video->processed)
-                        
-                    @else
-                        <div class="alert alert-info w-100">
-                             Video is currently being processed and will be available shortly
-                        </div>
-                    @endif
-                </div>
-            </div>
-        @endforeach
+
+        <video id="my_video_2" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360" data-setup='{}'>
+            <source src="{{asset('storage/test1234.m3u8')}}" type="application/x-mpegURL">
+        </video>
     </div>
 @endSection

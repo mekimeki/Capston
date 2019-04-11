@@ -17,7 +17,7 @@ class CreateVocabulariesTable extends Migration
             $table->increments('vo_pk');
             $table->string('voca');
             $table->string('explain');
-            $table->string('type');
+            $table->string('type')->default('GRAMMMAR');;
         });
     }
 

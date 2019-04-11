@@ -44,7 +44,7 @@
 		$.ajax({ 
 		     url: "{{ route('upload') }}", 
 		     type: 'post', 
-		     data: data,
+		     data: data, 
 		     cache: false, 
 		     processData: false, 
 		     contentType : false, 
