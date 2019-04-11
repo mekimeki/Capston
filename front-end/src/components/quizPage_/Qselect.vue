@@ -1,10 +1,12 @@
 <template>
 <v-app>
-<v-layout justify-center align-center>
-  <v-flex xs12 sm12 md9>
-    <v-toolbar color="indigo" dark >
+<v-layout justify-center align-center >
+  <v-flex xs12 sm12 md9 text-xs-center>
+
+
+    <v-container color="#00BFA5"  grid-list-xl text-xs-center>
       <v-toolbar-title>QUIZ TEST</v-toolbar-title>
-    </v-toolbar>
+    </v-container>
     
       <v-container
         fluid
@@ -53,7 +55,6 @@
 
 <script>
 import quizOne_ from '@/components/quizPage_/QuizeOne';
-
 export default {
   components: {
     quizOne_,
@@ -67,6 +68,5 @@ export default {
       { title: '5. 빈칸 채우기', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 2 },
     ]
   })
-
 }
 </script>
