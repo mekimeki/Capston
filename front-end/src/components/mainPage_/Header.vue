@@ -9,14 +9,16 @@
       :width="200"
     >
       <v-list dense >
-        <v-list-tile v-for="item in items" :key="item.text" :to="`${ item.link }`" >
+        <v-list-tile v-for=" (item,n) in items" :key="item.text" :to="`${ item.link }`" >
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content >
-            <v-list-tile-title >
+
+          <v-list-tile-content>
+            <v-list-tile-title>
               {{ item.text }}
             </v-list-tile-title>
+
           </v-list-tile-content>
         </v-list-tile>
 
@@ -98,7 +100,7 @@
         { text: '영상 제작', icon: 'video_call', link:'video' },
         { text: '퀴즈', icon: 'border_color', link:'qselect' },
         { text: '좋아하는 영상', icon: 'favorite', link:'video' },
-        { text: 'Go語집', icon: 'import_contacts', link:'video' },
+        { text: 'Go語집', icon: 'import_contacts'},
         { text: '성적 관리', icon: 'insert_chart', link:'video' }
       ],
     }),
