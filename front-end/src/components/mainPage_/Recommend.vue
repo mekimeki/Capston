@@ -1,57 +1,77 @@
-<template>
-  <v-container fluid grid-list-md>
-    <v-layout   v-for="i in 2" :key="`4${i}`" xs4 row wrap>
-      <v-flex d-flex xs12 sm6 md4>
-        <v-card color="purple" dark>
-          <v-card-title primary class="title">Lorem</v-card-title>
-          <v-card-text>{{ lorem }}</v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex d-flex xs12 sm6 md3>
-        <v-layout row wrap>
-          <v-flex d-flex>
-            <v-card color="indigo" dark>
-              <v-card-text>{{ lorem.slice(0, 70) }}</v-card-text>
-            </v-card>
-          </v-flex>
-          <v-flex d-flex>
+<template lang="html">
+  <v-container pt-5 fluid grid-list-md>
+    <v-layout justify-center row wrap>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
-                v-for="n in 2"
+                v-for="n in 9"
                 :key="n"
-                d-flex
-                xs12
+                xs4
               >
-                <v-card
-                  color="red lighten-2"
-                  dark
-                >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
                 </v-card>
               </v-flex>
             </v-layout>
-          </v-flex>
-        </v-layout>
+          </v-container>
+        </v-card>  
       </v-flex>
-      <v-flex d-flex xs12 sm6 md2 child-flex>
-        <v-card color="green lighten-2" dark>
-          <v-card-text>{{ lorem.slice(0, 90) }}</v-card-text>
-        </v-card>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
+            <v-layout row wrap>
+              <v-flex
+                v-for="n in 9"
+                :key="n"
+                xs4
+              >
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>  
       </v-flex>
-      <v-flex d-flex xs12 sm6 md3>
-        <v-card color="blue lighten-2" dark>
-          <v-card-text>{{ lorem.slice(0, 100) }}</v-card-text>
-        </v-card>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
+            <v-layout row wrap>
+              <v-flex
+                v-for="n in 9"
+                :key="n"
+                xs4
+              >
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>  
       </v-flex>
+      
     </v-layout>
   </v-container>
 </template>
 
-
 <script>
-  export default {
-    data: () => ({
-      lorem: `추천영상.`
-    })
-  }
+export default {}
 </script>
+
+<style lang="css" scoped>
+</style>
