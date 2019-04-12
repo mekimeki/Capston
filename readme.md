@@ -3,6 +3,7 @@
 ## About Go語
 
 프로젝트 설명부분
+체크
 
 ## About our team (Git)
 
