@@ -12,6 +12,9 @@
       <img src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-3/3/72-512.png" alt="" width="200" height="200">
       <v-btn color="success" v-on:click="cancel()">취소</v-btn>
       <v-btn color="success" v-on:click="upload()">업로드</v-btn>
+      <div class="" v-if="vc_getter">
+        <span>완료</span>
+      </div>
     </div>
   </div>
 </template>
@@ -75,12 +78,18 @@ export default {
       this.mouseup_lastTime();
     });
   },
+  updated:function(){
+    if(this.vc_getter){
+      this.$router.push({name:'subtitle', params:{check:this.vc_getter}});
+    }
+  },
   computed:{
     ...mapGetters({
       v_getter:'video_getter',
       s_getter:'subtitle_getter',
       sb_getter:'subtitle_buffer_getter',
       seb_getter:'seek_bar_getter',
+      vc_getter:'video_cut_getters',
     }),
   },
 }

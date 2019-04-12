@@ -27,7 +27,7 @@
           flat small
           right
           color="primary"
-          v-on:click="login_page_actions(2)"
+          v-on:click="$router.push({ name: 'register'})"
         >
           회원가입
         </v-btn>
@@ -35,7 +35,7 @@
           flat small
           left
           color="primary"
-          v-on:click="login_page_actions(3)"
+          v-on:click="$router.push({ name: 'password'})"
         >
           비밀번호찾기
         </v-btn>

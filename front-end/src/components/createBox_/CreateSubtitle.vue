@@ -99,18 +99,37 @@ export default {
     },(error)=>{alert("연결을 확인해 주세요")});
   },
   updated:function(){
-    for (let i = 0; i < this.subtitle_box.length; i++) {
-      for (let s = 0; s < this.sb_getter.length; s++) {
-        if(this.subtitle_box[i].firstTime > this.sb_getter[s].firstTime){
-          this.subtitle_box.splice(i,0,{
-            "firstTime":this.sb_getter[s].firstTime,
-            "lastTime":this.sb_getter[s].lastTime,
-            "textArea":this.sb_getter[s].textArea,
-          });
-          this.sb_getter.splice(s-1,1);
+    while (this.sb_getter.length != 0) {
+      let i = 0;
+      for (i; i < this.subtitle_box.length; i++) {
+        if (this.subtitle_box[i].firstTime > this.sb_getter[0].firstTime) {
+          break;
+        }else{
+          if(this.subtitle_box.length === i){
+            i = 0;
+            break;
+          }
         }
       }
-    }//end for
+      this.subtitle_box.splice(i,0,{
+        "firstTime":this.sb_getter[0].firstTime,
+        "lastTime":this.sb_getter[0].lastTime,
+        "textArea":this.sb_getter[0].textArea,
+      });
+      this.sb_getter.splice(0,1);
+    }
+    // for (let i = 0; i < this.subtitle_box.length; i++) {
+    //   for (let s = 0; s < this.sb_getter.length; s++) {
+    //     if(this.subtitle_box[i].firstTime > this.sb_getter[s].firstTime){
+    //       this.subtitle_box.splice(i,0,{
+    //         "firstTime":this.sb_getter[s].firstTime,
+    //         "lastTime":this.sb_getter[s].lastTime,
+    //         "textArea":this.sb_getter[s].textArea,
+    //       });
+    //       this.sb_getter.splice(s-1,1);
+    //     }
+    //   }
+    // }//end for
   },
   computed:{
     ...mapGetters({
