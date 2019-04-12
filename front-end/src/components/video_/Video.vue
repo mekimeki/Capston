@@ -1,29 +1,30 @@
 <template lang="html">
-  <div class="">
+  <div id="videoContainer">
     <!--
         video 총시간 구하기
     -->
     <!-- <input type="text" name="" value="" v-model="videoLink">
     <hr> -->
     <div id="videoplayer">
-      <video id="video" width="500" v-on:timeupdate="seek_timeupdate()">
+      <video id="video" v-on:timeupdate="seek_timeupdate()">
         <source src="@/components/test.mp4" type="video/mp4">
         <track kind="subtitles" src="@/components/word.vtt" srclang="en">
       </video>
-
       <!-- <video id="video" class="video-js vjs-default-skin" preload="auto" width="500" height="360" data-setup='{}' v-on:timeupdate="seek_timeupdate()">
         <source src="http://172.26.3.246/storage/streamable_videos/53.m3u8" type="application/x-mpegURL">
       </video> -->
 
       <div id="videoController">
-        <input id="seekBar" type="range" name="" value="0"
-          v-on:change="seek_change()"
-          v-on:dblclick="video_loop(true)"
-          v-on:click="video_loop(false)"
-          v-on:mousedown="mouse_down()"
-          v-on:mouseover="mouse_over()"
-          v-on:mouseup="mouse_up()"
-        >
+        <span id="seekBar_span">
+          <input id="seekBar" type="range" name="" value="0"
+            v-on:change="seek_change()"
+            v-on:dblclick="video_loop(true)"
+            v-on:click="video_loop(false)"
+            v-on:mousedown="mouse_down()"
+            v-on:mouseover="mouse_over()"
+            v-on:mouseup="mouse_up()"
+          >
+        </span>
         <button class="btn" id="playBtn" type="button" name="button" v-on:click="play()">Play</button>
         <span id="videoAudio">
           <input id="audioBar" type="range" name="" value="100" v-on:change="audio()">
@@ -206,75 +207,93 @@ export default {
 </script>
 <style lang="css" scoped>
 /* video css scoped is now file only css*/
-  #videoplayer{
-    float:left;
-    padding:1em 1em .5em;
-    background-color: #ffffff;
-    border: 1px solid black;
-    border-radius: 10px;
+  #video{
+    /* first div -> video div */
+    /* video tag */
+    width:100%;
+    height:100%;
   }
   #videoController{
-    padding: 1px;
-    border: 1px solid white;
-    width:500px;
+    /* second div */
+    /* video controller */
+    position:sticky;
+    width:100%;
+    height:20%;
+    border:1px solid black;
     /* visibility: hidden; */
-    position:absolute;
-    top:260px;
   }
-  #videoplayer:hover #videoController{
+  #videoplayer{
+    /* first div */
+    /* video Box */
+    width:100%;
+    height:100%;
+    float:left;
+  }
+  /* #videoplayer:hover #videoController{
     visibility: inherit;
     position:absolute;
-    top:260px;
+  } */
+
+  #videoContainer{
+    /* top div */
+    width:80%;
+    height:80%;
   }
+
   /* buttons css */
   .btn{
     text-indent:-10000px;
-    width:20px;
-    height:20px;
-    border:none;
+    /* border:none; */
     cursor:pointer;
+    width:5%;
+    height:100%;
   }
   #playBtn{
-    background-size: 20px;
+    background-size:100%;
     background-image:url("../../assets/play.jpg");
-    margin:5px;
   }
   #audioBtn{
-    background-size:20px;
+    border:1px solid black;
+    width:20%;
+    background-size:25%;
     background-image:url("../../assets/audio.png");
-    margin:5px;
   }
   #speedBtn{
-    background-size:20px;
+    background-size:100%;
     background-image:url("../../assets/speed.jpg");
-    margin:5px;
   }
   /* seekbar css */
+  #seekBar_span{
+    width:100%;
+    height:100%;
+  }
   #seekBar{
+    position:sticky;
     -webkit-appearance:none;
-    background: white;
-    width:80%;
-    height:5px;
-    cursor: pointer;
+    background:red;
+    width:100%;
+    height:8%;
+    cursor:pointer;
   }
   #seekBar::-webkit-slider-thumb{
     -webkit-appearance:none;
     width:15px;
     height:15px;
-    background:rgb(47,7,186);
+    background:blue;
     border-radius: 10px;
     cursor:pointer;
   }
   /* audioBar css */
   #audioBar{
-    transform: rotate(-90deg);
-    -webkit-appearance:none;
-    background:white;
-    width:30%;
-    height:5px;
+    /* transform: rotate(-90deg); */
     position:absolute;
-    top:-71px;
-    left:368px;
+    margin:2%;
+    -webkit-appearance:none;
+    background:red;
+    width:10%;
+    height:0.5%;
+    /* top:-71px; */
+    /* left:368px; */
     visibility: hidden;
   }
   #audioBar::-webkit-slider-thumb{

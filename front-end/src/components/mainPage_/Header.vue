@@ -76,7 +76,7 @@
               <v-icon color="gray darken-2">video_call</v-icon>
             </router-link>
             <v-icon color="gray darken-2">notifications</v-icon>
-            <router-link to="/login">
+            <router-link to="/log/login">
               <v-icon color="gray darken-2">account_circle</v-icon>
             </router-link>
           </v-layout>

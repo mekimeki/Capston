@@ -1,58 +1,64 @@
 <template lang="html">
-  <div class="">
-    <!-- 파일 선택시 같은 파일 재선택 안됨 문제 .-->
-    <div class="video">
-      <div class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
-        drop Zone video
+  <v-container>
+   <v-layout row wrap>
+     <v-flex xs12 sm6 md3 class="ma-5">
+       <v-card class="video" width="220">
+         <div class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
+           drop Zone video
 
-        <div class="" v-show="image_video">
-          <img v-bind:src="image_video" alt="" class="img" width="180" height="120"/>
-          <br>
-          <br>
-          <button class="btn" id="videobtn" v-on:click="remove_file($event)">REMOVE</button>
-          <span>|</span>
-          <button class="btn" type="submit" name="button" v-on:click="file_upload()">Upload</button>
-        </div>
+           <div class="" v-show="image_video">
+             <img v-bind:src="image_video" alt="" class="img" width="180" height="120"/>
+             <br>
+             <br>
+             <button class="btn" id="videobtn" v-on:click="remove_file($event)">REMOVE</button>
+             <span>|</span>
+             <button class="btn" type="submit" name="button" v-on:click="file_upload()">Upload</button>
+           </div>
 
-      </div>
-      <label>
-        <input class="hidden" id="videoInput" type="file" name="video" v-on:change="on_change($event)" multiple>
-      </label>
+         </div>
+         <label>
+           <input class="hidden" id="videoInput" type="file" name="video" v-on:change="on_change($event)" multiple>
+         </label>
+         <div class="">
+           <v-btn color="success" v-on:click="file_select_video($event)">video file select</v-btn>
+           <span>{{video_file_name}}</span>
+         </div>
+       </v-card>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="ma-5">
+        <v-card class="subtitle" width="220">
+          <div class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
+            drop Zone subtitle
+
+            <div class="" v-show="image_subtitle">
+              <img v-bind:src="image_subtitle" alt="" class="img" width="180" height="120"/>
+              <br>
+              <br>
+              <button class="btn" id="subtitlebtn" v-on:click="remove_file($event)">REMOVE</button>
+              <span>|</span>
+              <button class="btn" type="submit" name="button" v-on:click="file_upload($event)">Upload</button>
+            </div>
+
+          </div>
+          <label>
+            <input class="hidden" id="subtitleInput" type="file" name="subtitle" v-on:change="on_change($event)">
+          </label>
+          <div class="">
+            <v-btn color="success" v-on:click="file_select_subtitle($event)">subtitle file select</v-btn>
+            <span>{{subtitle_file_name}}</span>
+          </div>
+        </v-card>
+      </v-flex>
+      <!-- change  -->
       <div class="">
-        <v-btn color="success" v-on:click="file_select_video($event)">video file select</v-btn>
-        <span>{{video_file_name}}</span>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="subtitle">
-      <div class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
-        drop Zone subtitle
-
-        <div class="" v-show="image_subtitle">
-          <img v-bind:src="image_subtitle" alt="" class="img" width="180" height="120"/>
-          <br>
-          <br>
-          <button class="btn" id="subtitlebtn" v-on:click="remove_file($event)">REMOVE</button>
-          <span>|</span>
-          <button class="btn" type="submit" name="button" v-on:click="file_upload($event)">Upload</button>
+        <div class="" v-if="up_getters.subtitle">
+          <span>바꾸기</span>
         </div>
-
       </div>
-      <label>
-        <input class="hidden" id="subtitleInput" type="file" name="subtitle" v-on:change="on_change($event)">
-      </label>
-      <div class="">
-        <v-btn color="success" v-on:click="file_select_subtitle($event)">subtitle file select</v-btn>
-        <span>{{subtitle_file_name}}</span>
-      </div>
-    </div>
-    <router-link to="" v-if="up_getters.subtitle"> 다음 단계로 </router-link>
-    //원래
-    <!-- v-if="up_getters.video && up_getters.subtitle" -->
-  </div>
+   </v-layout>
+  </v-container>
 </template>
+
 
 <script>
 import {mapState,mapGetters,mapActions} from 'vuex';
@@ -174,14 +180,22 @@ export default {
     }//
   },
   mounted:function(){
-    this.input_video = document.getElementById("videoInput");
-    this.input_subtitle = document.getElementById("subtitleInput");
-    // let url = "http://172.26.3.246/get-token";
-    // axios.get(url).then((res) => {
-    //   this.token = res.data;
-    // }).catch( error => {
-    //   console.log('failed', error);
-    // });
+    console.log(this.up_getters.subtitle);
+    if(this.up_getters.subtitle){
+      console.log("o");
+      alert("이미 업로드 한 상태 입니다.");
+      this.$router.push({ name: 'main'});
+    }else{
+      console.log("x");
+      this.input_video = document.getElementById("videoInput");
+      this.input_subtitle = document.getElementById("subtitleInput");
+    }
+  },
+  updated:function(){
+    if(this.up_getters.subtitle){
+      console.log("upload move");
+      this.$router.push({name:'c-video', params:{check:this.up_getters.subtitle}});
+    }
   },
   computed:{
     ...mapGetters({
@@ -196,13 +210,18 @@ export default {
 *{
   font-family: 'Arial';
   font-size: 12px;
+  text-align: center;
 }
 .dropzone{
-  width:200px;
+  text-align: center;
+  width:220px;
   height:200px;
-  border:1px solid black;
+  border:5px solid rgb(17, 74, 218);
 }
 .hidden{
   display: none;
+}
+button:hover{
+  color:blue;
 }
 </style>

@@ -7,7 +7,6 @@ const state = {
     email:"",
     PassWord:"",
   },
-  login_page:"",
   upload:{//upload
     video:false,
     subtitle:false,
