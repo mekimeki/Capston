@@ -71,16 +71,18 @@
           append-icon="search"
           color="gray"
           hide-details
-
         ></v-text-field>
+        <v-spacer></v-spacer>
           <v-layout justify-center > 
             <v-spacer></v-spacer>
             <v-icon color="gray darken-2">video_call</v-icon>
             <v-spacer></v-spacer>
             <v-icon color="gray darken-2">notifications</v-icon>
-            <router-link to="/log/login">
-              <v-icon color="gray darken-2">account_circle</v-icon>
-            </router-link>
+
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">account_circle</v-icon>
+            <v-spacer></v-spacer>
+            
           </v-layout>
       </v-layout>
     </v-toolbar>
