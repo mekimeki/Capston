@@ -115,10 +115,15 @@ class QuizController extends Controller
 		}
     }
 
-    public function result($id)
+    public function result(Request $request)
     {
-
+        $results = $request->input('results');
+        \Log::debug($results);
+        // $result = explode(',', $results);
+        // \Log::debug($result);
+        return "a";
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -135,7 +140,7 @@ class QuizController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         
     }
@@ -182,6 +187,7 @@ class QuizController extends Controller
 			return '검색 결과가 없습니다.';
 		}
     }
+
 
     /**
      * Show the form for editing the specified resource.

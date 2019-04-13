@@ -16,6 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//<<<<<<< Updated upstream
 //비디오테스트
 Route::group(['middleware'=>['auth']],function(){
 	
@@ -92,3 +93,7 @@ Route::get('voice/comparison',[
     'as' => 'voice.comparison',
     'uses' => 'VoiceAnalysisController@comparison'
 ]);
+//=======
+// Route::get('quiz', 'QuizController@index');
+// Route::get('solution', 'QuizController@show')->name('quiz');
+//>>>>>>> Stashed changes
