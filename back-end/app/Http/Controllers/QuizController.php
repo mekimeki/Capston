@@ -121,6 +121,8 @@ class QuizController extends Controller
         \Log::debug($results);
         // $result = explode(',', $results);
         // \Log::debug($result);
+        \DB::insert('insert into scores (m_id, score) values (?, ?)', [1, $results]);
+
         return "a";
     }
 
