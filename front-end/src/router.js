@@ -32,19 +32,41 @@ import login from '@/components/login_/Login';
 
 
 import test from '@/views/Test';//test page
+import start from './views/Start_page';
+import quiz_select from './views/Quiz_select';
+import quiz_one from './views/Quiz_one';
+
 
 export default new Router({
   mode:'history',//#を消す。
   routes:[
     { // main
       path:'/',
+      name:'start',
+      component:start,
+    },
+    {
+      path:'/main',
       name:'main',
       component:main,
       children:[
 
       ]
     },
+
+    {
+      path:'/qselect',
+      name:'qselect',
+      component:quiz_select,
+    },
+    {
+      path:'/quizOne',
+      name:'quizOne',
+      component:quiz_one,
+    },
+
     { //video
+
       path:'/video',
       name:'video',
       component:video_see,
@@ -52,6 +74,7 @@ export default new Router({
 
       ]
     },
+
     { //create
       path:'/create',
       name:'create',
