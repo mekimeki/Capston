@@ -14,9 +14,6 @@ const mutations = {
   login_mutation: (state,payload) => {
     state.login = payload;
   },
-  login_page_mutation: (state,payload) => {
-    state.login_page = payload;
-  },
   upload_mutation: (state,payload) => { //upload
     if(payload){
       state.upload.video = true;

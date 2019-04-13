@@ -11,18 +11,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-card class="pa-5" v-if="lp_getters == 1">
-          <login_></login_>
-        </v-card>
-
-        <v-card class="pa-5" v-else-if="lp_getters == 2">
-          <loginRegister_></loginRegister_>
-        </v-card>
-
-        <v-card class="pa-5" v-else-if="lp_getters == 3">
-          <loginRegister_></loginRegister_>
-        </v-card>
-
+        <router-view></router-view>
       </v-flex>
     </v-layout>
   </v-container>
@@ -31,30 +20,11 @@
 <script>
 import login_ from '@/components/login_/Login';
 import loginRegister_ from '@/components/login_/LoginRegister';
-import { mapGetters, mapActions } from 'vuex';//vuex actions import
 export default {
   components:{
     login_,
     loginRegister_,
   },
-  data(){
-    return{
-      check:1,
-    }
-  },
-  methods:{
-    ...mapActions(['login_page_actions']),
-
-  },
-  computed:{
-    ...mapGetters({
-      lp_getters:'login_page_getters'
-    }),
-  },
-  mounted:function(){
-    this.login_page_actions(1);
-  }
-
 }
 </script>
 

@@ -1,16 +1,9 @@
 <template lang="html">
   <v-container>
-    <v-layout row wrap>
-      <v-flex grid-list-xl>
-        <v-card>
-          <video_></video_>
-          <subtitle_></subtitle_>
-        </v-card>
-      </v-flex>
-      <v-flex>
-        <v-card>
-          <content_></content_>
-        </v-card>
+    <v-layout>
+      <v-flex xs12>
+        <video_></video_>
+        <!-- <content_></content_> -->
       </v-flex>
     </v-layout>
   </v-container>

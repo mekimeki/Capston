@@ -14,9 +14,6 @@ const getters = {
   login_getters: (state) =>{
     return state.login;
   },
-  login_page_getters: (state) =>{//login page check getters
-    return state.login_page;
-  },
   upload_getters: (state) =>{
     return state.upload;
   },

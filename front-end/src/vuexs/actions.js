@@ -29,9 +29,6 @@ const actions = {
       commit('login_mutation',payload);
     }
   },
-  login_page_actions : ({commit},payload) => {//login page move
-    commit('login_page_mutation',payload);
-  },
   upload_actions : ({commit},payload,check) => {
     let form = new FormData();
     if (check) {
@@ -80,7 +77,8 @@ const actions = {
     axios.post(url,form).then( (res) => {
       console.log(res.data);
       if(res.data){
-        alert("준비 끝 났습니다.");
+        // alert("준비 끝 났습니다.");
+        console.log("준비끝");
         commit('video_cut_mutation',true);
       }
     }).catch( error => {

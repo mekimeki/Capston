@@ -9,7 +9,7 @@
 
 <script>
 import video_ from "@/components/video_/Video";
-import createSubtitle_ from "@/components/createBox_/CreatSubtitle";
+import createSubtitle_ from "@/components/createBox_/CreateContent";
 import createInput_ from "@/components/createBox_/CreateInput";
 export default {
   components:{
