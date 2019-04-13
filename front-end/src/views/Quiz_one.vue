@@ -9,7 +9,7 @@
 
 <script>
 import header_ from '@/components/mainPage_/Header';
-import quizone_ from '@/components/quizPage_/QuizeOne';
+import quizone_ from '@/components/quizPage_/QuizOne';
 
 export default {
   components:{
