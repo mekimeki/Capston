@@ -83,3 +83,12 @@ Route::get('do',function(){
 });
 Route::get('/check-auth','MemberController@checkAuth');
 
+Route::get('voice/analysis', [
+    'as' => 'voice.analy',
+    'uses' => 'VoiceAnalysisController@analysis'
+]);
+
+Route::get('voice/comparison',[
+    'as' => 'voice.comparison',
+    'uses' => 'VoiceAnalysisController@comparison'
+]);
