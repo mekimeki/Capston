@@ -1,5 +1,5 @@
 <template lang="html">
-  <v-container pt-5 fluid grid-list-md>
+  
     <v-layout justify-center row wrap>
       <v-flex xs12 sm3>
         <v-card>
@@ -66,7 +66,7 @@
       </v-flex>
       
     </v-layout>
-  </v-container>
+ 
 </template>
 
 <script>

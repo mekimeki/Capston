@@ -96,12 +96,12 @@
     data: () => ({
       drawer: null,
       items: [
-        { text: '홈페이지', icon: 'home' , link:'/' },
+        { text: '홈페이지', icon: 'home' , link:'main' },
         { text: '영상 관리', icon: 'video_library', link:'video' },
         { text: '영상 제작', icon: 'video_call', link:'video' },
         { text: '퀴즈', icon: 'border_color', link:'qselect' },
         { text: '좋아하는 영상', icon: 'favorite', link:'video' },
-        { text: 'Go語집', icon: 'import_contacts'},
+        { text: 'Go語집', icon: 'import_contacts', link:'allWord'},
         { text: '성적 관리', icon: 'insert_chart', link:'video' }
       ],
     }),
