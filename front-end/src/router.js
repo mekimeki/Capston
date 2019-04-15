@@ -3,9 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-
-import subtitle_create from '@/views/Subtitle_create';
-
 const main = () => {//top views
   return import("./views/Main.vue");
 };
@@ -29,52 +26,53 @@ import register from '@/components/login_/LoginRegister';
 import passowrd_find from '@/components/login_/passwordFind';
 import login from '@/components/login_/Login';
 
-
-
 import test from '@/views/Test';//test page
-import start from './views/Start_page';
-import quiz_select from './views/Quiz_select';
+
+import start from './views/Start_page'; //start page
+
+import quiz_select from './views/Quiz_select'; //quiz
 import quiz_one from './views/Quiz_one';
 
+import all_word from './views/Word_book';
 
 export default new Router({
   mode:'history',//#を消す。
   routes:[
-    { // main
+    { //start
       path:'/',
       name:'start',
       component:start,
     },
-    {
+    { //main
       path:'/main',
       name:'main',
       component:main,
       children:[
-
       ]
     },
-
-    {
+    { //quizSelect
       path:'/qselect',
       name:'qselect',
       component:quiz_select,
     },
-    {
+    { //quizOne
       path:'/quizOne',
       name:'quizOne',
       component:quiz_one,
     },
+    { //allWord
+      path:'/allWord',
+      name:'allWord',
+      component:all_word,
 
+    },
     { //video
-
       path:'/video',
       name:'video',
       component:video_see,
       children:[
-
       ]
     },
-
     { //create
       path:'/create',
       name:'create',
