@@ -1,7 +1,7 @@
 <template lang="html">
-  <v-container pt-5 fluid grid-list-md>
-    <v-layout justify-center row wrap>
-      <v-flex xs12 sm3>
+
+    <v-layout justify-space-around row wrap>
+      <v-flex xs12 sm3 ml-5>
         <v-card>
           <v-container >
             <span>등록한 채널</span>
@@ -66,7 +66,7 @@
       </v-flex>
 
     </v-layout>
-  </v-container>
+ 
 </template>
 
 <script>

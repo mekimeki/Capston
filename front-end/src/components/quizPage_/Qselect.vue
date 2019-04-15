@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import quizOne_ from '@/components/quizPage_/QuizeOne';
+import quizOne_ from '@/components/quizPage_/QuizOne';
 export default {
   components: {
     quizOne_,

@@ -16,6 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//<<<<<<< Updated upstream
 //비디오테스트
 Route::group(['middleware'=>['auth']],function(){
 	
@@ -91,3 +92,7 @@ Route::post('voice/record',[
 	'as' => 'voice.record',
 	'uses' => 'VoiceAnalysisController@voiceRecord'
 ]);
+
+// Route::get('quiz', 'QuizController@index');
+// Route::get('solution', 'QuizController@show')->name('quiz');
+

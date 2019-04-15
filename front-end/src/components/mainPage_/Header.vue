@@ -71,16 +71,18 @@
           append-icon="search"
           color="gray"
           hide-details
-
         ></v-text-field>
+        <v-spacer></v-spacer>
           <v-layout justify-center > 
             <v-spacer></v-spacer>
             <v-icon color="gray darken-2">video_call</v-icon>
             <v-spacer></v-spacer>
             <v-icon color="gray darken-2">notifications</v-icon>
-            <router-link to="/log/login">
-              <v-icon color="gray darken-2">account_circle</v-icon>
-            </router-link>
+
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">account_circle</v-icon>
+            <v-spacer></v-spacer>
+            
           </v-layout>
       </v-layout>
     </v-toolbar>
@@ -94,12 +96,12 @@
     data: () => ({
       drawer: null,
       items: [
-        { text: '홈페이지', icon: 'home' , link:'/' },
+        { text: '홈페이지', icon: 'home' , link:'main' },
         { text: '영상 관리', icon: 'video_library', link:'video' },
         { text: '영상 제작', icon: 'video_call', link:'video' },
         { text: '퀴즈', icon: 'border_color', link:'qselect' },
         { text: '좋아하는 영상', icon: 'favorite', link:'video' },
-        { text: 'Go語집', icon: 'import_contacts'},
+        { text: 'Go語집', icon: 'import_contacts', link:'allWord'},
         { text: '성적 관리', icon: 'insert_chart', link:'video' }
       ],
     }),

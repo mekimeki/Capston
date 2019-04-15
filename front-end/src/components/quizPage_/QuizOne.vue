@@ -111,7 +111,8 @@
             v-if="n==7"
             color="red lighten-1"
             flat="flat"
-            v-on:click.stop="dialog = false"
+            v-on:click.stop="dialog = false, postQuest()"
+            
           >
             {{ close }}
           </v-btn>
@@ -126,7 +127,9 @@
 
 
 <script>
-  import axios from 'axios'
+import axios from 'axios'
+import { constants } from 'crypto';
+
   export default {
   data () {
       return {
@@ -142,6 +145,7 @@
         answer: 0,
         select: 99,
         result: [],
+        score: 0
       }
     },
     methods: {
@@ -150,7 +154,7 @@
         this.active = (active < 6 ? active + 1 : 0)
       },
       getQuest() {
-        const baseURI ='http://172.26.1.64/api/quiz';
+        const baseURI ='http://172.26.1.97/api/quiz';
         axios.get(baseURI).then((res)=>{
           var back = res.data;
           this.example = back.choice;
@@ -160,9 +164,47 @@
         console.log('failed',error);
       });
       },
+      //FormData()方式
+      postQuest() {
+        var form = new FormData();
+        form.append("results", this.score);
+        axios.get('http://172.26.1.97/get-token').then( response =>{
+          if(response.data){
+            form.append("_token",response.data);
+            axios.post('http://172.26.1.97/api/quiz', form)
+        .then( response =>{
+          console.log('response', ok)
+        }).catch(error => {
+          console.log('failed', error)
+        })
+      }
+        }
+        )},
+   　 // postQuest() {
+   　 //     var postData = {
+   　 //     results:this.result
+   　 //     };
+   　 //     //mime data
+   　 //     let axiosConfig = {
+   　 //     headers: {
+   　 //     "Access-Control-Allow-Origin": "*",
+   　 //     'Content-Type': 'application/x-www-form-urlencoded',
+   　 //     'Accept': 'application/json'
+   　 //     }
+   　 //     };
+   　 //     axios.post('http://172.26.1.97/api/quiz', postData, axiosConfig )
+   　 //     .then(response=> {
+   　 //       console.log('response', OK )
+   　 //     }).catch(error => {
+   　 //       console.log('failde', error)
+   　 //     })
+   　 //   }, 
+　
       checkAns() {
-        if(this.select==this.answer)
+        if(this.select==this.answer){
           this.result.push([this.select+1,this.answer+1,'O']);
+          this.score = this.score + 20;
+          }
         else
           this.result.push([this.select+1,this.answer+1,'X']);
 

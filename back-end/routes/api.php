@@ -36,3 +36,9 @@ Route::get('submit','VideoController@submit');
 
 Route::post('/searchJp','CrawlingController@searchJp');
 Route::post('/searchEn','CrawlingController@searchEn');
+
+Route::get('quiz', 'QuizController@english');
+Route::post('quiz', 'QuizController@result');
+
+Route::get('show/{b_id}', 'QuizController@show');
+Route::get('japan', 'QuizController@japanese'); 
