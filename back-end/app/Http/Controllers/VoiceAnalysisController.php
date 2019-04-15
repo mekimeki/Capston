@@ -108,6 +108,7 @@ class VoiceAnalysisController extends Controller
         $faudio = $ffmpeg->open(public_path('audio\\check.webm'));
         $auido_format = new \FFMpeg\Format\Audio\Wav();
         $faudio->save($auido_format, public_path('audio\\check.wav'));
+
         
     }
 }
