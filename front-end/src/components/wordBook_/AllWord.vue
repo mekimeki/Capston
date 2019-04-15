@@ -25,47 +25,58 @@
     
 
     <!--words button-->
-    <v-flex lg9 sm12 xs2 >
-        <v-card xs12 sm6 md3 height="600px" color="cyan lighten-3">
-            <v-layout v-for="i in 10" :key="i" justify-space-around>
-                <v-btn
-                xs1 sm1 md1
-                large v-for="i in 5" 
-                :key="i" 
-                >
-                <h3>
-                BANANA
-                </h3>
-                </v-btn>
+    
+    <v-flex lg9 sm12 xs2 row wrap >
+        <v-container
+        fluid
+        grid-list-md
+    >
+        <v-layout justify-center row wrap>
+        <v-flex
+            v-for="card in cards"
+            :key="card.word"
+            v-bind="{ [`xs${card.flex}`]: true }"
+            md2
+        >
+            <v-card color="red">
+            <v-card-text>
+            <v-layout justify-end>
+            <v-icon color="gray darken-2">video_call</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">notifications</v-icon>
+            <v-icon color="gray darken-2">account_circle</v-icon>
             </v-layout>
-        </v-card>
+            </v-card-text>
+                <v-container
+                fill-height
+                fluid
+                pa-2
+                text-xs-center
+                >
+                <v-layout fill-height>
+                    <v-flex xs12 align-end flexbox>
+                        
+                        <v-card class="headline black--text" v-text="card.word"></v-card>
+                        <v-card class="headline black--text" v-text="card.mean"></v-card>
+                    </v-flex>
+                </v-layout>
+                </v-container>
+            
+
+    
+            </v-card>
+        </v-flex>
+        </v-layout>
+    </v-container>
     </v-flex>
+    
 
     <!--words album-->
     <v-flex lg3 sm12 xs12>
         <v-card height="600px" color="deep-orange lighten-3">
-        각종 현황
         </v-card>
-    </v-flex>
+        </v-flex>
     </v-layout>
-
-    <div id="app">
-    <h4>User</h4>
-        <div>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Select All<input type="checkbox" v-on:click="selectAll()" v-model="allSelected"></th>
-                </tr>
-                <tr v-for="user in users" :key="user">
-                    <td>{{ user.name }}</td>
-                    <td><input type="checkbox" v-model="userIds" v-on:click="select()" :value="user.id"></td>
-                </tr>
-            </table>
-        </div>
-
-        <span>Selected Ids: {{ userIds }}</span>
-</div>
     </v-container>
 </template>
 
@@ -73,35 +84,27 @@
 <script>
 export default {
     
-    data() {
-        return{
-        el: '#app',
-        users: [ 
-            { "id": "Shad", "name": "Shad" }, 
-            { "id": "Duane", "name": "Duane" }, 
-            { "id": "Myah", "name": "Myah" }, 
-            { "id": "Kamron", "name": "Kamron" }, 
-            { "id": "Brendon", "name": "Brendon" }
-        ],
-        selected: [],
-        allSelected: false,
-        userIds: []
-        }
-    },
-    methods: {
-        selectAll() {
-            this.userIds = [];
-
-            if (this.allSelected) {
-                for (user in this.users) {
-                    this.userIds.push(user[name].toString());
-                }
-            }
-        },
-        select() {
-            this.allSelected = false;
-        }
-    }
+data() {
+    return {
+    cards: [
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    { word: 'Banana', mean: '바나나', flex: 4 },
+    ]
+}
+}
+    
 
 }
 
