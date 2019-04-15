@@ -41,14 +41,13 @@ class VoiceAnalysisController extends Controller
             }
 
         }
-        
         $analy = $this->comparison($datas[0],$datas[1]);
         
         return view("check",compact('datas','analy'));
     }
 
     function comparison($a, $b){
-        $datas = []; 
+        $datas = [];
         $datas[] = metaphone($a);
         $datas[] = metaphone($b);
         
@@ -90,5 +89,25 @@ class VoiceAnalysisController extends Controller
         }
 
         return "편집거리 = ".$M[strlen($a) - 1][strlen($b) - 1];
+    }
+
+    public function voiceRecord(Request $request){
+        $tmpfile = $request->all();
+
+        $file = $tmpfile["audio"];
+        
+        move_uploaded_file($file, public_path('audio\\check.webm'));
+
+        $ffmpeg = \FFMpeg\FFMpeg::create(array(
+            'ffmpeg.binaries'  => 'C:/ffmpeg/bin/ffmpeg.exe',
+            'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
+            'timeout'          => 3600, // The timeout for the underlying process
+            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+        ));
+
+        $faudio = $ffmpeg->open(public_path('audio\\check.webm'));
+        $auido_format = new \FFMpeg\Format\Audio\Wav();
+        $faudio->save($auido_format, public_path('audio\\check.wav'));
+        
     }
 }
