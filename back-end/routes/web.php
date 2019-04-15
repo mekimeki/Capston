@@ -62,7 +62,6 @@ Route::get('/myWordBook','MemberController@myWordBook');
 //어휘 테스트 결과
 Route::get('/VTestResult','MemberController@VTestResult');
 
-
 //토큰 테스트
 Route::get('/get-token',function(){
 	return csrf_token() ;
@@ -89,11 +88,11 @@ Route::get('voice/analysis', [
     'uses' => 'VoiceAnalysisController@analysis'
 ]);
 
-Route::get('voice/comparison',[
-    'as' => 'voice.comparison',
-    'uses' => 'VoiceAnalysisController@comparison'
+Route::post('voice/record',[
+	'as' => 'voice.record',
+	'uses' => 'VoiceAnalysisController@voiceRecord'
 ]);
-//=======
+
 // Route::get('quiz', 'QuizController@index');
 // Route::get('solution', 'QuizController@show')->name('quiz');
-//>>>>>>> Stashed changes
+
