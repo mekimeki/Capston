@@ -1,10 +1,10 @@
 <template lang="html">
-
-    <v-layout justify-space-around row wrap>
-      <v-flex xs12 sm3 ml-5>
+  
+    <v-layout justify-center row wrap>
+      <v-flex xs12 sm3>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -20,12 +20,12 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
       <v-flex xs12 sm3>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -41,12 +41,12 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
       <v-flex xs12 sm3>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -62,11 +62,11 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
-
+      
     </v-layout>
- 
+
 </template>
 
 <script>

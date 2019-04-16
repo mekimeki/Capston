@@ -12,7 +12,7 @@
     <!--words select-->
     <v-flex xs12 sm12 class="pb-2">
         <v-layout>
-            <v-card-text><h3>전체단어</h3></v-card-text>
+            <v-card-text><h2>전체단어</h2></v-card-text>
             <v-card-text>
             <v-layout justify-end>
             <v-icon color="gray darken-2">video_call</v-icon>
@@ -23,86 +23,88 @@
         </v-layout>
     </v-flex>
     
-
     <!--words button-->
-    <v-flex lg9 sm12 xs2 >
-        <v-card xs12 sm6 md3 height="600px" color="cyan lighten-3">
-            <v-layout v-for="i in 10" :key="i" justify-space-around>
-                <v-btn
-                xs1 sm1 md1
-                large v-for="i in 5" 
-                :key="i" 
-                >
-                <h3>
-                BANANA
-                </h3>
-                </v-btn>
+    <v-flex lg9 sm12 xs2 row wrap >
+        <v-container
+        fluid
+        grid-list-md
+    >
+        <v-layout justify-center row wrap>
+        <v-flex
+            v-for= "word in words"
+            :key="word"
+            v-bind="{ [`xs${words.flex}`]: true }"
+            md2
+        >
+            <v-card color="red">
+            <v-card-text>
+            <v-layout justify-end>
+            <v-icon color="gray darken-2">video_call</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">notifications</v-icon>
+            <v-icon color="gray darken-2">account_circle</v-icon>
             </v-layout>
-        </v-card>
+            </v-card-text>
+                <v-container
+                fill-height
+                fluid
+                pa-2
+                text-xs-center
+                >
+                <v-layout fill-height>
+                    <v-flex xs12 align-end flexbox>
+                        
+                        <v-card 
+                        class="headline black--text"
+                        v-for="word in words" 
+                        :key="word"
+                        >
+                        {{ word.word }}
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+                </v-container>
+
+            </v-card>
+        </v-flex>
+        </v-layout>
+    </v-container>
     </v-flex>
+    
 
     <!--words album-->
     <v-flex lg3 sm12 xs12>
         <v-card height="600px" color="deep-orange lighten-3">
-        각종 현황
         </v-card>
-    </v-flex>
+        </v-flex>
     </v-layout>
-
-    <div id="app">
-    <h4>User</h4>
-        <div>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Select All<input type="checkbox" v-on:click="selectAll()" v-model="allSelected"></th>
-                </tr>
-                <tr v-for="user in users" :key="user">
-                    <td>{{ user.name }}</td>
-                    <td><input type="checkbox" v-model="userIds" v-on:click="select()" :value="user.id"></td>
-                </tr>
-            </table>
-        </div>
-
-        <span>Selected Ids: {{ userIds }}</span>
-</div>
     </v-container>
 </template>
 
 
-<script>
-export default {
-    
+    <script>
+    import axios from 'axios'
+    import { constants } from 'crypto';
+
+    export default {
+
     data() {
-        return{
-        el: '#app',
-        users: [ 
-            { "id": "Shad", "name": "Shad" }, 
-            { "id": "Duane", "name": "Duane" }, 
-            { "id": "Myah", "name": "Myah" }, 
-            { "id": "Kamron", "name": "Kamron" }, 
-            { "id": "Brendon", "name": "Brendon" }
-        ],
-        selected: [],
-        allSelected: false,
-        userIds: []
+        return {
+        words: [],
+        flex: 4,
+        a: 0,
         }
     },
-    methods: {
-        selectAll() {
-            this.userIds = [];
-
-            if (this.allSelected) {
-                for (user in this.users) {
-                    this.userIds.push(user[name].toString());
-                }
-            }
-        },
-        select() {
-            this.allSelected = false;
-        }
+    mounted() { 
+        const baseURI = "http://172.26.2.146/api/show";
+        axios.get(baseURI)
+        .then((res)=>{
+            this.words = res.data;
+            console.log('ok',res);
+        }).catch(error => {
+            console.log('failed',error);
+        })
     }
-
-}
-
-</script>
+        
+    }
+    </script>
