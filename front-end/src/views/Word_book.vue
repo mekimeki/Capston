@@ -23,6 +23,6 @@ data(){
 
 <style lang="css" scoped>
 .container{
-    max-width: 81%
+    max-width: 82%
 }
 </style>

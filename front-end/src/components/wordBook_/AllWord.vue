@@ -1,26 +1,16 @@
 <template>
-<v-container fluid :grid-list-md="!$vuetify.breakpoint.xs">
-    <v-layout wrap row>
-    <v-toolbar color="white" >
+<v-container white fluid :grid-list-md="!$vuetify.breakpoint.xs">
+    <v-layout white wrap row>
+    <v-toolbar color="white" flat>
         <v-toolbar-items>
-        <v-btn flat>전체 단어</v-btn>
-        <v-btn flat>암기 단어</v-btn>
-        <v-btn flat>미암기 단어</v-btn>
+        <v-btn color="white">전체 단어</v-btn>
+        <v-btn color="white">암기 단어</v-btn>
+        <v-btn color="white">미암기 단어</v-btn>
         </v-toolbar-items>
     </v-toolbar>
 
     <!--words select-->
-    <v-flex xs12 sm12 class="pb-2">
-        <v-layout>
-            <v-card-text><h2>전체단어</h2></v-card-text>
-            <v-card-text>
-            <v-layout justify-end>
-            <v-icon color="gray darken-2">video_call</v-icon>
-            <v-icon color="gray darken-2">notifications</v-icon>
-            <v-icon color="gray darken-2">account_circle</v-icon>
-            </v-layout>
-            </v-card-text>
-        </v-layout>
+    <v-flex white xs12 sm12>
     </v-flex>
     
     <!--words button-->
@@ -28,46 +18,57 @@
         <v-container
         fluid
         grid-list-md
+        white
     >
+    <v-layout justify-end>
+        <v-card-text><h3><li>전체단어</li></h3></v-card-text>
+            <v-icon color="grey darken-3" >check_box_outline_blank</v-icon>
+            <v-icon color="grey darken-3" medium>playlist_add</v-icon>
+            <v-icon color="grey darken-3" >delete</v-icon>
+    </v-layout>
         <v-layout justify-center row wrap>
         <v-flex
-            v-for= "word in words"
-            :key="word"
-            v-bind="{ [`xs${words.flex}`]: true }"
-            md2
+        v-for= "(word, i) in words"
+        :key="(word, i)"
+        v-bind="{ [`xs${words.flex}`]: true }"
+        md2
         >
-            <v-card color="red">
-            <v-card-text>
-            <v-layout justify-end>
-            <v-icon color="gray darken-2">video_call</v-icon>
+        <v-card color="blue-grey lighten-4">
+        <v-card-text>
+        <v-layout justify-end>
+            <v-icon color="grey darken-3">check_box_outline_blank</v-icon>
             <v-spacer></v-spacer>
-            <v-icon color="gray darken-2">notifications</v-icon>
-            <v-icon color="gray darken-2">account_circle</v-icon>
-            </v-layout>
-            </v-card-text>
-                <v-container
-                fill-height
-                fluid
-                pa-2
-                text-xs-center
-                >
-                <v-layout fill-height>
-                    <v-flex xs12 align-end flexbox>
-                        
-                        <v-card 
-                        class="headline black--text"
-                        v-for="word in words" 
-                        :key="word"
-                        >
-                        {{ word.word }}
-                        </v-card>
-                    </v-flex>
-                </v-layout>
-                </v-container>
 
-            </v-card>
-        </v-flex>
+            <!--start of like icon-->
+            <v-icon v-if="word.memorized=='T'" id="memorized" color="red" v-on:click="changeHeart(i)">
+            favorite
+            </v-icon>
+
+            <v-icon v-else id="memorized" color="red" v-on:click="changeHeart(i)">
+            favorite_border
+            </v-icon>
+
         </v-layout>
+        </v-card-text>
+            <v-container
+            fill-height
+            fluid
+            pa-2
+            text-xs-center
+            >
+            <v-layout  fill-height>
+                <v-flex xs12 align-end flexbox>
+                    <v-card
+                    color="whtie"
+                    >
+                    {{ word.word }}
+                    </v-card>
+                </v-flex>
+            </v-layout>
+            </v-container>
+        </v-card>
+        </v-flex>
+    </v-layout>
     </v-container>
     </v-flex>
     
@@ -92,11 +93,21 @@
         return {
         words: [],
         flex: 4,
-        a: 0,
+        memorized:'',
+        }
+    },
+    methods: {
+        changeHeart(i) {
+            console.log(this.words[i].memorized);
+            if(this.words[i].memorized=="T"){
+                this.words[i].memorized="F"    
+            }else{
+                this.words[i].memorized="T"
+            }
         }
     },
     mounted() { 
-        const baseURI = "http://172.26.2.146/api/show";
+        const baseURI = "http://172.26.1.52/api/book/0";
         axios.get(baseURI)
         .then((res)=>{
             this.words = res.data;
@@ -105,6 +116,11 @@
             console.log('failed',error);
         })
     }
-        
     }
     </script>
+
+    <style  lang="css" scoped>
+    #memorized {
+        cursor: pointer;
+    }
+    </style>
