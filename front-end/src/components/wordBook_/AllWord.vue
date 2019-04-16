@@ -12,7 +12,7 @@
     <!--words select-->
     <v-flex xs12 sm12 class="pb-2">
         <v-layout>
-            <v-card-text><h3>전체단어</h3></v-card-text>
+            <v-card-text><h2>전체단어</h2></v-card-text>
             <v-card-text>
             <v-layout justify-end>
             <v-icon color="gray darken-2">video_call</v-icon>
@@ -23,9 +23,7 @@
         </v-layout>
     </v-flex>
     
-
     <!--words button-->
-    
     <v-flex lg9 sm12 xs2 row wrap >
         <v-container
         fluid
@@ -33,9 +31,9 @@
     >
         <v-layout justify-center row wrap>
         <v-flex
-            v-for="card in cards"
-            :key="card.word"
-            v-bind="{ [`xs${card.flex}`]: true }"
+            v-for= "word in words"
+            :key="word"
+            v-bind="{ [`xs${words.flex}`]: true }"
             md2
         >
             <v-card color="red">
@@ -56,14 +54,17 @@
                 <v-layout fill-height>
                     <v-flex xs12 align-end flexbox>
                         
-                        <v-card class="headline black--text" v-text="card.word"></v-card>
-                        <v-card class="headline black--text" v-text="card.mean"></v-card>
+                        <v-card 
+                        class="headline black--text"
+                        v-for="word in words" 
+                        :key="word"
+                        >
+                        {{ word.word }}
+                        </v-card>
                     </v-flex>
                 </v-layout>
                 </v-container>
-            
 
-    
             </v-card>
         </v-flex>
         </v-layout>
@@ -81,31 +82,29 @@
 </template>
 
 
-<script>
-export default {
-    
-data() {
-    return {
-    cards: [
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    { word: 'Banana', mean: '바나나', flex: 4 },
-    ]
-}
-}
-    
+    <script>
+    import axios from 'axios'
+    import { constants } from 'crypto';
 
-}
+    export default {
 
-</script>
+    data() {
+        return {
+        words: [],
+        flex: 4,
+        a: 0,
+        }
+    },
+    mounted() { 
+        const baseURI = "http://172.26.2.146/api/show";
+        axios.get(baseURI)
+        .then((res)=>{
+            this.words = res.data;
+            console.log('ok',res);
+        }).catch(error => {
+            console.log('failed',error);
+        })
+    }
+        
+    }
+    </script>
