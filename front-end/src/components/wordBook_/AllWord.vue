@@ -38,6 +38,26 @@
         <v-layout justify-end>
             <v-icon color="grey darken-3">check_box_outline_blank</v-icon>
             <v-spacer></v-spacer>
+            <v-icon color="gray darken-2">notifications</v-icon>
+            <v-icon color="gray darken-2">account_circle</v-icon>
+            </v-layout>
+            </v-card-text>
+                <v-container
+                fill-height
+                fluid
+                pa-2
+                text-xs-center
+                >
+                <v-layout fill-height>
+                    <v-flex xs12 align-end flexbox>
+                        <v-card 
+                        class="headline black--text">
+                            {{ word.word }}
+                        </v-card>
+                    </v-flex>
+
+                </v-layout>
+                </v-container>
 
             <!--start of like icon-->
             <v-icon v-if="word.memorized=='T'" id="memorized" color="red" v-on:click="changeHeart(i)">
