@@ -53,15 +53,12 @@
                 >
                 <v-layout fill-height>
                     <v-flex xs12 align-end flexbox>
-                        
                         <v-card 
-                        class="headline black--text"
-                        v-for="word in words" 
-                        :key="word"
-                        >
-                        {{ word.word }}
+                        class="headline black--text">
+                            {{ word.word }}
                         </v-card>
                     </v-flex>
+
                 </v-layout>
                 </v-container>
 
