@@ -10,7 +10,7 @@
 
     <v-flex xs12 sm12 class="pb-2" v-for="i in 1" :key="i">
     <v-card color="amber lighten-3">
-        <v-img class="start" :src="require(`@/assets/Start/start.jpg`)">
+        <v-img class="start" :src="require(`@/assets/Start/start.jpg`)" aspect-ratio="4.0">
         </v-img>
     </v-card>
     </v-flex>

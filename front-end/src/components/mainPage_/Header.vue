@@ -7,9 +7,10 @@
       clipped
       app
       :width="200"
+
     >
       <v-list dense >
-        <v-list-tile v-for=" (item,n) in items" :key="item.text" :to="`${ item.link }`" >
+        <v-list-tile v-for="item in items" :key="item.text" :to="`${ item.link }`" >
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -60,7 +61,7 @@
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <v-toolbar-title class="mr-5 align-center">
-        <span class="title">GO語</span>
+        <span flat class="title">GO語</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-layout row align-center style="max-width: 650px">
