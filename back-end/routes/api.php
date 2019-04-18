@@ -40,5 +40,7 @@ Route::post('/searchEn','CrawlingController@searchEn');
 Route::get('quiz', 'QuizController@english');
 Route::post('quiz', 'QuizController@result');
 
-Route::get('show/{b_id}', 'QuizController@show');
+Route::get('show', 'QuizController@show');
+Route::get('book/{b_id}', 'QuizController@book');
+Route::get('memo/{mm}', 'QuizController@memo');
 Route::get('japan', 'QuizController@japanese'); 

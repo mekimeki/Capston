@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Voca;
+use App\Book;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
@@ -153,43 +154,33 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($b_id)
-    {
-        //$id = 2; 
-        $vocas = voca::where('b_id', $b_id)->select('word')->get();
-        
-        $this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$vocas[1]->word.'&dic=jp');
-		$result = $this->snoopy->results;
-
-		$matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
-		$mean = preg_replace("/<ul[^>]*>/i", '', $mean);
-        $mean = preg_replace("/<\/ul>/i", '', $mean);
-        $mean = preg_replace("/<\/li>/", '', $mean);
-        $mean = preg_replace("/<span[^>]*>/i", '', $mean);
-        $mean = preg_replace("/<\/span>/", '', $mean);
-        $mean = preg_replace("/(<daum[^>]*>)/i", '', $mean);
-        $mean = preg_replace("/(<\/daum:word>)/", '', $mean);
-        $mean = preg_replace("/[0-9]./", '', $mean);
-        $mean = preg_replace("/\t|\n/", '', $mean);
-
-		if($matchFlag){
-			$array = explode('<li>', $mean[0]);
-            array_shift($array);
-            
-            // $back = ["word"=>$vocas, "mean"=>$array];
-            // $back = json_encode($back, JSON_UNESCAPED_UNICODE);
-            // return $back;
-            $array = json_encode($array, JSON_UNESCAPED_UNICODE);
-            $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
-            $back = ["word"=>$vocas, "mean"=>$array];
-            $back = json_encode($back, JSON_UNESCAPED_UNICODE);
-            return $vocas;
-
-		}else{
-			return '검색 결과가 없습니다.';
-		}
+    public function show()
+    {   
+        // $books = book::where('m_id', 1)->select('b_id')->get();
+        // $vocas = [];
+        // for($i=0; $i<$books->count(); $i++) {
+        //     $array[$i] = json_decode(voca::where('b_id', $books[$i]->b_id)->select('word')->get(),true);
+        //     $vocas = array_merge($vocas,$array[$i]);
+        // }
+        // $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
+        // return $vocas;
     }
 
+    public function book($b_id = null)
+    {
+        $books = book::where('m_id', 1)->select('b_id')->get();
+        $vocas = [];
+        if($b_id == false) {
+            for($i=0; $i<$books->count(); $i++) {
+                $array[$i] = json_decode(voca::where('b_id', $books[$i]->b_id)->select('word', 'memorized')->get(), true);
+                $vocas = array_merge($vocas, $array[$i]);
+            }
+        } else {
+            $vocas = voca::where('b_id', $b_id)->select('word', 'memorized')->get();
+        }
+        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
+        return $vocas;
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -197,6 +188,21 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function memo($mm = null)
+    {
+        $books = book::where('m_id', 1)->select('b_id')->get();
+        if($mm == "T") {
+            for($i=0; $i<$books->count(); $i++) {
+                $vocas = voca::where('memorized', $mm)->select('word')->get();
+            }
+        } else {
+            $vocas = voca::where('memorized', $mm)->select('word')->get();
+        }
+        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
+        return $vocas;
+    }
+
     public function edit($id)
     {
         //
