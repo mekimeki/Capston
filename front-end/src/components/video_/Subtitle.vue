@@ -1,12 +1,14 @@
 <template lang="html">
   <div class="">
-    <button type="button" name="button"
-    v-on:click="select(subtitle_open)"
-    >자막:{{subtitle_open}}</button>
-    <div class="" v-for="line in subtitle_line">
-      <button type="button" name="button"
-      >{{line['text']['content']}}</button>
-    </div>
+    <v-btn
+      v-on:click="select(subtitle_open)">
+      자막:{{subtitle_open}}
+    </v-btn>
+    <v-layout row wrap>
+      <v-flex v-for="line in subtitle_line">
+        <v-btn color="primary" class="pa-1 ma-1">{{line['text']['content']}}</v-btn>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -45,7 +47,10 @@ export default {
   mounted:function(){
     this.video = this.v_getter;
     let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"
+    // let url = "http://172.26.3.70/submit";
     axios.get(url).then((res)=>{
+      console.log("???",res.data);
+      // this.subtitle_action(res.data.submit);//store.js action
       this.subtitle_action(res.data);//store.js action
       this.subtitle = this.s_getter;
       setInterval(()=>{

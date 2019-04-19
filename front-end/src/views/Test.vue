@@ -3,7 +3,7 @@
     <!-- audio record -->
     <div class="line">
       <audio id="audio" controls src=""></audio>
-      <video id="video" autoplay poster="posterimage.jpg" controls></video>
+      <!-- <video id="video" autoplay poster="posterimage.jpg" controls></video> -->
     </div>
     <br>
     <div class="line">
@@ -53,19 +53,21 @@ export default {
         this.chunks = [];//chunks reset
 
         this.record.ondataavailable = (e) => {//first event data fush in chunks -> this.record event stop
+          console.log("ondataavailable");
           this.chunks.push(e.data);
         }
 
         this.record.addEventListener("stop",() =>{//second event stop event
-
+          console.log("stop");
           this.blob = new Blob(this.chunks, { 'type' : 'audio/wav;base64 codecs=MS_PCM' });//blob data create
           this.audioURL = window.URL.createObjectURL(this.blob);//audio data url create
           this.audio.src = this.audioURL;//url connect
+          this.save();
         });
         alert("녹음 종료");
         this.check = true;
         this.recording_icon.innerHTML = "play_arrow";
-        this.save();
+        // this.save();
       }
     },
     save(){//audio blob to file data
@@ -82,14 +84,14 @@ export default {
   },
   mounted:function(){
     this.audio = document.getElementById('audio');//audio
-    this.video = document.getElementById('video');//video test
+    // this.video = document.getElementById('video');//video test
     this.recording_icon = document.getElementById("recording_icon");
-    navigator.mediaDevices.getUserMedia({audio:true,video:true}).then((stream)=>{//
+    navigator.mediaDevices.getUserMedia({audio:true,video:false}).then((stream)=>{//
     //navigator 브라우저에 대한 정보
     //medioDevices 액세스 제공
     //getUserMedia 권한 부여
-      this.video.srcObject = stream;//test stream data
-      this.video.play();//test
+      // this.video.srcObject = stream;//test stream data
+      // this.video.play();//test
       this.record = new MediaRecorder(stream,{//미디어 쉽게 기록할 수 있도록 해주는 메소
         audioBitsPerSecond : 128000,
         mimeType :''
