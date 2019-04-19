@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="">
+    <!-- 중복 코드 많음 정리 -->
     <span>{{sb_getter.length}}</span>
     <div id="scroll_div"
     v-on:scroll="scroll()">
@@ -11,14 +12,17 @@
         name="input-7-4"
         label="Outline textarea"
         value="자막을 작성 하시오."
-        v-model="tent.textarea">
+        v-model="tent.textArea">
         </v-textarea>
         <v-btn color="success" v-on:click="create_btn(i)">추가</v-btn>
         <v-btn color="success" v-on:click="delete_btn(i)">삭제</v-btn>
+        <span class="" v-if="!up_getters.subtitle_">
+          <v-btn><v-icon v-on:click="record(i,$event)">mic_off</v-icon></v-btn>
+        </span>
       </div>
     </div>
     <div class="">
-      <v-btn color="success" v-on:click="">저장</v-btn>
+      <v-btn color="success" v-on:click="save_btn()">저장</v-btn>
     </div>
   </div>
 </template>
@@ -32,20 +36,19 @@ export default {
       video:"",
       scroll_div:"",
       scroll_bottom:"",
-
       content:[],
+      record_box:[],
       scroll_num:{
         first:0,
         last:100,
       },
-
       terval:"",
       //
       video_time_check:"",
     }
   },
   methods:{
-    ...mapActions(['subtitle_action']),
+    ...mapActions(['subtitle_action','upload_subtitle_actions','upload_content_actions']),
     create_btn(check){
       this.content.splice(check+1,0,{
         "firstTime":this.content[check].lastTime+1,
@@ -61,33 +64,46 @@ export default {
       }
     },
     save_btn(){
-
+      if(!this.up_getters.subtitle_){
+        this.upload_subtitle_actions(this.content);
+      }else{
+        this.upload_content_actions(this.content);
+      }
     },
     scroll(){
-      console.log("?");
       this.scroll_bottom = this.scroll_div.scrollTop;
+    },
+    record(num,evt){
+      evt.target.innerHTML = "mic";
+      this.record_box.push({
+        firstTime:this.content[num].firstTime,
+        lastTime:this.content[num].lastTime,
+        mic:true,
+      });
+
     }
   },
   mounted:function(){
+    console.log("monted");
     this.video = this.v_getter;
     this.scroll_div = document.getElementById('scroll_div');
-    let url = "";
-    if (true) { //subtitle create
-      url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"//url path
-    }else{ //content create
-    } //
-    //
-    axios.get(url).then((res)=>{
-      this.subtitle_action(res.data);
-      for (let i = 0; i < this.s_getter.length; i++) {
-        this.content.push({
-          "firstTime": this.s_getter[i][1][0],
-          "lastTime": this.s_getter[i][1][1],
-          "textArea":this.s_getter[i][2],
-        });
-      }
-    },(error)=>{alert("연결을 확인해 주세요")});
-    //
+    let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"//url path
+
+    if(!this.up_getters.subtitle_){
+      alert("subtitle");
+      axios.get(url).then((res)=>{
+        this.subtitle_action(res.data);
+        for (let i = 0; i < this.s_getter.length; i++) {
+          this.content.push({
+            "firstTime": this.s_getter[i][1][0],
+            "lastTime": this.s_getter[i][1][1],
+            "textArea":this.s_getter[i][2],
+          });
+        }
+      },(error)=>{alert("연결을 확인해 주세요")});
+    }else{
+      alert("content");
+    }
     this.terval = setInterval(()=>{//체크 변수
       this.video_time_check = this.video.currentTime;
     },100);
@@ -95,7 +111,6 @@ export default {
   beforeUpdate:function(){
   },
   updated:function(){
-    console.log("check updated");//2num loop
     while (this.sb_getter.length != 0) {
       let i = 0;
       for (i; i < this.content.length; i++) {
@@ -121,6 +136,7 @@ export default {
       v_getter:'video_getter',
       s_getter:'subtitle_getter',
       sb_getter:'subtitle_buffer_getter',
+      up_getters:'upload_getters'
     }),
   },
   watch:{
@@ -138,12 +154,10 @@ export default {
           }else{
             this.scroll_num.last = this.scroll_num.last +i;
           }
-
-          //
           setTimeout(()=>{
             clearInterval(this.terval);
             let input = document.getElementsByClassName("textarea");
-            input[i].style.backgroundColor = "blue";
+            input[i].style.border = "2px solid blue";
             input[i].scrollIntoView({behavior:'smooth'});
             setTimeout(()=>{
               this.terval = setInterval(()=>{
@@ -152,7 +166,12 @@ export default {
             },this.content[i].lastTime - this.content[i].firstTime);
           },100);
           //
-        }//if end
+        }else{
+          if(this.content[i].lastTime.toFixed(1) === data.toFixed(1)){
+            let input = document.getElementsByClassName("textarea");
+            input[i].style.border = "none";
+          }
+        }
       }//for end
     },
   }
@@ -162,6 +181,6 @@ export default {
 <style lang="css" scoped>
 #scroll_div{
   overflow: scroll;
-  height:300px;
+  height:500px;
 }
 </style>
