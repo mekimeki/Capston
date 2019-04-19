@@ -120,10 +120,10 @@ import { constants } from 'crypto';
         deleteQuest() {
             var form = new FormData();
             form.append("deleteWord", this.deletedWord);
-            axios.get('http://172.26.1.97/get-token').then( response =>{
+            axios.get('http://172.26.1.11/get-token').then( response =>{
                 if(response.data){
                     form.append("_token",reponse.data);
-                    axios.post('http://172.26.2.104/api/deletedWord', form)
+                    axios.post('http://172.26.1.11/api/deletedWord', form)
                 .then( response =>{
                     console.log('respnse', ok)
                 }).catch(error => {

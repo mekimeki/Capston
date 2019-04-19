@@ -154,7 +154,7 @@ import { constants } from 'crypto';
         this.active = (active < 6 ? active + 1 : 0)
       },
       getQuest() {
-        const baseURI ='http://172.26.1.97/api/quiz';
+        const baseURI ='http://172.26.1.11/api/quiz';
         axios.get(baseURI).then((res)=>{
           var back = res.data;
           this.example = back.choice;
@@ -168,10 +168,10 @@ import { constants } from 'crypto';
       postQuest() {
         var form = new FormData();
         form.append("results", this.score);
-        axios.get('http://172.26.1.97/get-token').then( response =>{
+        axios.get('http://172.26.1.11/get-token').then( response =>{
           if(response.data){
             form.append("_token",response.data);
-            axios.post('http://172.26.1.97/api/quiz', form)
+            axios.post('http://172.26.1.11/api/quiz', form)
         .then( response =>{
           console.log('response', ok)
         }).catch(error => {
