@@ -1,8 +1,11 @@
 <template lang="html">
-  <v-container >
+  <div>
+    <header_></header_>
+    <v-container>
     <register_></register_>
     <recommend_></recommend_>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script>

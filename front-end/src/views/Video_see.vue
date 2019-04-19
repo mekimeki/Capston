@@ -1,12 +1,9 @@
 <template lang="html">
   <v-container>
-    <v-layout row wrap>
-      <v-flex xs12 sm8 md8>
+    <v-layout>
+      <v-flex xs12>
         <video_></video_>
-        <subtitle_></subtitle_>
-      </v-flex>
-      <v-flex xs12 sm4 md4>
-        <content_></content_>
+        <!-- <content_></content_> -->
       </v-flex>
     </v-layout>
   </v-container>

@@ -3,23 +3,20 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-
 const main = () => {//top views
   return import("./views/Main.vue");
 };
-const video_see = () => {
+const video_see = () => {//top views
   return import("./views/Video_see.vue");
 };
 
 //create components
-const create = () => {
+const create = () => {//top views
   return import("./views/Create.vue");
 };
-import upload from '@/components/createBox_/create/Upload';
-import create_video from '@/components/createBox_/create/Video_create';
-import create_subtitle from '@/components/createBox_/create/Subtitle_create';
-import create_content from '@/components/createBox_/create/Content_create';
-import create_message from '@/components/createBox_/create/CreateMessage';
+import upload from '@/components/createBox_/Upload';
+import create_video from '@/views/Video_create';
+import create_subtitle from '@/views/Subtitle_create';
 
 //login components
 const login_page = () => {//top views
@@ -29,28 +26,9 @@ import register from '@/components/login_/LoginRegister';
 import passowrd_find from '@/components/login_/passwordFind';
 import login from '@/components/login_/Login';
 
-
-//beforeEnter methods
-const login_check = (path,query_check) => (to,from,next) => {//login and query check .1
-  if(localStorage.getItem('login')){//user check
-    if(query_check){
-      if(to.query[query_check]){//querycheck
-        next();
-      }else{
-        next('/');
-      }
-    }else{
-      next(path);
-    }
-  }else{
-    next(path);
-  }
-}
-
 import test from '@/views/Test';//test page
 
 import start from './views/Start_page'; //start page
-
 
 import quiz_select from './views/Quiz_select'; //quiz
 import quiz_one from './views/Quiz_one';
@@ -69,6 +47,8 @@ export default new Router({
       path:'/main',
       name:'main',
       component:main,
+      children:[
+      ]
     },
     { //quizSelect
       path:'/qselect',
@@ -88,37 +68,46 @@ export default new Router({
     },
     { //video
       path:'/video',
-      name:'v-video',
+      name:'video',
       component:video_see,
+      children:[
+      ]
     },
-    { //create routers
+    { //create
       path:'/create',
       name:'create',
       component:create,
       children:[
-        { //upload
+        {
           path:'upload',
           name:'upload',
           component:upload,
-          beforeEnter:login_check('/log/login','user'),
         },
-        { //create video
-          path:'video',
+        {
+          path:'c-video',
           name:'c-video',
           component:create_video,
-          beforeEnter:login_check('/log/login','video'),
+          beforeEnter:(to, from, next) => {
+            console.log("to",to.params.check);
+            if (to.params.check) {
+              next();
+            }else {
+              next('/create/upload');
+            }
+          }
         },
-        { //create subtitle
+        {
           path:'subtitle',
           name:'subtitle',
           component:create_subtitle,
-          beforeEnter:login_check('/log/login','subtitle'),
-        },
-        { //create content
-          path:'content',
-          name:'content',
-          component:create_content,
-          beforeEnter:login_check('/log/login','content'),
+          beforeEnter:(to, from, next) => {
+            console.log("to",to.params.check);
+            if (to.params.check) {
+              next();
+            }else {
+              next('/create/upload');
+            }
+          }
         },
       ]
     },
@@ -127,24 +116,24 @@ export default new Router({
       name:'login_page',
       component:login_page,
       children:[
-        { //login
+        {
           path:'login',
           name:'login',
           component:login,
         },
-        { //register
+        {
           path:'register',
           name:'register',
           component:register,
         },
-        { //password find
+        {
           path:'password',
           name:'password',
           component:passowrd_find,
         }
       ]
     },
-    { //test record
+    {
       path:'/test',
       name:'test',
       component:test,

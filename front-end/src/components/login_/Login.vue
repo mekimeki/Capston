@@ -11,7 +11,6 @@
 
     <v-text-field
       v-model="login.password"
-      type="password"
       label="PassWord"
       required
     ></v-text-field>
@@ -19,7 +18,7 @@
     <v-flex>
       <v-btn
         block
-        v-on:click="login_click()"
+        v-on:click="login_actions(login)"
       >
         로그인
       </v-btn>
@@ -82,24 +81,10 @@ export default {
   },
   methods:{
     ...mapActions(['login_actions','login_page_actions']),
-    login_click(){
-      this.login_actions(this.login);
-      this.login.email = "";
-      this.login.password = "";
-    }
-  },
-  mounted:function(){
-    if(localStorage.getItem('login')){
-      this.$router.push({name:'main'});
-    }
-  },
-  updated:function(){
-    if(localStorage.getItem('login')){
-      this.$router.push({name:'main'});
-    }
   },
   computed:{
     ...mapGetters({
+
     }),
 
   }

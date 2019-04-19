@@ -1,24 +1,77 @@
-<template>
-  <v-container fluid grid-list-md>
-    <v-layout xs4 row wrap>
-      <v-flex d-flex xs12 sm6 md3 v-for="i in 16">
-        <v-card color="purple" dark>
-          <v-card-title primary class="title">Lorem</v-card-title>
-          <v-card-text>{{ lorem }}</v-card-text>
-        </v-card>
+<template lang="html">
+  
+    <v-layout justify-center row wrap>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
+            <v-layout row wrap>
+              <v-flex
+                v-for="n in 9"
+                :key="n"
+                xs4
+              >
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>  
       </v-flex>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
+            <v-layout row wrap>
+              <v-flex
+                v-for="n in 9"
+                :key="n"
+                xs4
+              >
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>  
+      </v-flex>
+      <v-flex xs12 sm3>
+        <v-card>
+          <v-container >
+            <span>추천 영상</span>
+            <v-layout row wrap>
+              <v-flex
+                v-for="n in 9"
+                :key="n"
+                xs4
+              >
+                <v-card flat tile>
+                  <v-img
+                    :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
+                    height="100px"
+                  ></v-img>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>  
+      </v-flex>
+      
     </v-layout>
-  </v-container>
+ 
 </template>
 
 <script>
-
-  export default {
-    data(){
-      return{
-        lorem:'추천영상',
-      }
-    }
-  }
+export default {}
 </script>
 
+<style lang="css" scoped>
+</style>

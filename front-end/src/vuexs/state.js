@@ -1,19 +1,17 @@
 const state = {
-  video:"",//video element
-  subtitle:[],//subtitle
-  subtitle_buffer:[],//create input subtitle buffer
-  seek_bar:"",//input[range] element
-  login:{//login value
+  video:"",
+  subtitle:[],
+  subtitle_buffer:[],
+  seek_bar:"",
+  login:{
     email:"",
-    nickname:"",
+    PassWord:"",
   },
-  upload:{//upload value
-    video:false, //video name
-    subtitle:false, //subtitle name
-    video_cut:false, //video cut name
-    create_subtitle:false, //subtitle create name
-    content:false, // content create name
+  upload:{//upload
+    video:false,
+    subtitle:false,
   },
+  video_cut:false,
 }
 
 export default state;

@@ -96,7 +96,6 @@
 <script>
 import axios from 'axios'
 import { constants } from 'crypto';
-
     export default {
     data() {
         return {
@@ -138,13 +137,10 @@ import { constants } from 'crypto';
             }else{
                 
             }
-
-
         }
     },
-
     mounted() { 
-        const baseURI = "http://172.26.2.104/api/book/0";
+        const baseURI = "http://172.26.1.11/api/book/0";
         axios.get(baseURI)
         .then((res)=>{
             this.words = res.data;

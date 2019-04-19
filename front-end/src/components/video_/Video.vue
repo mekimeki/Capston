@@ -1,16 +1,16 @@
 <template lang="html">
-  <div>
+  <div id="videoContainer">
     <div id="videoplayer">
-      <video id="video" v-on:timeupdate="seek_timeupdate()" controls src="@/components/test.mp4">
+      <video id="video" v-on:timeupdate="seek_timeupdate()">
+        <source src="@/components/test.mp4" type="video/mp4">
+        <track kind="subtitles" src="@/components/word.vtt" srclang="en">
       </video>
       <!-- <video id="video" class="video-js vjs-default-skin" preload="auto" width="500" height="360" data-setup='{}' v-on:timeupdate="seek_timeupdate()">
         <source src="http://172.26.3.246/storage/streamable_videos/53.m3u8" type="application/x-mpegURL">
       </video> -->
 
       <div id="videoController">
-        <span>
-          <span id="seekBarTime">{{video_time}}</span>
-        </span>
+        <span id="seekBarTime">{{video_time}}</span>
         <input id="seekBar" type="range" name="" value="0"
           v-on:change="seek_change()"
           v-on:dblclick="video_loop(true)"
@@ -68,7 +68,6 @@ export default {
       // time:0,//video time view
       time:"",
       linear:"",
-      linear_check:true,
     }
   },
   methods: {
@@ -133,13 +132,9 @@ export default {
     mouse_move(evt){
       if(this.first_loop_time === 0){
         this.seek_bar.style.background = "linear-gradient(to right, red 0% 0%, blue 0% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
-      }else if(this.first_loop_time != 0){
-        if(this.linear_check){
-          this.seek_bar.style.background = "linear-gradient(to right, red "+this.linear+"% "+this.linear+"%, yellow "+this.linear+"% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
-          this.linear_check = false;
-        }else{
-
-        }
+      }else{
+        console.log("??");
+        this.seek_bar.style.background = "linear-gradient(to right, red "+this.linear+"% "+this.linear+"%, yellow "+this.linear+"% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
       }
     },
     audio_change(){//audio volume control
@@ -179,6 +174,7 @@ export default {
     video_loop(check){
       if(check){//check true -> dblclick
         this.first_loop_time = this.video.currentTime;
+        console.log("dblclcik");
         this.video.pause();
         this.linear = this.seek_bar.value;
       }else{//check false -> click
@@ -190,7 +186,6 @@ export default {
           }else{
             this.last_loop_time = this.video.currentTime;
             this.loop_check = true;
-            this.linear_check = true;
           }
         }
       }
@@ -233,7 +228,7 @@ export default {
   },
   computed:{
     video_time(){
-      return this.time_change(Math.floor(parseInt(this.time)));
+      return this.time_change(this.time);
     },
   },
   watch: {
@@ -260,15 +255,13 @@ export default {
   #videoController{
     position:sticky;
     width:100%;
-    height:110px;
-    /* border:1px solid black; */
-
+    height:25%;
     /* visibility: hidden; */
   }
   #videoplayer{
+    border:1px solid black;
     width:100%;
     height:100%;
-
     float:left;
   }
   /* #videoplayer:hover #videoController{
@@ -276,11 +269,10 @@ export default {
     position:absolute;
   } */
 
-  /* #videoContainer{
-    background: black;
-    width:100%;
-    height:100%;
-  } */
+  #videoContainer{
+    width:70%;
+    height:80%;
+  }
 
   /* buttons css */
   .btn{
@@ -381,16 +373,18 @@ export default {
     position: relative; left: 0%;
   }
   #seekBarLastTime{
-    width:8%;
+    width:10%;
     position: absolute;
+    border:1px solid red;
+    border-radius: 10px;
   }
 
 
-  /* @media only screen and (max-width:800px){
+  @media only screen and (max-width:800px){
     #videoContainer{
       width:90%;
       height:80%;
     }
 
-  } */
+  }
 </style>
