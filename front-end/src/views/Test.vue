@@ -52,6 +52,7 @@ export default {
         this.chunks = [];//chunks reset
 
         this.record.ondataavailable = (e) => {//first event data fush in chunks -> this.record event stop
+          console.log("ondataavailable");
           this.chunks.push(e.data);
         }
 
@@ -66,7 +67,7 @@ export default {
         alert("녹음 종료");
         this.check = true;
         this.recording_icon.innerHTML = "play_arrow";
-              }
+      }
     },
     save(){//audio blob to file data
       let file = new File([this.blob], "audio.webm", {type:"audio/webm; codecs=opus"});//create file data
