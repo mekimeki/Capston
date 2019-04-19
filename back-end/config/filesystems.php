@@ -65,7 +65,7 @@ return [
         ],
         'local_audio' => [
             'driver' => 'local',
-            'root' => storage_path('app/audio'),
+            'root' => storage_path('app/public/audio'),
         ],
     ],
 

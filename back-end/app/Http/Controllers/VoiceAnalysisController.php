@@ -92,6 +92,12 @@ class VoiceAnalysisController extends Controller
     }
 
     public function voiceRecord(Request $request){
+        /*
+        * 1. 사용자의 아이디를 받지 않았음
+        * 2. 아이디를 받고, 해당하는 아이디의 폴더가 있으면 그곳에 생성 없으면 작성 후 생성
+        * 3. 파일명 형식은 날짜_voice
+        *
+        */
         $tmpfile = $request->all();
 
         $file = $tmpfile["audio"];
@@ -106,9 +112,21 @@ class VoiceAnalysisController extends Controller
         ));
 
         $faudio = $ffmpeg->open(public_path('audio\\check.webm'));
-        $auido_format = new \FFMpeg\Format\Audio\Wav();
-        $faudio->save($auido_format, public_path('audio\\check.wav'));
+        $audio_format = new \FFMpeg\Format\Audio\Wav();
 
+        \Log::debug("codec ==== ".$audio_format-> getAudioCodec());
+        \Log::debug("codec ==== ".$audio_format-> getAudioKiloBitrate());
+
+        $faudio->filters()->resample(16000);
+        $audio_format
+        ->setAudioChannels(1)
+        ->setAudioKiloBitrate(192);
+
+        $faudio->save($audio_format, public_path('audio\\check.wav'));
+
+        
+        if(\Storage::disk("local_audio")->exists('check.webm'))
+        \Storage::disk("local_audio")->delete('check.webm');
         
     }
 }

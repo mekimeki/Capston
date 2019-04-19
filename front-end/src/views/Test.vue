@@ -3,7 +3,7 @@
     <!-- audio record -->
     <div class="line">
       <audio id="audio" controls src=""></audio>
-      <video id="video" autoplay poster="posterimage.jpg" controls></video>
+      <!-- <video id="video" autoplay poster="posterimage.jpg" controls></video> -->
     </div>
     <br>
     <div class="line">
@@ -20,13 +20,12 @@
 <script>
 import createContent_ from '@/components/createBox_/CreateContent';
 import createInput_ from '@/components/createBox_/CreateInput';
-import video_ from '@/components/video_/Video';
+// import video_ from '@/components/video_/Video';
 import axios from 'axios';
 export default {
   components:{
     createContent_,
     createInput_,
-    video_,
   },
   data(){
     return {
@@ -58,21 +57,22 @@ export default {
 
         this.record.addEventListener("stop",() =>{//second event stop event
 
-          this.blob = new Blob(this.chunks, { 'type' : 'audio/wav;base64 codecs=MS_PCM' });//blob data create
+          this.blob = new Blob(this.chunks, { 'type' : 'audio/webm; codecs=opus' });//blob data create
           this.audioURL = window.URL.createObjectURL(this.blob);//audio data url create
           this.audio.src = this.audioURL;//url connect
+          this.save();
+
         });
         alert("녹음 종료");
         this.check = true;
         this.recording_icon.innerHTML = "play_arrow";
-        this.save();
-      }
+              }
     },
     save(){//audio blob to file data
-      let file = new File([this.blob], "audio.wav", {type:"audio/wav;base64 codecs=MS_PCM"});//create file data
+      let file = new File([this.blob], "audio.webm", {type:"audio/webm; codecs=opus"});//create file data
       let form = new FormData();//form create
       form.append("audio",file);// file data to form append
-      let url = "http://localhost/FFMPEGTEST/audio.php";//url
+      let url = "http://localhost/voice/record";//url
       axios.post(url,form).then((res) => {//axios to url
         console.log(res.data);//check
       }).catch( error => {
@@ -82,14 +82,14 @@ export default {
   },
   mounted:function(){
     this.audio = document.getElementById('audio');//audio
-    this.video = document.getElementById('video');//video test
+    // this.video = document.getElementById('video');//video test
     this.recording_icon = document.getElementById("recording_icon");
-    navigator.mediaDevices.getUserMedia({audio:true,video:true}).then((stream)=>{//
+    navigator.mediaDevices.getUserMedia({audio:true,video:false}).then((stream)=>{//
     //navigator 브라우저에 대한 정보
     //medioDevices 액세스 제공
     //getUserMedia 권한 부여
-      this.video.srcObject = stream;//test stream data
-      this.video.play();//test
+      // this.video.srcObject = stream;//test stream data
+      // this.video.play();//test
       this.record = new MediaRecorder(stream,{//미디어 쉽게 기록할 수 있도록 해주는 메소
         audioBitsPerSecond : 128000,
         mimeType :''

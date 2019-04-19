@@ -40,5 +40,7 @@ Route::post('/searchEn','CrawlingController@searchEn');
 Route::get('quiz', 'QuizController@english');
 Route::post('quiz', 'QuizController@result');
 
-Route::get('show/{b_id}', 'QuizController@show');
+Route::get('show/{b_id}', 'QuizController@show'); //단어만 (암기 미암기 표시X) 표시해주는 것
+Route::get('book/{b_id}', 'QuizController@book');
+Route::get('memo/{mm}', 'QuizController@memo');
 Route::get('japan', 'QuizController@japanese'); 
