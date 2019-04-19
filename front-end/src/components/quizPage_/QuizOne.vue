@@ -149,7 +149,7 @@ import { constants } from 'crypto';
       }
     },
     methods: {
-      next () {
+      next() {
         const active = parseInt(this.active)
         this.active = (active < 6 ? active + 1 : 0)
       },
