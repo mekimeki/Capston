@@ -20,13 +20,12 @@
 <script>
 import createContent_ from '@/components/createBox_/CreateContent';
 import createInput_ from '@/components/createBox_/CreateInput';
-import video_ from '@/components/video_/Video';
+// import video_ from '@/components/video_/Video';
 import axios from 'axios';
 export default {
   components:{
     createContent_,
     createInput_,
-    video_,
   },
   data(){
     return {
@@ -58,23 +57,23 @@ export default {
         }
 
         this.record.addEventListener("stop",() =>{//second event stop event
-          console.log("stop");
-          this.blob = new Blob(this.chunks, { 'type' : 'audio/wav;base64 codecs=MS_PCM' });//blob data create
+
+          this.blob = new Blob(this.chunks, { 'type' : 'audio/webm; codecs=opus' });//blob data create
           this.audioURL = window.URL.createObjectURL(this.blob);//audio data url create
           this.audio.src = this.audioURL;//url connect
           this.save();
+
         });
         alert("녹음 종료");
         this.check = true;
         this.recording_icon.innerHTML = "play_arrow";
-        // this.save();
       }
     },
     save(){//audio blob to file data
-      let file = new File([this.blob], "audio.wav", {type:"audio/wav;base64 codecs=MS_PCM"});//create file data
+      let file = new File([this.blob], "audio.webm", {type:"audio/webm; codecs=opus"});//create file data
       let form = new FormData();//form create
       form.append("audio",file);// file data to form append
-      let url = "http://localhost/FFMPEGTEST/audio.php";//url
+      let url = "http://localhost/voice/record";//url
       axios.post(url,form).then((res) => {//axios to url
         console.log(res.data);//check
       }).catch( error => {

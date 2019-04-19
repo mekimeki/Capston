@@ -24,10 +24,11 @@
               <router-link :to="{ name: item.link, query: {user:lg_getters.nickname}}">
                 {{ item.title }}
               </router-link>
-
             </v-list-tile-title>
+
           </v-list-tile-content>
         </v-list-tile>
+
 
         <v-divider class="pa-5"></v-divider>
         <v-list-tile>

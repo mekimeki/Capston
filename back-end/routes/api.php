@@ -12,7 +12,35 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+/*
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
+Route::get('unauthorized', function() {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Unauthorized'
+    ], 401);
+})->name('api.jwt.unauthorized');
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('user', 'MemberController@user')->name('api.jwt.user');
+});
+
+Route::post('/upload', 'VideoController@store');
+Route::get('/video','VideoController@index');
+//Route::get('/uploader', 'VideoController@uploader')->name('uploader');
+Route::post('/upload', 'VideoController@store')->name('upload');
+Route::get('submit','VideoController@submit');
+
+Route::post('/searchJp','CrawlingController@searchJp');
+Route::post('/searchEn','CrawlingController@searchEn');
+
+Route::get('quiz', 'QuizController@english');
+Route::post('quiz', 'QuizController@result');
+
+Route::get('show/{b_id}', 'QuizController@show'); //단어만 (암기 미암기 표시X) 표시해주는 것
+Route::get('book/{b_id}', 'QuizController@book');
+Route::get('memo/{mm}', 'QuizController@memo');
+Route::get('japan', 'QuizController@japanese'); 

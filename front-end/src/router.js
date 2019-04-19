@@ -3,7 +3,8 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const main = () => {
+
+const main = () => {//top views
   return import("./views/Main.vue");
 };
 const video_see = () => {
@@ -28,6 +29,7 @@ import register from '@/components/login_/LoginRegister';
 import passowrd_find from '@/components/login_/passwordFind';
 import login from '@/components/login_/Login';
 
+
 //beforeEnter methods
 const login_check = (path,query_check) => (to,from,next) => {//login and query check .1
   if(localStorage.getItem('login')){//user check
@@ -45,22 +47,49 @@ const login_check = (path,query_check) => (to,from,next) => {//login and query c
   }
 }
 
-
 import test from '@/views/Test';//test page
+
+import start from './views/Start_page'; //start page
+
+
+import quiz_select from './views/Quiz_select'; //quiz
+import quiz_one from './views/Quiz_one';
+
+import all_word from './views/Word_book';
 
 export default new Router({
   mode:'history',//#を消す。
   routes:[
-    { // main
+    { //start
       path:'/',
+      name:'start',
+      component:start,
+    },
+    { //main
+      path:'/main',
       name:'main',
       component:main,
     },
-    { //video view
+    { //quizSelect
+      path:'/qselect',
+      name:'qselect',
+      component:quiz_select,
+    },
+    { //quizOne
+      path:'/quizOne',
+      name:'quizOne',
+      component:quiz_one,
+    },
+    { //allWord
+      path:'/allWord',
+      name:'allWord',
+      component:all_word,
+
+    },
+    { //video
       path:'/video',
       name:'v-video',
       component:video_see,
-
     },
     { //create routers
       path:'/create',

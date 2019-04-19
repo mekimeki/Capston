@@ -87,6 +87,7 @@ export default {
       }else{
         this.video.pause();
         this.play_btn.style.backgroundImage = "url("+require('@/assets/play.png')+")";
+
       }
     },
     seek_change(){//play input[range]bar reflection

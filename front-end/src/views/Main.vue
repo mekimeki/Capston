@@ -26,4 +26,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.container{
+    max-width: 80%
+}
 </style>

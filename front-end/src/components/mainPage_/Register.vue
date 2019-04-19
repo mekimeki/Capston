@@ -1,11 +1,12 @@
 <template lang="html">
   <v-container pt-5 fluid grid-list-md>
     <v-layout row wrap>
+    
       <!-- 1 -->
       <v-flex xs12 sm4>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -21,13 +22,14 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
+
       <!-- 2 -->
       <v-flex xs12 sm4>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -43,13 +45,14 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
+
       <!-- 3 -->
       <v-flex xs12 sm4>
         <v-card>
           <v-container >
-            <span>등록한 채널</span>
+            <span>추천 영상</span>
             <v-layout row wrap>
               <v-flex
                 v-for="n in 9"
@@ -65,11 +68,10 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </v-card>  
       </v-flex>
-    <!--  -->
     </v-layout>
-  </v-container>
+
 </template>
 
 <script>
