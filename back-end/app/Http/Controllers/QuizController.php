@@ -126,39 +126,9 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($b_id)
+    public function show()
     {
         
-    }
-
-    public function book($b_id = null)
-    {
-        $books = book::where('m_id', 1)->select('b_id')->get();
-        $vocas = [];
-        if($b_id == false) {
-            for($i=0; $i<$books->count(); $i++) {
-                $array[$i] = json_decode(voca::where('b_id', $books[$i]->b_id)->select('word', 'memorized')->get(), true);
-                $vocas = array_merge($vocas, $array[$i]);
-            }
-        } else {
-            $vocas = voca::where('b_id', $b_id)->select('word', 'memorized')->get();
-        }
-        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
-        return $vocas;
-    }
-
-    public function memo($mm = null)
-    {
-        $books = book::where('m_id', 1)->select('b_id')->get();
-        if($mm == "T") {
-            for($i=0; $i<$books->count(); $i++) {
-                $vocas = voca::where('memorized', $mm)->select('word')->get();
-            }
-        } else {
-            $vocas = voca::where('memorized', $mm)->select('word')->get();
-        }
-        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
-        return $vocas;
     }
 
     /**
@@ -179,9 +149,9 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update()
+    {   
+        
     }
 
     /**
@@ -192,7 +162,7 @@ class QuizController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 
 
