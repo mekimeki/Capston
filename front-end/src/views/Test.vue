@@ -13,6 +13,9 @@
       <v-btn color="error" fab large dark v-on:click="recording()">
         <v-icon id="recording_icon">play_arrow</v-icon>
       </v-btn>
+      <v-btn v-on:click="checkk()">
+        check
+      </v-btn>
     </div>
   </div>
 </template>
@@ -78,7 +81,15 @@ export default {
       }).catch( error => {
         console.log('failed', error);
       });
+    },
+    checkk(){
+      axios.post("http://localhost/voice/extract").then((res)=>{
+        console.log("checkkkk1");
+      }).catch(error => {
+        console.log("faillll2");
+      });
     }
+
   },
   mounted:function(){
     this.audio = document.getElementById('audio');//audio

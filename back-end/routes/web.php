@@ -93,6 +93,8 @@ Route::post('voice/record',[
 	'uses' => 'VoiceAnalysisController@voiceRecord'
 ]);
 
+Route::post('voice/extract', 'VoiceAnalysisController@voiceExtraction');
+
 // Route::get('quiz', 'QuizController@index');
 // Route::get('solution', 'QuizController@show')->name('quiz');
 

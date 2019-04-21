@@ -87,27 +87,27 @@ export default new Router({
           path:'c-video',
           name:'c-video',
           component:create_video,
-          beforeEnter:(to, from, next) => {
-            console.log("to",to.params.check);
-            if (to.params.check) {
-              next();
-            }else {
-              next('/create/upload');
-            }
-          }
+          // beforeEnter:(to, from, next) => {
+          //   console.log("to",to.params.check);
+          //   if (to.params.check) {
+          //     next();
+          //   }else {
+          //     next('/create/upload');
+          //   }
+          // }
         },
         {
           path:'subtitle',
           name:'subtitle',
           component:create_subtitle,
-          beforeEnter:(to, from, next) => {
-            console.log("to",to.params.check);
-            if (to.params.check) {
-              next();
-            }else {
-              next('/create/upload');
-            }
-          }
+          // beforeEnter:(to, from, next) => {
+          //   console.log("to",to.params.check);
+          //   if (to.params.check) {
+          //     next();
+          //   }else {
+          //     next('/create/upload');
+          //   }
+          // }
         },
       ]
     },
