@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use App\Voca;
+use App\WBook;
+use App\Word;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
@@ -24,7 +26,8 @@ class QuizController extends Controller
     public function english()
     {
         $id = 1;
-        $vocas = voca::where('b_id', $id)->select('word')->inRandomOrder()->take(4)->get();
+        $vocas = word::where('wbook_pk', $id)->select('w_nm AS word')->inRandomOrder()->take(4)->get();
+        \Log::debug($vocas);
         $random = random_int(0, $vocas->count()-1);
         $quiz = $vocas->slice($random, 1);
         $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$quiz[$random]->word);
@@ -58,10 +61,10 @@ class QuizController extends Controller
     public function japanese() 
     {
         $id = 2;
-        $vocas = voca::where('b_id', $id)->select('word')->inRandomOrder()->take(4)->get();
+        $vocas = word::where('wbook_pk', $id)->select('w_nm')->inRandomOrder()->take(4)->get();
         $random = random_int(0, $vocas->count()-1);
         $quiz = $vocas->slice($random, 1);
-        $this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$quiz[$random]->word.'&dic=jp');
+        $this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$quiz[$random]->w_nm.'&dic=jp');
 		$result = $this->snoopy->results;
 
 		$matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
@@ -94,7 +97,7 @@ class QuizController extends Controller
         \Log::debug($results);
         // $result = explode(',', $results);
         // \Log::debug($result);
-        \DB::insert('insert into scores (m_id, score) values (?, ?)', [1, $results]);
+        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $results]);
 
         return "a";
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
-use App\Voca;
+use App\WBook;
+use App\Word;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
@@ -49,22 +49,22 @@ class WordController extends Controller
      */
     public function show() // 단어장 목록 보여주기
     {
-        $books = book::where('m_id', 1)->select('title')->get();
+        $books = wbook::where('m_id', 1)->select('wbook_tt AS title')->get();
         $books = json_encode($books, JSON_UNESCAPED_UNICODE);
         return $books;
     }
 
     public function book($b_id = null)
     {
-        $books = book::where('m_id', 1)->select('b_id')->get();
+        $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
         $vocas = [];
         if($b_id == false) {
             for($i=0; $i<$books->count(); $i++) {
-                $array[$i] = json_decode(voca::where('b_id', $books[$i]->b_id)->select('word', 'memorized')->get(), true);
+                $array[$i] = json_decode(word::where('wbook_pk', $books[$i]->wbook_pk)->select('w_nm AS word', 'memo_st AS memorized')->get(), true);
                 $vocas = array_merge($vocas, $array[$i]);
             }
         } else {
-            $vocas = voca::where('b_id', $b_id)->select('word', 'memorized')->get();
+            $vocas = word::where('wbook_pk', $b_id)->select('w_nm AS word', 'memo_st AS memorized')->get();
         }
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -72,13 +72,13 @@ class WordController extends Controller
 
     public function memo($mm = null)
     {
-        $books = book::where('m_id', 1)->select('b_id')->get();
+        $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
         if($mm == "T") {
             for($i=0; $i<$books->count(); $i++) {
-                $vocas = voca::where('memorized', $mm)->select('word')->get();
+                $vocas = word::where('memo_st', $mm)->select('w_nm AS word')->get();
             }
         } else {
-            $vocas = voca::where('memorized', $mm)->select('word')->get();
+            $vocas = word::where('memo_st', $mm)->select('w_nm AS word')->get();
         }
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -104,11 +104,11 @@ class WordController extends Controller
      */
     public function update($w_id)
     {   
-        $mm = voca::where('w_id', $w_id)->select('memorized')->get();
-        if ($mm[0]->memorized == "F") {
-            voca::where('w_id', $w_id)->update(['memorized' => "T"]);
+        $mm = word::where('w_pk', $w_id)->select('memo_st')->get();
+        if ($mm[0]->memo_st == "F") {
+            word::where('w_pk', $w_id)->update(['memo_st' => "T"]);
         } else {
-            voca::where('w_id', $w_id)->update(['memorized' => "F"]);
+            word::where('w_pk', $w_id)->update(['memo_st' => "F"]);
         }
         
     }
@@ -119,9 +119,8 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reqeust $reqeust)
+    public function destroy($id)
     {
-        $deletes = $reqeust->input('deletedWord');
-        voca::where('w_id', $deletes)->delete();
+        word::where('w_pk', $id)->delete();
     }
 }
