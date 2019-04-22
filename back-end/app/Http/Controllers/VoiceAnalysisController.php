@@ -27,8 +27,7 @@ class VoiceAnalysisController extends Controller
             'timeout'          => 3600,
             'ffmpeg.threads'   => 12,   
         ));
-
-    };
+    }
 
     public function analysis(){
         $datas = [];
@@ -149,16 +148,18 @@ class VoiceAnalysisController extends Controller
         // $duration = $request->input('duration');
         // $path = $request->input('pk');
 
-        $auido_format = new \FFMpeg\Format\Audio\Wav();
+        $s_time = 30;
+        $duration = 15;
+        $audio_format = new \FFMpeg\Format\Audio\Wav();
 
         $fvideo = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
-
+        
         $audio_format
         ->setAudioChannels(1)
         ->setAudioKiloBitrate(192);
 
-        $clip = $video->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($s_time), FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
-        
+        $clip = $fvideo->clip(\FFMpeg\Coordinate\TimeCode::fromSeconds($s_time), \FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
+        $clip->filters()->resample(16000);
         $clip->save($audio_format, public_path('audio\\check2.wav'));
     }
 }
