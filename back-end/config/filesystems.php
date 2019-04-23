@@ -54,6 +54,19 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'video' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/video'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
+        'subtitle' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/subtitle'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',
@@ -63,7 +76,10 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
-
+        'local_audio' => [
+            'driver' => 'local',
+            'root' => storage_path('app/audio'),
+        ],
     ],
 
 ];
