@@ -60,11 +60,11 @@ class WordController extends Controller
         $vocas = [];
         if($b_id == false) {
             for($i=0; $i<$books->count(); $i++) {
-                $array[$i] = json_decode(word::where('wbook_pk', $books[$i]->wbook_pk)->select('w_nm AS word', 'memo_st AS memorized')->get(), true);
+                $array[$i] = json_decode(word::where('wbook_pk', $books[$i]->wbook_pk)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get(), true);
                 $vocas = array_merge($vocas, $array[$i]);
             }
         } else {
-            $vocas = word::where('wbook_pk', $b_id)->select('w_nm AS word', 'memo_st AS memorized')->get();
+            $vocas = word::where('wbook_pk', $b_id)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -75,10 +75,10 @@ class WordController extends Controller
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
         if($mm == "T") {
             for($i=0; $i<$books->count(); $i++) {
-                $vocas = word::where('memo_st', $mm)->select('w_nm AS word')->get();
+                $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word')->get();
             }
         } else {
-            $vocas = word::where('memo_st', $mm)->select('w_nm AS word')->get();
+            $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word')->get();
         }
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -119,8 +119,16 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        word::where('w_pk', $id)->delete();
+        //word::where('w_pk', $id)->delete();
+        //$words[] = $request->input('words'); //Reqeust $request
+        $b_id = 2;
+        $words = word::where('wbook_pk', $b_id)->select('w_pk AS id')->get();
+        
+        for($i=0; $i<$words->count(); $i++) {
+            word::where('w_pk', $words[$i]->id)->delete();
+        }
+        
     }
 }
