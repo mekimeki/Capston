@@ -28,12 +28,16 @@ import login from '@/components/login_/Login';
 
 import test from '@/views/Test';//test page
 
-import start from './views/Start_page'; //start page
+import start from '@/components/startPage_/StartPage'; //start page
 
-import quiz_select from './views/Quiz_select'; //quiz
+import quiz_select from '@/components/quizPage_/Qselect'; //quiz
 import quiz_one from './views/Quiz_one';
 
-import all_word from './views/Word_book';
+import all_word from '@/components/wordBook_/AllWord';
+
+import recommend from '@/components/mainPage_/Recommend';
+
+import register_video from '@/components/mainPage_/Register';
 
 export default new Router({
   mode:'history',//#を消す。
@@ -43,28 +47,10 @@ export default new Router({
       name:'start',
       component:start,
     },
-    { //main
-      path:'/main',
-      name:'main',
-      component:main,
-      children:[
-      ]
-    },
-    { //quizSelect
-      path:'/qselect',
-      name:'qselect',
-      component:quiz_select,
-    },
     { //quizOne
       path:'/quizOne',
       name:'quizOne',
       component:quiz_one,
-    },
-    { //allWord
-      path:'/allWord',
-      name:'allWord',
-      component:all_word,
-
     },
     { //video
       path:'/video',
@@ -72,6 +58,28 @@ export default new Router({
       component:video_see,
       children:[
       ]
+    },
+    {
+      path:'/main',
+      name:'recommend',
+      component:recommend,
+      children:[
+      {
+      path:'/main',
+      name:'register',
+      component:register_video,
+    },
+      ]
+    },
+    { //quizSelect
+      path:'/qselect',
+      name:'qselect',
+      component:quiz_select,
+    },
+    { //allWord
+      path:'/allWord',
+      name:'allWord',
+      component:all_word,
     },
     { //create
       path:'/create',
@@ -140,7 +148,7 @@ export default new Router({
     },
     { //redirect
       path:'/*',
-      redirect:{name:'main'},
+      redirect:{name:'/'},
     },
   ]
 });

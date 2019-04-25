@@ -1,9 +1,10 @@
 <template>
-  <v-layout  row justify-center>
+  <v-layout row justify-center>
     <v-btn
-      color="#00BFA5"
-      dark
+      flat
       v-on:click.stop="dialog = true"
+      small
+      class="subheading font-weight-bold"
     >
       QUIZ START
     </v-btn>
@@ -13,9 +14,9 @@
     >
     <v-tabs
       v-model="active"
-      color="#00BFA5"
+      color="red"
       dark
-      slider-color="#EC407A"
+      slider-color="yellow"
     >
     <v-tab
         v-for="n in 7"
@@ -45,23 +46,20 @@
                     :key="n"
                     md5
                   >
-                
                     <v-btn
                       large
                       block
-                      color="cyan lighten-2" 
+                      color="orange" 
                       v-on:click="select=(n-1)"
                       value="check"
                     >{{ n + ". " + example[n-1].word}}
                     </v-btn> 
-                  
-
                   </v-flex> 
                 </v-layout>
               </v-flex>
             </v-layout>
           </v-card>
-
+          
           <v-card v-if="n==7" flat>
           <v-card-text>{{ end }}</v-card-text>
           <v-card-text 
@@ -81,42 +79,41 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            v-if="1<n&&n<6"
-            color="red lighten-1"
-            flat="flat"
-            v-on:click="next(), getQuest(), checkAns()"
+          v-if="1<n&&n<6"
+          color="red lighten-1"
+          flat="flat"
+          v-on:click="next(), getQuest(), checkAns()"
           >
             {{ button }}
           </v-btn>
 
           <v-btn
-            v-if="n==1"
-            color="red lighten-1"
-            flat="flat"
-            v-on:click="next(), getQuest()"
+          v-if="n==1"
+          color="red lighten-1"
+          flat="flat"
+          v-on:click="next(), getQuest()"
           >
             {{ button }}
           </v-btn>
 
           <v-btn
-            v-if="n==6"
-            color="red lighten-1"
-            flat="flat"
-            v-on:click="next(),checkAns()"
+          v-if="n==6"
+          color="red lighten-1"
+          flat="flat"
+          v-on:click="next(),checkAns()"
           >
-            {{ button }}
+          {{ button }}
           </v-btn>
 
-            <v-btn
-            v-if="n==7"
-            color="red lighten-1"
-            flat="flat"
-            v-on:click.stop="dialog = false, postQuest()"
-            
+          <v-btn
+          v-if="n==7"
+          color="red lighten-1"
+          flat="flat"
+          v-on:click.stop="dialog = false, postQuest()"
           >
-            {{ close }}
+          {{ close }}
           </v-btn>
-
+          
         </v-card-actions>
         </v-card>
       </v-tab-item>
@@ -154,7 +151,7 @@ import { constants } from 'crypto';
         this.active = (active < 6 ? active + 1 : 0)
       },
       getQuest() {
-        const baseURI ='http://172.26.1.11/api/quiz';
+        const baseURI ='http://172.26.4.41/api/quiz';
         axios.get(baseURI).then((res)=>{
           var back = res.data;
           this.example = back.choice;
@@ -168,10 +165,10 @@ import { constants } from 'crypto';
       postQuest() {
         var form = new FormData();
         form.append("results", this.score);
-        axios.get('http://172.26.1.11/get-token').then( response =>{
+        axios.get('http://172.26.4.41/get-token').then( response =>{
           if(response.data){
             form.append("_token",response.data);
-            axios.post('http://172.26.1.11/api/quiz', form)
+            axios.post('http://172.26.4.41/api/quiz', form)
         .then( response =>{
           console.log('response', ok)
         }).catch(error => {
@@ -180,26 +177,6 @@ import { constants } from 'crypto';
       }
         }
         )},
-   　 // postQuest() {
-   　 //     var postData = {
-   　 //     results:this.result
-   　 //     };
-   　 //     //mime data
-   　 //     let axiosConfig = {
-   　 //     headers: {
-   　 //     "Access-Control-Allow-Origin": "*",
-   　 //     'Content-Type': 'application/x-www-form-urlencoded',
-   　 //     'Accept': 'application/json'
-   　 //     }
-   　 //     };
-   　 //     axios.post('http://172.26.1.97/api/quiz', postData, axiosConfig )
-   　 //     .then(response=> {
-   　 //       console.log('response', OK )
-   　 //     }).catch(error => {
-   　 //       console.log('failde', error)
-   　 //     })
-   　 //   }, 
-　
       checkAns() {
         if(this.select==this.answer){
           this.result.push([this.select+1,this.answer+1,'O']);

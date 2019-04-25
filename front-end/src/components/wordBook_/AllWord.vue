@@ -40,11 +40,11 @@
 
             <!--start of like icon-->
             <v-icon v-if="word.memorized=='T'" id="memorized" color="red" v-on:click="changeHeart(i)">
-            favorite
+            turned_in
             </v-icon>
 
             <v-icon v-else id="memorized" color="red" v-on:click="changeHeart(i)">
-            favorite_border
+            turned_in_not
             </v-icon>
 
         </v-layout>
@@ -78,8 +78,9 @@
             <v-layout pa-4>
             <v-text-field
             label="제목"
-            solo
-            outline
+            v-model="search"
+            dark
+            clear-icon="mdi-close-circle-outline"
             ></v-text-field>
             <v-spacer></v-spacer>
         <div><v-icon x-large color="grey darken-3">create_new_folder</v-icon></div>
@@ -119,10 +120,10 @@ import { constants } from 'crypto';
         deleteQuest() {
             var form = new FormData();
             form.append("deleteWord", this.deletedWord);
-            axios.get('http://172.26.1.11/get-token').then( response =>{
+            axios.get('http://172.26.4.41/get-token').then( response =>{
                 if(response.data){
                     form.append("_token",reponse.data);
-                    axios.post('http://172.26.1.11/api/deletedWord', form)
+                    axios.post('http://172.26.4.41/api/deletedWord', form)
                 .then( response =>{
                     console.log('respnse', ok)
                 }).catch(error => {
@@ -135,12 +136,12 @@ import { constants } from 'crypto';
             if(this.box == false){
                 this.box = true;
             }else{
-                
+                deleteQuest()
             }
         }
     },
     mounted() { 
-        const baseURI = "http://172.26.1.11/api/book/0";
+        const baseURI = "http://172.26.4.41/api/book/0";
         axios.get(baseURI)
         .then((res)=>{
             this.words = res.data;
