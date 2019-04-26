@@ -84,9 +84,9 @@ export default {
     },
     checkk(){
       axios.post("http://localhost/voice/extract").then((res)=>{
-        console.log("checkkkk1");
+        console.log(res.data);
       }).catch(error => {
-        console.log("faillll2");
+        console.log("faillll2", error);
       });
     }
 
