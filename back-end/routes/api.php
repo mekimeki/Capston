@@ -46,3 +46,4 @@ Route::get('deletedWord/{id}', 'WordController@destroy'); // 단어 삭제
 Route::get('update/{w_id}', 'WordController@update'); // 단어 업데이트 (암기 미암기)
 Route::get('memo/{mm}', 'WordController@memo'); // 암기 미암기 단어 보여주기
 Route::get('books', 'WordController@show'); // 단어장 목록 보여주기
+    
