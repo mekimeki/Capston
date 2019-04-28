@@ -3,9 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const main = () => {//top views
-  return import("./views/Main.vue");
-};
 const video_see = () => {//top views
   return import("./views/Video_see.vue");
 };
