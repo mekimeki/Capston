@@ -1,5 +1,7 @@
 <template lang="html">
-    <startPage_></startPage_>
+    <v-container>
+        <startPage_></startPage_>
+    </v-container>
 </template>
 
 <script>
