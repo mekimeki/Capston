@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	 <meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+</head>
+<body>
+
+	<form action="/register-test" method='post'>
+		email<input type="text" name='email' required><br>
+		nickname<input type="text" name='nickname' required><br>
+		pw<input type="password" name='password' required><br>
+		pw_conirmation<input id="password-confirm" type="password" name="password_confirmation" required>
+		
+		<input type="submit">
+	</form>
+	<form action="http://172.26.1.125/api/login" method='post'>
+		email<input type="text" name='email' required><br>
+		pw<input type="password" name='password' required><br>
+		<input type='hidden' name='_token' value='MhKh8avyk2uKojwUDh9fske7jiMNryrs0ZAV2SHu'>
+		<input type="submit">
+	</form>
+</body>
+</html>
