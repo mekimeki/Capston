@@ -15,9 +15,30 @@ class WordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public $snoopy;
+    public function __construct(){
+    	$this->snoopy = new Snoopy;
+    }
+
+    public function index() // 자세히 보기
     {
-        //
+        $word = "random";
+        $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$word);
+        $result = $this->snoopy->results;
+        $matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
+        /*태그만제거*/
+        $mean = preg_replace("/<ul[^>]*>/i", '', $mean);
+        $mean = preg_replace("/<\/ul>/i", '', $mean);
+        $mean = preg_replace("/<\/li>/", '', $mean);
+        $mean = preg_replace("/<span[^>]*>/i", '', $mean);
+        $mean = preg_replace("/<\/span>/", '', $mean);
+        // $mean = preg_replace("/(<daum[^>]*>)/i", '', $mean);
+        $mean = preg_replace("/(<\/daum:word>)/", '', $mean);
+        $mean = preg_replace("/\t|\n/", '', $mean);
+        // \Log::debug($result);
+        $mean = json_encode($mean, JSON_UNESCAPED_UNICODE);
+        return $mean;
     }
 
     /**
@@ -72,13 +93,16 @@ class WordController extends Controller
 
     public function memo($mm = null)
     {
+        //classifyWord 
+
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
+
         if($mm == "T") {
             for($i=0; $i<$books->count(); $i++) {
-                $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word')->get();
+                $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
             }
         } else {
-            $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word')->get();
+            $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -90,9 +114,14 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request) // 단어장 제목 수정
     {
-        //
+        $title = $request->input('title');
+
+        $wbook = wbook::find('wbook_tt');
+        // 그 멤버의 단어장 목록을 출력하고
+        // 단어장의 제목을 수정 (멤버 아이디, 단어장의 아이디)
+
     }
 
     /**
@@ -102,15 +131,16 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($w_id)
+    public function update(Request $request)
     {   
-        $mm = word::where('w_pk', $w_id)->select('memo_st')->get();
-        if ($mm[0]->memo_st == "F") {
-            word::where('w_pk', $w_id)->update(['memo_st' => "T"]);
-        } else {
-            word::where('w_pk', $w_id)->update(['memo_st' => "F"]);
+        $memo_id = $request->input('id');
+        $memo_flag = $request->input('flag');
+        //\Log::debug($memo);
+
+        if (word::where('w_pk', $memo_id)->update(['memo_st' => $memo_flag])) {
+            return "ok";
         }
-        
+        return "nope";
     }
 
     /**
@@ -119,16 +149,15 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
-        //word::where('w_pk', $id)->delete();
-        //$words[] = $request->input('words'); //Reqeust $request
-        $b_id = 2;
-        $words = word::where('wbook_pk', $b_id)->select('w_pk AS id')->get();
-        
-        for($i=0; $i<$words->count(); $i++) {
-            word::where('w_pk', $words[$i]->id)->delete();
+        $words = $request->input('selected');
+        $vocas = explode(',', $words);
+
+        for($i=0; $i<count($vocas); $i++) {
+            word::where('w_pk', $vocas[$i])->delete();
         }
-        
+
+        return $this->book(0);
     }
 }
