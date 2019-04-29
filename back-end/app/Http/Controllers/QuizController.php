@@ -79,7 +79,7 @@ class QuizController extends Controller
         $mean = preg_replace("/\t|\n/", '', $mean);
 
 		if($matchFlag){
-			$array = explode('<li>', $mean[0]);
+            $array = explode('<li>', $mean[0]);
             array_shift($array);
             
             $back = ["ques"=>$array, "choice"=>$vocas, "ans"=>$random];
