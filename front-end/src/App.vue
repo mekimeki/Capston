@@ -95,79 +95,77 @@
 
 <script>
 export default {
-  data: () => ({
-    drawer: false,
-    items: [
-      {
-        icon: "home",
-        text: "홈페이지",
-        link: "main"
-      },
-      {
-        icon: "video_library",
-        text: "영상 관리",
-        link: "video"
-      },
-      {
-        icon: "video_call",
-        text: "영상 제작",
-        link: "video"
-      },
-      {
-        icon: "favorite",
-        text: "좋아하는 영상",
-        link: "video"
-      },
-      {
-        icon: "border_color",
-        text: "퀴즈",
-        link: "qselect"
-      },
-      {
-        icon: "keyboard_arrow_up",
-        "icon-alt": "keyboard_arrow_down",
-        text: "단어집",
-        model: false,
-        children: [
-          {
-            icon: "import_contacts",
-            text: "나의 단어집",
-            link: "allWord"
-          },
-          {
-            icon: "import_contacts",
-            text: "나의 어휘집",
-            link: "allWord"
-          },
-          {
-            icon: "import_contacts",
-            text: "나의 대사집",
-            link: "allWord"
-          },
-          {
-            icon: "import_contacts",
-            text: "추천 Go語집",
-            link: "allWord"
-          }
+    data: () => ({
+        drawer: false,
+        items: [{
+                icon: "home",
+                text: "홈페이지",
+                link: "main"
+            },
+            {
+                icon: "video_library",
+                text: "영상 관리",
+                link: "video"
+            },
+            {
+                icon: "video_call",
+                text: "영상 제작",
+                link: "video"
+            },
+            {
+                icon: "favorite",
+                text: "좋아하는 영상",
+                link: "video"
+            },
+            {
+                icon: "border_color",
+                text: "퀴즈",
+                link: "qselect"
+            },
+            {
+                icon: "keyboard_arrow_up",
+                "icon-alt": "keyboard_arrow_down",
+                text: "단어집",
+                model: false,
+                children: [{
+                        icon: "import_contacts",
+                        text: "나의 단어집",
+                        link: "allWord"
+                    },
+                    {
+                        icon: "import_contacts",
+                        text: "나의 어휘집",
+                        link: "allWord"
+                    },
+                    {
+                        icon: "import_contacts",
+                        text: "나의 대사집",
+                        link: "allWord"
+                    },
+                    {
+                        icon: "import_contacts",
+                        text: "추천 Go語집",
+                        link: "gogoBoard"
+                    }
+                ]
+            },
+            {
+                icon: "help",
+                text: "도움말",
+                link: "qselect"
+            },
+            {
+                icon: "settings",
+                text: "설정",
+                link: "qselect"
+            }
         ]
-      },
-      {
-        icon: "help",
-        text: "도움말",
-        link: "qselect"
-      },
-      {
-        icon: "settings",
-        text: "설정",
-        link: "qselect"
-      }
-    ]
-  })
+    })
 };
 </script>
 
 <style>
 .icon {
-  font-size: 50px;
+    font-size: 50px;
 }
 </style>

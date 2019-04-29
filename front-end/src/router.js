@@ -30,7 +30,9 @@ import start from '@/components/startPage_/StartPage'; //start page
 import quiz_select from '@/components/quizPage_/Qselect'; //quiz
 import quiz_one from './views/Quiz_one';
 
-import all_word from '@/components/wordBook_/AllWord';
+import word_book from '@/components/wordBook_/AllWord';
+
+import gogo_book from '@/components/gogoBook_/GogoBoard';
 
 import recommend from '@/components/mainPage_/Recommend';
 
@@ -76,7 +78,12 @@ export default new Router({
     { //allWord
       path:'/allWord',
       name:'allWord',
-      component:all_word,
+      component:word_book,
+    },
+    { //gogoBoard
+      path:'/gogoBoard',
+      name:'gogoBoard',
+      component:gogo_book,
     },
     { //create
       path:'/create',

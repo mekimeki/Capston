@@ -20,7 +20,7 @@
                 <span v-if="hover1">
             <h1 class="pa-2 text-xs-right white--text">사용자 참여형</h1>
             <h1 class="pr-2 text-xs-right white--text">어학 컨텐츠</h1>
-          </span>
+            </span>
             </v-img>
         </v-flex>
         <v-flex xs12 sm6 md3 class="pb-4">
@@ -28,7 +28,7 @@
                 <span v-if="hover2">
             <h1 class="pa-2 text-xs-right white--text">즉각적인</h1>
             <h1 class="pr-2 text-xs-right white--text">100LS 가능</h1>
-          </span>
+            </span>
             </v-img>
         </v-flex>
         <v-flex xs12 sm6 md3 class="pb-4">
@@ -36,7 +36,7 @@
                 <span v-if="hover3">
             <h1 class="pa-2 text-xs-right white--text">사진으로</h1>
             <h1 class="pr-2 text-xs-right white--text">연상 가능한 어학집</h1>
-          </span>
+            </span>
             </v-img>
         </v-flex>
         <v-flex xs12 sm6 md3 class="pb-4">
@@ -44,7 +44,7 @@
                 <span v-if="hover4">
             <h1 class="pa-2 text-xs-right white--text">어학을 위한</h1>
             <h1 class="pr-2 text-xs-right white--text">간편한 영상 편집</h1>
-          </span>
+            </span>
             </v-img>
         </v-flex>
 
