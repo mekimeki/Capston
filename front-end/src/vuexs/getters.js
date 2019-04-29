@@ -5,11 +5,23 @@ const getters = {
   subtitle_getter: (state) =>{ //subtitle getter
     return state.subtitle;
   },
+  content_getter: (state) =>{
+    return state.content;
+  },
   subtitle_buffer_getter: (state) =>{ //create input subtitle buffer getter
     return state.subtitle_buffer;
   },
   seek_bar_getter: (state) =>{ //input[range] element getter
     return state.seek_bar;
+  },
+  capture_getter: (state) =>{
+    return state.capture;
+  },
+  capture_data_getter: (state) =>{
+    return state.capture_data;
+  },
+  percent_getter: (state) =>{
+    return state.percent;
   },
   login_getters: (state) =>{ //login values getter
     return state.login;

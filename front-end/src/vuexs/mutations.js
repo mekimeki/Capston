@@ -10,42 +10,46 @@ const mutations = {
   subtitle_buffer_mutation: (state, payload) => {//subtitle buffer mutation
     state.subtitle_buffer = payload;
   },
+  content_mutation: (state, payload) =>{
+    state.content = payload;
+  },
   seek_bar_mutation: (state,payload) => {//seek bar mutation
     state.seek_bar = payload;
   },
-  login_mutation: (state,payload) => {//login mutation
-    if (localStorage.getItem('login')) {
-      state.login.email = payload.email;
-      state.login.nickname = payload.nickname;
-    }else{
-      alert("오류입니다.");
-    }
+  capture_mutation: (state,payload) => {
+    state.capture = payload;
   },
-  // upload mutation
+  capture_data_mutation: (state,payload) =>{
+    state.capture_data = payload;
+  },
+  upload_percent_mutation:(state,payload) => {
+    state.percent = payload;
+  },
+  login_mutation: (state,payload) => {//login mutation
+    state.login.email = payload.email;
+    state.login.nickname = payload.nickname;
+  },
+  logout_mutation: (state) => {
+    state.login.email = "";
+    state.login.nickname = "";
+    localStorage.setItem('login',"");
+  },
   upload_mutation: (state,payload) => { //upload
-    if(payload.substring(payload.length,payload.length-3) != 'srt'){
-      state.upload.video = payload;
-    }else{
-      state.upload.subtitle = payload;
-    }
-    if(state.upload.subtitle && state.upload.video){
-      router.push({name:'c-video', query:{video:state.upload.video}});//move
+    if(payload.video_pk){
+      state.upload.video = payload.video_pk;
+    }else if(payload.subtitle_pk){
+      state.upload.subtitle = payload.subtitle_pk;
     }
   },
   video_cut_mutation: (state,payload) => {
-    state.upload.video_cut = payload;
-    if(state.upload.video_cut){
-      router.push({name:'subtitle', query:{subtitle:state.upload.subtitle}});//move
-    }
+    state.upload.firstTime = payload.firstTime;
+    state.upload.lastTime = payload.lastTime
   },
   upload_subtitle_mutations: (state,payload) =>{
     state.upload.subtitle_ = payload;
-    if(state.upload.subtitle_){
-      router.push({name:'content'});
-    }
   },
   upload_content_mutations: (state,payload) =>{
-    console.log("content");
+    state.upload_content = payload;
   },
 }
 

@@ -18,15 +18,10 @@
 </template>
 
 <script>
-import createContent_ from '@/components/createBox_/CreateContent';
-import createInput_ from '@/components/createBox_/CreateInput';
+
 // import video_ from '@/components/video_/Video';
 import axios from 'axios';
 export default {
-  components:{
-    createContent_,
-    createInput_,
-  },
   data(){
     return {
       audio:"",//audio

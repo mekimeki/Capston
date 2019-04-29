@@ -19,10 +19,10 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['login_actions']),
+    ...mapActions(['login_check_actions']),
   },
   mounted:function(){
-    this.login_actions(localStorage.getItem('token'));
+    // this.login_check_actions(localStorage.getItem('login'));
   }
 }
 </script>

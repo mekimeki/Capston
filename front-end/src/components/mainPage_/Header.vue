@@ -1,8 +1,6 @@
 <template lang="html">
   <v-layout>
     <v-navigation-drawer
-      temporary
-      clipped
       app
       v-model="drawer">
       <v-list>
@@ -21,15 +19,11 @@
           <!-- list -s title -->
           <v-list-tile-content>
             <v-list-tile-title>
-              <router-link :to="{ name: item.link, query: {user:lg_getters.nickname}}">
-                {{ item.title }}
-              </router-link>
+              {{ item.title }}
             </v-list-tile-title>
 
           </v-list-tile-content>
         </v-list-tile>
-
-
         <v-divider class="pa-5"></v-divider>
         <v-list-tile>
           メキメキ組
@@ -42,6 +36,9 @@
           2019年Capston ProjectGo語
         </v-list-tile>
         <v-divider></v-divider>
+        <v-btn>
+          <v-icon v-on:click="drawer = !drawer">close</v-icon>
+        </v-btn>
       </v-list>
     </v-navigation-drawer>
 
@@ -49,30 +46,43 @@
 
     <!-- nav  -->
     <v-toolbar
-      color="white"
+      color=""
+      img="@/assets/Start/start.jpg"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>GO語</v-toolbar-title>
+      <v-toolbar-title>
+        <img src="@/assets/gogo.png" alt="" width="40">
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-icon color="gray darken-2" class="pa-3" @click.stop="dialog = true">search</v-icon>
-        <v-toolbar-items v-if="lg_getters.email">
-          <router-link :to="{ name: '', params: {} }">
+        <v-btn fab flat color="black">
+          <v-icon color="gray darken-2" class="pa-3" @click.stop="dialog = true">search</v-icon>
+        </v-btn>
+        <v-toolbar-items v-if="lg_getter.email&&lg_getter.nickname">
+          <v-btn fab flat color="black">
             <v-icon color="gray darken-2" class="pa-3">video_call</v-icon>
-          </router-link>
-          <router-link :to="{ name: '', params: {} }">
+          </v-btn>
+          <v-btn fab flat color="black">
             <v-icon color="gray darken-2" class="pa-3">notifications</v-icon>
-          </router-link>
-          <router-link :to="{ name: '', params: {} }">
-            <v-icon color="gray darken-2" class="pa-3">account_circle</v-icon>
-          </router-link>
+          </v-btn>
+          <v-menu transition="slide-x-reverse-transition">
+             <template v-slot:activator="{ on }">
+               <v-btn fab flat color="black" v-on="on">
+                 <v-icon color="gray darken-2" class="pa-3">account_circle</v-icon>
+               </v-btn>
+             </template>
+             <v-list>
+              <v-list-tile v-for="item in loginItem" :key="n" @click="">
+                <v-list-tile-title v-text="item.title" v-on:click="logout_actions()"></v-list-tile-title>
+              </v-list-tile>
+             </v-list>
+           </v-menu>
         </v-toolbar-items>
         <v-toolbar-items v-else>
-          <router-link :to="{ path: 'log/login' }">
+          <v-btn fab flat color="black" router :to="{ path:'log/login'}">
             <v-icon color="gray darken-2" class="pa-3">account_circle</v-icon>
-          </router-link>
+          </v-btn>
         </v-toolbar-items>
-
       </v-toolbar-items>
     </v-toolbar>
     <!-- modal -->
@@ -80,7 +90,7 @@
       <v-card>
         <v-flex xs12 sm12 md12 class="pa-4">
           <v-text-field
-            label="search"
+            label="Search"
           ></v-text-field>
         </v-flex>
         <v-card-actions>
@@ -90,7 +100,7 @@
             flat="flat"
             @click="dialog = false"
           >
-            닫기
+           <v-icon>close</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -114,13 +124,19 @@
           { title: '성적 관리', icon: 'insert_chart', link:'video'}
         ],
         drawer:"",//navigation slider button value
-        dialog:"",
-        check:false,
+        dialog:"",//Search modal
+        loginItem: [
+          {title:'logout', link:''},
+          {title:'nickname'},
+        ]
       }
+    },
+    methods:{
+      ...mapActions(['logout_actions']),
     },
     computed:{
       ...mapGetters({
-        lg_getters:'login_getters',
+        lg_getter:'login_getters',
       }),
 
     }

@@ -69,7 +69,6 @@
 
 <script>
 import { mapActions,mapGetters } from 'vuex';//vuex actions import
-import axios from 'axios';
 
 export default {
   data(){
@@ -78,6 +77,7 @@ export default {
         email:"",
         password:"",
       },
+      login_check:false,
     }
   },
   methods:{
@@ -86,23 +86,28 @@ export default {
       this.login_actions(this.login);
       this.login.email = "";
       this.login.password = "";
+      this.login_check = true;
     }
   },
   mounted:function(){
-    if(localStorage.getItem('login')){
+    if(this.login_getters.email&&this.login_getters.nickname){
       this.$router.push({name:'main'});
     }
   },
   updated:function(){
-    if(localStorage.getItem('login')){
-      this.$router.push({name:'main'});
-    }
   },
   computed:{
     ...mapGetters({
+      login_getters:'login_getters',
     }),
-
-  }
+  },
+  watch:{
+    login_check: function(data){
+      if(data){
+        this.$router.push({name:'main'});
+      }
+    }
+  },
 }
 </script>
 
