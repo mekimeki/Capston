@@ -99,11 +99,7 @@ class CrawlingController extends Controller
 		$mean = str_replace('일본어사전','',$mean);
 		$mean = str_replace('주요 검색어','',$mean);
 
-<<<<<<< Updated upstream
-		/*태그 와 태그 내용 통째ㅐ로 제거*/
-=======
 		/*태그 와 태그 내용 통째로 제거*/
->>>>>>> Stashed changes
 		$mean= preg_replace("!<a(.*?)<\/a>!is","",$mean);
 
 		/*태그만제거*/
