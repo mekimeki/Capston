@@ -1,16 +1,15 @@
 <template lang="html">
-  <v-container>
-    <router-view></router-view>
-  </v-container>
+  <div class="">
+
+  </div>
 </template>
 
 <script>
-
 export default {
-  components:{
-  },
+  
 }
 </script>
 
 <style lang="css" scoped>
+
 </style>
