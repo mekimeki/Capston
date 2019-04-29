@@ -1,13 +1,15 @@
 <template lang="html">
   <div>
-    <button id="captureButton" type="button" name="button" v-on:click="capture()">Capture</button>
+    <button type="button" name="button" v-on:click="capture()">Capture</button>
     <canvas id="canvasd" width="1300" height="1000"></canvas>
     <img id="image" v-bind:src="image_view" alt="" width="250" hegith="250">
+    <p v-if="imageText">SAVE</p>
+    <p v-else>NOT SAVE</p>
   </div>
 </template>
 
 <script>
-import {mapState,mapActions, mapGetters} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   name:"capture_",
@@ -18,43 +20,63 @@ export default {
       video_img: "",
       image:"",
       image_view:"",
+      imageText:"",
       capture_check:true,
     }
   },
   methods:{
-    ...mapActions(['capture_action','capture_data_action']),
     capture(){
+      console.log(this.capture_check);
       if(this.capture_check){
-        this.capture_check = false;//flot
-        this.image.style.display = "block";//css
-        this.ctx = this.canvas.getContext("2d");//cnavas data start
-        this.video_img = this.v_getter;//video store.js getter image data
+        this.capture_check = false;
+        this.image.style.display = "block";
+        this.ctx = this.canvas.getContext("2d");
+        this.video_img = this.v_getter;//video store.js getter
         this.ctx.drawImage(this.video_img, 10, 10);
         this.image_view = this.canvas.toDataURL("image/png");
-        this.capture_data_action(this.canvas.toDataURL("image/png"));
+        this.imageText = true;
+
         setTimeout(()=>{
           this.capture_check = true;
+          this.imageText = false;
           this.image.style.display = "none";
         }, 3000);
+      }else{
+
       }
     },
     save(){
+
     },
   },
   beforeCreate:function(){},
   created:function(){},
   beforeMout:function(){},
   mounted:function(){
-    this.canvas = document.getElementById("canvasd");//canvas element
-    this.image = document.getElementById("image");//image element
-    this.capture_action(document.getElementById('captureButton'));//vuex capture element save
+    this.canvas = document.getElementById("canvasd");
+    this.image = document.getElementById("image");
+  },
+  beforeUpdate:function(){
+    console.log("capture beforeUpdate");
+  },
+  updated:function(){
+    console.log("capture update");
   },
   computed:{
     ...mapGetters({
       v_getter:'video_getter',
-      c_getter:'capture_getter'
     }),
+    ...mapState(['video']),
   },
+  watch:{
+    imageText: function(data){
+      if(data){
+        // alert("저장됨");
+      }else{
+        // alert("저장안됨");
+      }
+    }
+  }
 }
 </script>
 
@@ -65,8 +87,6 @@ export default {
   }
   #canvasd{
     display:none;
-  }
-  #captureButton{
-    display:none;
+
   }
 </style>

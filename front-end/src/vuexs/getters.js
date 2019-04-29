@@ -1,34 +1,25 @@
 const getters = {
-  video_getter: (state) => { //video element getter
+  video_getter: (state) => {
     return state.video;
   },
-  subtitle_getter: (state) =>{ //subtitle getter
+  subtitle_getter: (state) =>{
     return state.subtitle;
   },
-  content_getter: (state) =>{
-    return state.content;
-  },
-  subtitle_buffer_getter: (state) =>{ //create input subtitle buffer getter
+  subtitle_buffer_getter: (state) =>{
     return state.subtitle_buffer;
   },
-  seek_bar_getter: (state) =>{ //input[range] element getter
+  seek_bar_getter: (state) =>{
     return state.seek_bar;
   },
-  capture_getter: (state) =>{
-    return state.capture;
-  },
-  capture_data_getter: (state) =>{
-    return state.capture_data;
-  },
-  percent_getter: (state) =>{
-    return state.percent;
-  },
-  login_getters: (state) =>{ //login values getter
+  login_getters: (state) =>{
     return state.login;
   },
-  upload_getters: (state) =>{ //upload values getter
+  upload_getters: (state) =>{
     return state.upload;
   },
+  video_cut_getters: (state) =>{
+    return state.video_cut;
+  }
 }
 
 export default getters;

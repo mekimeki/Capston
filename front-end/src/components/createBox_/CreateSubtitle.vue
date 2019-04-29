@@ -1,161 +1,141 @@
 <template lang="html">
   <div class="">
-    <span>{{sb_getter.length}}</span>
+    <div class="">
+      {{sb_getter.length}}
+    </div>
     <div id="scroll_div"
     v-on:scroll="scroll()">
-      <div class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
-        <input type="text" name="" value="" v-model="tent.firstTime">~
-        <input type="text" name="" value="" v-model="tent.lastTime">
+      <div class="textarea" v-for="(subtitle, i) in subtitle_box" v-if="i >= scroll_num.first && i<= scroll_num.last">
+        <input type="text" name="" value="" v-model="subtitle.firstTime">
+        ~
+        <input type="text" name="" value="" v-model="subtitle.lastTime">
         <v-textarea
-        outline
-        name="input-7-4"
-        label="Outline textarea"
-        value="자막을 작성 하시오."
-        v-model="tent.textArea">
-        </v-textarea>
-        <v-btn color="success" v-on:click="create_btn(i)">추가</v-btn>
-        <v-btn color="success" v-on:click="delete_btn(i)">삭제</v-btn>
-        <span class="" v-if="!up_getters.subtitle_">
-          <v-btn><v-icon v-on:click="record(i,$event)">mic_off</v-icon></v-btn>
-        </span>
+            outline
+            name="input-7-4"
+            label="Outline textarea"
+            value="자막을 작성 하시오."
+            v-model="subtitle.textArea"
+          ></v-textarea>
+          <v-btn color="success"
+          v-on:click="subtitle_middle_create(i)">추가</v-btn>
+          <v-btn color="success"
+          v-on:click="subtitle_middle_delete(i)">삭제</v-btn>
       </div>
+      <hr>
     </div>
     <div class="">
-      <v-btn color="success" v-on:click="save_btn()">저장</v-btn>
-      <template v-if="open">
-        <v-flex>
-           <v-progress-linear v-model="precent_video_cut"></v-progress-linear>
-        </v-flex>
-      </template>
-    </div>
-    <div class="" v-if="up_getters.subtitle_">
-      <v-btn color="success" v-on:click="move()">다음으로</v-btn>
+      <v-btn color="success" v-on:click="subtitle_save()">저장</v-btn>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import {mapState,mapGetters,mapActions} from 'vuex';
-import axios from 'axios';
 export default {
   data(){
     return{
       video:"",
+      subtitle_box:[],
+      //
       scroll_div:"",
       scroll_bottom:"",
-      content:[],
-      record_box:[],
+      scroll_top:"",
       scroll_num:{
         first:0,
         last:100,
       },
       terval:"",
+      //
       video_time_check:"",
-      percent_data:0,
-      open:false,
     }
   },
   methods:{
-    ...mapActions(['subtitle_action','upload_subtitle_actions','upload_content_actions','percent_action','subtitle_answer_action']),
-    move(){
-      this.percent_action(0);
-      this.$router.push({name:'content', query:{video:this.up_getters.subtitle_.video_pk}});
-    },
-    create_btn(check){
-      this.content.splice(check+1,0,{
-        "firstTime":this.content[check].lastTime+1,
-        "lastTime":this.content[check].lastTime+3,
-        "textArea":"Content Box",
+    ...mapActions(['subtitle_action']),
+    subtitle_middle_create(check){
+      this.subtitle_box.splice(check+1,0,{
+        "firstTime":this.subtitle_box[check].lastTime+1,
+        "lastTime":this.subtitle_box[check].lastTime+3,
+        "textArea":"자막박스",
       })
     },
-    delete_btn(check){
+    subtitle_middle_delete(check){
       if(check === 0){
-        this.content.shift();
+        this.subtitle_box.shift();
       }else{
-        this.content.splice(check,1);
+        this.subtitle_box.splice(check,1);
       }
-    },
-    save_btn(){
-      this.open = true;
-      let data = {
-        video : this.$route.query.video,
-        content: this.content,
-      }
-      this.upload_subtitle_actions(data);
-      let inter = setInterval(() => {
-        this.percent_data = this.percent;
-        if(this.percent_data === 100){
-          console.log("clear");
-          clearInterval(inter);
-        }
-      }, 100);
     },
     scroll(){
       this.scroll_bottom = this.scroll_div.scrollTop;
     },
-    record(num,evt){
-      evt.target.innerHTML = "mic";
-      this.record_box.push({
-        firstTime:this.content[num].firstTime,
-        lastTime:this.content[num].lastTime,
-        mic:true,
+    subtitle_save(){
+      let form = new FormData();
+      form.append("subtitle",JSON.stringify(this.subtitle_box));
+      let url = `http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestVideo.php`;
+      axios.post(url,form).then( (res) => {
+        console.log(res.data);
+      }).catch( error => {
+        console.log('failed', error);
       });
-
     }
   },
   mounted:function(){
     this.video = this.v_getter;
     this.scroll_div = document.getElementById('scroll_div');
-    let data = {
-      'video' : this.$route.query.video,
-      'firstTime': this.$route.query.firstTime,
-      'lastTime': this.$route.query.lastTime,
-    }
-    this.subtitle_answer_action(data)
-    .then(result=>{
-      this.subtitle_action(result.subtitle);
+    let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"//url path
+    axios.get(url).then((res)=>{
+      this.subtitle_action(res.data);
       for (let i = 0; i < this.s_getter.length; i++) {
-        this.content.push({
+        this.subtitle_box.push({
           "firstTime": this.s_getter[i][1][0],
           "lastTime": this.s_getter[i][1][1],
           "textArea":this.s_getter[i][2],
         });
       }
-    });
-    let inter = setInterval(() => {
-      this.video_time_check = this.video.currentTime;
-    }, 100);
-  },
-  beforeUpdate:function(){
+      this.terval = setInterval(()=>{
+        this.video_time_check = this.video.currentTime;
+      },100);
+    },(error)=>{alert("연결을 확인해 주세요")});
   },
   updated:function(){
     while (this.sb_getter.length != 0) {
       let i = 0;
-      for (i; i < this.content.length; i++) {
-        if (this.content[i].firstTime > this.sb_getter[0].firstTime) {
+      for (i; i < this.subtitle_box.length; i++) {
+        if (this.subtitle_box[i].firstTime > this.sb_getter[0].firstTime) {
           break;
         }else{
-          if(this.content.length === i){
+          if(this.subtitle_box.length === i){
             i = 0;
             break;
           }
         }
       }
-      this.content.splice(i,0,{
+      this.subtitle_box.splice(i,0,{
         "firstTime":this.sb_getter[0].firstTime,
         "lastTime":this.sb_getter[0].lastTime,
         "textArea":this.sb_getter[0].textArea,
       });
       this.sb_getter.splice(0,1);
     }
+    // for (let i = 0; i < this.subtitle_box.length; i++) {
+    //   for (let s = 0; s < this.sb_getter.length; s++) {
+    //     if(this.subtitle_box[i].firstTime > this.sb_getter[s].firstTime){
+    //       this.subtitle_box.splice(i,0,{
+    //         "firstTime":this.sb_getter[s].firstTime,
+    //         "lastTime":this.sb_getter[s].lastTime,
+    //         "textArea":this.sb_getter[s].textArea,
+    //       });
+    //       this.sb_getter.splice(s-1,1);
+    //     }
+    //   }
+    // }//end for
   },
   computed:{
     ...mapGetters({
       v_getter:'video_getter',
       s_getter:'subtitle_getter',
       sb_getter:'subtitle_buffer_getter',
-      up_getters:'upload_getters',
-      percent:'percent_getter'
     }),
   },
   watch:{
@@ -166,9 +146,9 @@ export default {
     },
     video_time_check:function(data){
       //코드 수정 필요
-      for (let i = 0; i < this.content.length; i++) {
-        //
-        if (this.content[i].firstTime.toFixed(1) === data.toFixed(1)) {
+      let input = document.getElementsByClassName("textarea");
+      for (let i = 0; i < this.subtitle_box.length; i++) {
+        if (this.subtitle_box[i].firstTime.toFixed(1) === data.toFixed(1)) {
           if(this.scroll_num.first<=i && i<= this.scroll_num.last){
           }else{
             this.scroll_num.last = this.scroll_num.last +i;
@@ -176,30 +156,25 @@ export default {
           setTimeout(()=>{
             clearInterval(this.terval);
             let input = document.getElementsByClassName("textarea");
-            input[i].style.border = "2px solid blue";
+            input[i].style.backgroundColor = "blue";
             input[i].scrollIntoView({behavior:'smooth'});
             setTimeout(()=>{
               this.terval = setInterval(()=>{
                 this.video_time_check = this.video.currentTime;
               },100);
-            },this.content[i].lastTime - this.content[i].firstTime);
+            },this.subtitle_box[i].lastTime - this.subtitle_box[i].firstTime);
           },100);
-          //
-        }else{
-          if(this.content[i].lastTime.toFixed(1) === data.toFixed(1)){
-            let input = document.getElementsByClassName("textarea");
-            input[i].style.border = "none";
-          }
         }
-      }//for end
+      }
     },
   }
+
 }
 </script>
 
 <style lang="css" scoped>
 #scroll_div{
   overflow: scroll;
-  height:500px;
+  height:300px;
 }
 </style>

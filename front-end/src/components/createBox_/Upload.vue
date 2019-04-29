@@ -1,15 +1,8 @@
 <template lang="html">
   <v-container>
-   <v-flex xs12 sm4>
-    <p>방식</p>
-    <v-overflow-btn
-      :items="select"
-      label="선택"
-    ></v-overflow-btn>
-   </v-flex>
    <v-layout row wrap>
-     <v-flex xs12 sm6 md6 class="pa-1">
-       <v-card class="video">
+     <v-flex xs12 sm6 md3 class="ma-5">
+       <v-card class="video" width="220">
          <div class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
            drop Zone video
 
@@ -32,9 +25,8 @@
          </div>
        </v-card>
       </v-flex>
-
-      <v-flex xs12 sm6 md6 class="pa-1">
-        <v-card class="subtitle">
+      <v-flex xs12 sm6 md3 class="ma-5">
+        <v-card class="subtitle" width="220">
           <div class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
             drop Zone subtitle
 
@@ -59,16 +51,10 @@
       </v-flex>
       <!-- change  -->
       <div class="">
-        {{up_getters}}
-      </div>
-      <div class="">
         <div class="" v-if="up_getters.subtitle">
-          <div class="">
-            Change!
-          </div>
+          <span>바꾸기</span>
         </div>
       </div>
-
    </v-layout>
   </v-container>
 </template>
@@ -94,10 +80,6 @@ export default {
       //
       input_video:"",
       input_subtitle:"",
-      select:[
-        {text:"공개용"},
-        {text:"개인용"}
-      ]
     }
   },
   methods: {
@@ -118,9 +100,11 @@ export default {
     on_change(evt){//change methods
       if(evt.target.id === "videoInput"){
         this.files = evt.target.files;
+        console.log("change",this.files[0]);
         this.create_video_file(this.files[0]);
       }else if(evt.target.id === "subtitleInput"){
         this.files = evt.target.files;
+        console.log("change",this.files[0]);
         this.create_subtitle_file(this.files[0]);;
       }
     },
@@ -141,6 +125,7 @@ export default {
     },
     create_subtitle_file(file) {//create file subtitle methods
       if (file.name.substring(file.name.length,file.name.length-3) != 'srt') {
+        // !file.type.match('text*')
         alert('subtitle를 선택해라');//subtitle 선택하기
         return;
       }else{
@@ -161,22 +146,56 @@ export default {
     },
 
     file_upload(){//다시
+      // let form = new FormData();
       if (this.video_file_name) {
         if (this.files.length) {
-          this.upload_actions(this.files[0],true);//upload
+          this.upload_actions(this,files[0],true);
+          // form.append("video",this.files[0]);
         }
       }else if(this.subtitle_file_name){
         if (this.files.length) {
-          this.upload_actions(this.files[0],false);//upload
+          this.upload_actions(this.files[0],false);
+          // form.append("subtitle",this.files[0]);
         }
       }
-    }
+      // let url_token = "http://172.26.3.246/get-token"
+      // // let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestUpload.php";
+      // let url = "http://172.26.3.246/upload"
+      // axios.get(url_token).then((res)=>{
+      //   //
+      //   console.log(res.data);
+      //   if (res.data) {
+      //     form.append("_token",res.data);
+      //     console.log(form);
+      //     axios.post(url,form).then((res) => {
+      //       console.log("성공",res.data);
+      //     }).catch( error => {
+      //       console.log('failed', error);
+      //     });
+      //   }
+      //   //
+      // }).catch( error => {
+      //   console.log('failed',error);
+      // });
+    }//
   },
   mounted:function(){
-    this.input_video = document.getElementById('videoInput');
-    this.input_subtitle = document.getElementById('subtitleInput');
+    console.log(this.up_getters.subtitle);
+    if(this.up_getters.subtitle){
+      console.log("o");
+      alert("이미 업로드 한 상태 입니다.");
+      this.$router.push({ name: 'main'});
+    }else{
+      console.log("x");
+      this.input_video = document.getElementById("videoInput");
+      this.input_subtitle = document.getElementById("subtitleInput");
+    }
   },
   updated:function(){
+    if(this.up_getters.subtitle){
+      console.log("upload move");
+      this.$router.push({name:'c-video', params:{check:this.up_getters.subtitle}});
+    }
   },
   computed:{
     ...mapGetters({
@@ -195,9 +214,9 @@ export default {
 }
 .dropzone{
   text-align: center;
-  width:100%;
-  height:300px;
-  border:5px solid black;
+  width:220px;
+  height:200px;
+  border:5px solid rgb(17, 74, 218);
 }
 .hidden{
   display: none;

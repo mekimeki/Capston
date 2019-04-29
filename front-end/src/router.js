@@ -33,6 +33,7 @@ import recommend from '@/components/mainPage_/Recommend';
 import register_video from '@/components/mainPage_/Register';
 
 import all_word from './views/Word_book';
+
 //beforeEnter methods
 const login_check = (path,query_check) => (to,from,next) => {//login and query check
   //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기

@@ -5,7 +5,8 @@
         <video_></video_>
       </v-flex>
       <v-flex xs12 sm5 md5 class="pa-2">
-        <content_></content_>
+        <createInput_></createInput_>
+        <createContent_></createContent_>
       </v-flex>
     </v-layout>
   </v-container>
@@ -13,11 +14,13 @@
 
 <script>
 import video_ from "@/components/video_/Video";
-import content_ from "@/components/createBox_/CreateContent";
+import createContent_ from "@/components/createBox_/CreateContent";
+import createInput_ from "@/components/createBox_/CreateInput";
 export default {
   components:{
     video_,
-    content_,
+    createContent_,
+    createInput_,
   },
   data(){
     return{
