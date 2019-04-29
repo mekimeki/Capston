@@ -22,6 +22,16 @@ import create_message from '@/components/createBox_/create/CreateMessage';
 import start from './views/Start_page'; //start page
 import quiz_select from './views/Quiz_select'; //quiz
 import quiz_one from './views/Quiz_one';
+
+
+import word_book from '@/components/wordBook_/AllWord';
+
+import gogo_book from '@/components/gogoBook_/GogoBoard';
+
+import recommend from '@/components/mainPage_/Recommend';
+
+import register_video from '@/components/mainPage_/Register';
+
 import all_word from './views/Word_book';
 //beforeEnter methods
 const login_check = (path,query_check) => (to,from,next) => {//login and query check
@@ -40,6 +50,7 @@ const login_check = (path,query_check) => (to,from,next) => {//login and query c
     next(path);
   }
 }
+
 
 export default new Router({
   mode:'history',//#を消す。
@@ -67,8 +78,12 @@ export default new Router({
     { //allWord
       path:'/allWord',
       name:'allWord',
-      component:all_word,
-
+      component:word_book,
+    },
+    { //gogoBoard
+      path:'/gogoBoard',
+      name:'gogoBoard',
+      component:gogo_book,
     },
     { //video
       path:'/video',
