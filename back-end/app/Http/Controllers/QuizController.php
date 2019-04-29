@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use App\Voca;
+use App\WBook;
+use App\Word;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
@@ -24,7 +26,8 @@ class QuizController extends Controller
     public function english()
     {
         $id = 1;
-        $vocas = voca::where('b_id', $id)->select('word')->inRandomOrder()->take(4)->get();
+        $vocas = word::where('wbook_pk', $id)->select('w_nm AS word')->inRandomOrder()->take(4)->get();
+        \Log::debug($vocas);
         $random = random_int(0, $vocas->count()-1);
         $quiz = $vocas->slice($random, 1);
         $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$quiz[$random]->word);
@@ -58,10 +61,10 @@ class QuizController extends Controller
     public function japanese() 
     {
         $id = 2;
-        $vocas = voca::where('b_id', $id)->select('word')->inRandomOrder()->take(4)->get();
+        $vocas = word::where('wbook_pk', $id)->select('w_nm')->inRandomOrder()->take(4)->get();
         $random = random_int(0, $vocas->count()-1);
         $quiz = $vocas->slice($random, 1);
-        $this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$quiz[$random]->word.'&dic=jp');
+        $this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$quiz[$random]->w_nm.'&dic=jp');
 		$result = $this->snoopy->results;
 
 		$matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
@@ -76,7 +79,7 @@ class QuizController extends Controller
         $mean = preg_replace("/\t|\n/", '', $mean);
 
 		if($matchFlag){
-			$array = explode('<li>', $mean[0]);
+            $array = explode('<li>', $mean[0]);
             array_shift($array);
             
             $back = ["ques"=>$array, "choice"=>$vocas, "ans"=>$random];
@@ -94,7 +97,7 @@ class QuizController extends Controller
         \Log::debug($results);
         // $result = explode(',', $results);
         // \Log::debug($result);
-        \DB::insert('insert into scores (m_id, score) values (?, ?)', [1, $results]);
+        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $results]);
 
         return "a";
     }
@@ -126,39 +129,9 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($b_id)
+    public function show()
     {
         
-    }
-
-    public function book($b_id = null)
-    {
-        $books = book::where('m_id', 1)->select('b_id')->get();
-        $vocas = [];
-        if($b_id == false) {
-            for($i=0; $i<$books->count(); $i++) {
-                $array[$i] = json_decode(voca::where('b_id', $books[$i]->b_id)->select('word', 'memorized')->get(), true);
-                $vocas = array_merge($vocas, $array[$i]);
-            }
-        } else {
-            $vocas = voca::where('b_id', $b_id)->select('word', 'memorized')->get();
-        }
-        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
-        return $vocas;
-    }
-
-    public function memo($mm = null)
-    {
-        $books = book::where('m_id', 1)->select('b_id')->get();
-        if($mm == "T") {
-            for($i=0; $i<$books->count(); $i++) {
-                $vocas = voca::where('memorized', $mm)->select('word')->get();
-            }
-        } else {
-            $vocas = voca::where('memorized', $mm)->select('word')->get();
-        }
-        $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
-        return $vocas;
     }
 
     /**
@@ -179,9 +152,9 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update()
+    {   
+        
     }
 
     /**
@@ -192,7 +165,7 @@ class QuizController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 
 

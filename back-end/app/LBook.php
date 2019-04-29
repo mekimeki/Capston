@@ -8,7 +8,7 @@ class LBook extends Model
 {
     //
     protected $table ='LBOOK_TB';
-    protected $timestamps = false;
+    public $timestamps = false;
     protected $primarykey = 'LBOOK_PK';
 
     public function member(){

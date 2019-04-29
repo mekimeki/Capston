@@ -7,18 +7,36 @@ use Google\Cloud\Speech\V1\SpeechClient;
 use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
+/*
+ * analysis = 
+ *
+ *
+ *
+ *
+ */
 
 class VoiceAnalysisController extends Controller
-{
-    //
-    public function analysis(){
+{   
+    public $ffmpeg;
+
+    public function __construct(){
+        
+        $GLOBALS['ffmpeg'] = \FFMpeg\FFMpeg::create(array(
+            'ffmpeg.binaries'  => 'C:/ffmpeg/bin/ffmpeg.exe',
+            'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
+            'timeout'          => 3600,
+            'ffmpeg.threads'   => 12,   
+        ));
+    }
+
+    public function analysis($origin_path){
         $datas = [];
         $analy = [];
         $projectId = 'capston';
 
-        $files = [public_path('audio\\helloworld.wav'),public_path('audio\\hellotilt.wav')];
-        // $fileName = public_path('audio\\helloworld.wav');
-        // $fileName2 = public_path('audio\\hellotilt.wav');
+        \Log::debug($origin_path);
+
+        $files = [$origin_path,public_path('audio\\hellotilt.wav')];
 
         foreach($files as $fileName){
             $content = file_get_contents($fileName);
@@ -43,7 +61,8 @@ class VoiceAnalysisController extends Controller
         }
         $analy = $this->comparison($datas[0],$datas[1]);
         
-        return view("check",compact('datas','analy'));
+        return [$analy,$datas];
+        // return view("check",compact('datas','analy'));
     }
 
     function comparison($a, $b){
@@ -96,22 +115,18 @@ class VoiceAnalysisController extends Controller
         * 1. 사용자의 아이디를 받지 않았음
         * 2. 아이디를 받고, 해당하는 아이디의 폴더가 있으면 그곳에 생성 없으면 작성 후 생성
         * 3. 파일명 형식은 날짜_voice
-        *
         */
+
         $tmpfile = $request->all();
 
         $file = $tmpfile["audio"];
         
         move_uploaded_file($file, public_path('audio\\check.webm'));
 
-        $ffmpeg = \FFMpeg\FFMpeg::create(array(
-            'ffmpeg.binaries'  => 'C:/ffmpeg/bin/ffmpeg.exe',
-            'ffprobe.binaries' => 'C:/ffmpeg/bin/ffprobe.exe',
-            'timeout'          => 3600, // The timeout for the underlying process
-            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-        ));
 
-        $faudio = $ffmpeg->open(public_path('audio\\check.webm'));
+        \Log::debug("type === ".gettype($this->ffmpeg));
+
+        $faudio = $GLOBALS['ffmpeg']->open(public_path('audio\\check.webm'));
         $audio_format = new \FFMpeg\Format\Audio\Wav();
 
         \Log::debug("codec ==== ".$audio_format-> getAudioCodec());
@@ -119,14 +134,43 @@ class VoiceAnalysisController extends Controller
 
         $faudio->filters()->resample(16000);
         $audio_format
-        ->setAudioChannels(1)
-        ->setAudioKiloBitrate(192);
+        ->setAudioChannels(1);
 
-        $faudio->save($audio_format, public_path('audio\\check.wav'));
-
+        $faudio->save($audio_format, public_path('audio\\compare.wav'));
         
         if(\Storage::disk("local_audio")->exists('check.webm'))
         \Storage::disk("local_audio")->delete('check.webm');
+        
+    }
+
+    public function voiceExtraction(Request $request){
+        // $s_time = $request->input('s_time');
+        // $duration = $request->input('duration');
+        // $path = $request->input('pk');
+
+        $s_time = 1;
+        $duration = 8;
+        $audio_format = new \FFMpeg\Format\Audio\Wav();
+
+        // $fvideo = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
+        $audio = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
+
+        $audio_format
+        ->setAudioChannels(1)
+        ->setAudioKiloBitrate(192);
+        \Log::debug('checkk'.gettype($audio_format));
+
+        $clip = $audio->clip(\FFMpeg\Coordinate\TimeCode::fromSeconds($s_time), \FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
+        $clip->filters()->resample(16000);
+        $path = public_path('audio\\origin.wav');
+
+        $clip->save($audio_format, $path);
+
+        $originsize = fileSize($path);
+
+        \Log::debug('size ===== '.floor($originsize*8 / 256000));
+
+        return $this->analysis($path);
         
     }
 }

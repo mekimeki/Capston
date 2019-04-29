@@ -1,88 +1,122 @@
 import axios from 'axios';
+import Service from '../api/service';
+
+const service = new Service("http://172.26.4.110/");//axios api service class created
 
 const actions = {
-  video_action : ({commit},payload) => {//video actions
+  video_action : ({commit},payload) => {//video action
     commit('video_mutation',payload);
   },
-  subtitle_action : ({commit},payload) => {//subtitle actions
+  video_link_action: ({commit},payload) =>{ //video link action
+    return service.video_link("api/video/edit/",payload);
+  },
+  subtitle_answer_action: ({commit},payload) => { //subtitle answer action
+    return service.subtitle_answer("api/subtitle/edit",payload);
+  },
+  subtitle_open_action: ({commit},payload) =>{//subtitle open action
+    return service.subtitle_open('http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php');
+  },
+  content_action: ({commit},payload) => {
+    commit('content_mutation',payload);
+  },
+  content_answer_action: ({commit},payload) => {
+    return service.content_answer("http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php");
+  },
+  subtitle_action : ({commit},payload) => {//subtitle action
     commit('subtitle_mutation',payload);
   },
-  subtitle_buffer_action : ({commit},payload) => {//subtitle create input subtitle buffer actions
+  subtitle_buffer_action : ({commit},payload) => {//subtitle create input subtitle buffer action
     commit('subtitle_buffer_mutation',payload);
   },
-  seek_bar_action : ({commit},payload) => {//video seek_bar actions
+  subtitle_word_action : ({commit},payload) => {
+    return service.subtitle_word("http://localhost/Capstone_practice/project_videoPlayer/api/test2.php",payload);
+  },
+  seek_bar_action : ({commit},payload) => {//video seek_bar action
     commit('seek_bar_mutation',payload);
   },
-  login_actions : ({commit},payload) => {//login actions
-    if(!(payload.email&&payload.password)){
-      alert("빈칸 입니당");
-    }else{
-      let url = "";//login url;
-
-      let form = new FormData();
-      form.append("email",payload.email);
-      form.append("password",payload.password);
-
-      axios.post(url).then((res)=>{
-        console.log(res.data);
-      },(error)=>{alert("연결을 확인해 주세요")});
-      commit('login_mutation',payload);
+  capture_action : ({commit},payload) => {//capture element action
+    commit('capture_mutation',payload);
+  },
+  capture_data_action : ({commit},payload) =>{
+    commit('capture_data_mutation',service.capture_image('api/?',payload));
+  },
+  percent_action : ({commit},payload) => {//capture element action
+    commit('upload_percent_mutation',payload);
+  },
+  login_actions : ({commit},payload) => {//login action
+    service.login("api/login",payload).then(result => {
+      localStorage.setItem('login',result.token);
+      service.login_check("api/token",result.token).then(result => {
+        commit('login_mutation',result);
+      });
+    });
+  },
+  login_check_actions : ({commit},payload) => {//login check action
+    if(payload){
+      service.login_check("api/token",payload).then(result => {
+        commit('login_mutation',result);
+      });
     }
   },
-  upload_actions : ({commit},payload,check) => {
-    let form = new FormData();
-    if (check) {
-      form.append("video",payload);
-      commit('upload_mutation',true);
+  logout_actions : ({commit}) => {//logout action
+    let check = confirm("本当にlogout?");
+    if(check){
+      commit('logout_mutation');
     }else{
-      form.append("subtitle",payload);
-      commit('upload_mutation',false);
+      alert("logoutX");
     }
-
-    // let url_token = "http://172.26.3.246/get-token"
-    // // let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestUpload.php";
-    // let url = "http://172.26.3.246/upload"
-    // axios.get(url_token).then((res)=>{
-    //   //
-    //   console.log(res.data);
-    //   if (res.data) {
-    //     form.append("_token",res.data);
-    //     console.log(form);
-    //     axios.post(url,form).then((res) => {
-    //       console.log(res.data);
-    //       if(res.data){
-    //         if(check){
-    //           commit('upload_mutation',true);
-    //         }else {
-    //           commit('upload_mutation',false);
-    //         }
-    //       }else{
-    //         alert("업로드 실패");
-    //       }
-    //     }).catch( error => {
-    //       console.log('failed', error);
-    //     });
-    //   }
-    //   //
-    // }).catch( error => {
-    //   console.log('failed',error);
-    // });
-
+  },
+  upload_actions : ({commit},payload) => {//upload action
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
+      }
+    }
+    if (payload.check) {//video
+      service.csrf_check("csrf-token").then(result => {
+        service.upload("api/video/originalUpload",payload.file,result,localStorage.getItem('login'),"",config)
+        .then(result => {
+          commit('upload_mutation',result);
+        });
+      });
+    }else{//subtitle
+      service.csrf_check("csrf-token").then(result => {
+        service.upload("api/subtitle/originalUpload",payload.file,result,localStorage.getItem('login'),payload.video_pk,config)
+        .then(result => {
+          commit('upload_mutation',result);
+        });
+      });
+    }
   },
   video_cut_actions : ({commit},payload) => {
-    let form = new FormData();
-    form.append("time",JSON.stringify(payload));
-    let url = `http://localhost/FFMPEGTEST/ffmpeg_test.php`;
-    alert("준비중입니다.");
-    axios.post(url,form).then( (res) => {
-      console.log(res.data);
-      if(res.data){
-        // alert("준비 끝 났습니다.");
-        console.log("준비끝");
-        commit('video_cut_mutation',true);
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
       }
-    }).catch( error => {
-      console.log('failed', error);
+    }
+    service.video_cut_upload('api/video/streamingUpload',payload,config).then(result => {
+      commit('video_cut_mutation',result);
+    });
+  },
+  upload_subtitle_actions: ({commit},payload) =>{
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
+      }
+    }
+    service.subtitle_upload("api/subtitle/produce",payload,config).then(result=>{
+      commit('upload_subtitle_mutations',result);
+    });
+  },
+  search_action: ({commit},payload) =>{
+    return service.search('',payload);
+  },
+  upload_content_actions:({commit},payload) =>{
+    return service.content_upload('',payload).then(result=>{
+      commit('upload_content_mutation',result);
     });
   }
 }
