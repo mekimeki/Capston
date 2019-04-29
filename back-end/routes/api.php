@@ -59,3 +59,4 @@ Route::get('deletedLine', 'LineController@destroy'); // 대사 삭제
 //출석
 
 Route::get('attend/{id}', 'AttendController@attendance');
+
