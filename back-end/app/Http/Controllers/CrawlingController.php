@@ -120,4 +120,92 @@ class CrawlingController extends Controller
 		
 	}
 
+	public function example($word) // 예문
+	{
+		// $word = $request->input('word');
+        $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$word.'&dic=ee&search_first=Y');
+        $result = $this->snoopy->results;
+        //\Log::debug($result);
+        $matchFlag = preg_match('/<ul class="list_example sound_example">(.*?)<\/ul>/is', $result, $mean);
+        /*태그만제거*/
+        $mean = preg_replace("/<ul[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/ul>/i", '', $mean);
+        $mean = preg_replace("/<li[^>]*>/i", '', $mean);
+        //$mean = preg_replace("/<\/li>/", '', $mean);
+        $mean = preg_replace("/<span[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/span>/", '', $mean);
+		$mean = preg_replace("/<daum:word[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<daum:collocate[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/daum:collocate[^>]*>/i", '', $mean);
+		$mean = preg_replace("/(<\/daum:word>)/", '', $mean);
+		
+        $mean = preg_replace("/<a[^>]*>/i", '', $mean);
+        //$mean = preg_replace("/<\/a>/", '', $mean);
+        $mean = preg_replace("/<div[^>]*>/i", '', $mean);
+        $mean = preg_replace("/<\/div>/", '', $mean);
+		$mean = preg_replace("/\t|\n/", '', $mean);
+		$mean = preg_replace("/<\/li>/", '', $mean);
+		$mean = trim($mean[0]);
+        if($matchFlag){
+			$array = explode("</a>", $mean);
+			$arrays = [];
+			for ($i=0; $i<count($array)-1; $i++) {
+				$arrays[$i] = trim($array[$i]);
+
+				if($i%2 != 0){
+				$arrays[$i] = rtrim($arrays[$i]," 소리듣기");
+			}
+			\Log::debug($arrays[$i]);
+			}
+
+			$arrays = json_encode($arrays, JSON_UNESCAPED_UNICODE);
+            return $arrays;
+		}else{
+			return '검색 결과가 없습니다.';
+		}
+	}
+
+	public function mean($word) // 단어 뜻
+	{
+		$this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$word);
+        $result = $this->snoopy->results;
+
+        $matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
+        /*태그만제거*/
+        $mean = preg_replace("/<ul[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/ul>/i", '', $mean);
+        //$mean = preg_replace("/<li[^>]*>/i", '', $mean); // 좀 더 보기 편하게 해줌
+        $mean = preg_replace("/<\/li>/", '', $mean);
+        $mean = preg_replace("/<span[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/span>/", '', $mean);
+		$mean = preg_replace("/<daum:word[^>]*>/i", '', $mean);
+        $mean = preg_replace("/(<\/daum:word>)/", '', $mean);
+        $mean = preg_replace("/<a[^>]*>/i", '', $mean);
+        $mean = preg_replace("/<\/a>/", '', $mean);
+        $mean = preg_replace("/<\/div>/", '', $mean);
+		$mean = preg_replace("/\t|\n/", '', $mean);
+        
+        if($matchFlag){
+			$array = explode('<li>', $mean[0]);
+			array_shift($array);
+			\Log::debug($array);
+			$array = json_encode($array, JSON_UNESCAPED_UNICODE);
+            return $array;
+		}else{
+			return '검색 결과가 없습니다.';
+		}
+	}
+
+	public function wordExample(Request $request)
+	{
+		$word = $request->input('word');
+		return $this->example($word);
+	}
+
+	public function wordMean(Request $request)
+	{
+		$word = $request->input('word');
+		return $this->mean($word);
+	}
+
 }
