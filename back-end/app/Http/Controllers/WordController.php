@@ -99,18 +99,6 @@ class WordController extends Controller
                 ->select('w_nm')
                 ->groupBy('w_nm')
                 ->get()->toArray();
-
-            // $array[$i] = word::select('w_pk', 'w_nm', 'memo_st', 'wbook_pk')->groupBy('w_nm')->having('wbook_pk', $books[$i]->wbook_pk)->get()->toArray();
-
-            // $array[$i] = \DB::table('word_tb')
-            // ->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')
-            // ->groupBy('word')
-            // ->havingRaw('wbook_pk', [$books[$i]->wbook_pk])
-            // ->get();
-
-            //$array[$i] = word::select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->where('wbook_pk', $books[$i]->wbook_pk)->get()->toArray();
-            // $vocas = array_merge($vocas, $array[$i]);
-
         } else {
             $vocas = word::where('wbook_pk', $b_id)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
@@ -125,9 +113,7 @@ class WordController extends Controller
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
 
         if ($mm == "T") {
-            for ($i = 0; $i < $books->count(); $i++) {
-                $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
-            }
+            $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         } else {
             $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
