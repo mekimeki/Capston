@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\LBook;
 use App\Line;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Snoopy;
+use Illuminate\Support\Arr;
 
 class LineController extends Controller
 {
@@ -154,5 +156,10 @@ class LineController extends Controller
             return "ok";
         }
         return "nope";
+    }
+
+    public function savePicture(Request $request, Uploaded $file){
+        $pic = $request->input('picture');
+        
     }
 }

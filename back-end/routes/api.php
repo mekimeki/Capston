@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 Route::post('/upload', 'VideoController@store');
 Route::get('/video','VideoController@index');
 //Route::get('/uploader', 'VideoController@uploader')->name('uploader');
+Route::get('/imgTest', 'VideoController@videoImage');
 Route::post('/upload', 'VideoController@store')->name('upload');
 Route::get('submit','VideoController@submit');
 
@@ -62,6 +63,7 @@ Route::get('line/{l_id}', 'LineController@index'); // 대사 보여주기
 Route::post('deletedLine', 'LineController@destroy'); // 대사 삭제
 Route::post('deletedLineBook', 'LineController@delete'); // 대사집 삭제
 Route::post('createLine', 'LineController@create'); // 대사집 추가
+Route::post('pictest', 'LineController@savePicture'); // 사진 저장
 
 //출석
 

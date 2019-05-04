@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vocabulary extends Model
 {
     //
-    protected $table='VOCABULARY_TB';
+    protected $table='vocabulary_tb';
     public $timestamps = false;
 
     public function VG(){

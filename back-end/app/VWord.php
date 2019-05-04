@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VWord extends Model
 {
     //
-    protected $table='VWORD_TB';
+    protected $table='vword_tb';
     public $timestamps = false;
 
     public function Video(){
