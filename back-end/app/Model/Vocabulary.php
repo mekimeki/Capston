@@ -8,6 +8,7 @@ class Vocabulary extends Model
 {
     //
     protected $table='VOCABULARY_TB';
+    protected $primaryKey = 'vo_pk';
     public $timestamps = false;
     protected $guarded = [];
 

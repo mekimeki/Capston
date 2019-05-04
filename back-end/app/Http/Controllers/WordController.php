@@ -93,8 +93,6 @@ class WordController extends Controller
     public function book($b_id = null)
     {
         $books = wBook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
-
-        \Log::debug($books);
         $vocas = [];
 
         if ($b_id == false) {
@@ -103,7 +101,6 @@ class WordController extends Controller
                 ->whereIn('wbook_pk',$booksBefore)
                 ->groupBy('w_nm')
                 ->get()->toArray();
-
         } else {
             $vocas = \DB::table('word_tb')
                 ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
