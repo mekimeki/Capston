@@ -12,7 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Video;
+use App\Model\Video;
+use Illuminate\Http\Request;
 class ConvertVideoForStreaming implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -22,12 +23,13 @@ class ConvertVideoForStreaming implements ShouldQueue
      *
      * @return void
      */
-    public $path;
-    public function __construct($path)//Video $video
+    public $streaming;
+    public $video;
+    public $request;
+    public function __construct(Video $video,$streaming)//Video $video
     {
-        //$this->video = $video;
-        $this->path = $path;
-        
+        $this->video = $video;
+        $this->streaming = $streaming;
     }
 
     /**
@@ -39,23 +41,28 @@ class ConvertVideoForStreaming implements ShouldQueue
     {
         //return $this->video->path;
         // create some video formats...
+        $video_pk = $this->video->video_pk;
         $lowBitrateFormat = (new X264('aac', 'libx264'))->setKiloBitrate(500);
         $midBitrateFormat  = (new X264('aac', 'libx264'))->setKiloBitrate(1500);
         $highBitrateFormat = (new X264('aac', 'libx264'))->setKiloBitrate(3000);
-        $start = \FFMpeg\Coordinate\TimeCode::fromSeconds(7);
-        $duration = \FFMpeg\Coordinate\TimeCode::fromSeconds(1);
+        $start = \FFMpeg\Coordinate\TimeCode::fromSeconds($this->streaming['start']);
+        $duration = \FFMpeg\Coordinate\TimeCode::fromSeconds($this->streaming['duration']);
         $clipFilter = new \FFMpeg\Filters\Video\ClipFilter($start,$duration);
         // open the uploaded video from the right disk...
         FFMpeg::fromDisk('public')//$this->video->disk
-            ->open($this->path)
-            //->addFilter($clipFilter)
-            ->exportForHLS()
-            ->toDisk('public')// streamable_videos
-            ->setSegmentLength(15)
-            ->addFormat($lowBitrateFormat)
-            ->save('test1234'. '.m3u8');//$this->video->video_pk 
-
-            /*
+            ->open($this->streaming['path'])
+            ->addFilter($clipFilter)
+            //->exportForHLS()
+            ->export()
+            //
+            ->toDisk('video')// streamable_videos
+            //->setSegmentLength(15)
+            //->addFormat($lowBitrateFormat)
+            ->inFormat($lowBitrateFormat)
+            //
+            ->save($video_pk. '.mp4');//$this->video->video_pk 
+        $this->video->where('video_pk',$video_pk)->update(['v_add'=>asset('storage/video/'.$video_pk.'.mp4')]);
+        /*
         $this->video->update([
             'converted_for_streaming_at' => Carbon::now(),
         ]);

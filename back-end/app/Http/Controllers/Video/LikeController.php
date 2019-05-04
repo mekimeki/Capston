@@ -15,59 +15,59 @@ namespace App\Http\Controllers\Video;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Member\CheckController;
 use App\Model\Like;
 
 class LikeController extends Controller
 {
     //
 
-    public function like($video_pk){
-    	if(Auth::user()){
-    		$like = new Like;
-    		$m_id = Auth::user()->member_pk;
-    		$check = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
-    		if(!$check){
-    			/*수정필요*/
-    			$like->fill([
-	    			'm_id'=>$m_id,
-	    			'video_pk'=>$video_pk,
-    			]);
-    			$like->save();
-    			return response()->json([
-	    			'message'=>'success'
-	    		],200);
-    		}else{
-    			return response()->json([
-	    			'message'=>'already liked'
-	    		],200);
-    		}
-    	}else{
-			return response()->json([
-	    		'message'=>'login please'
-	    	],200);
-		}
+    public $check;
+    public function __construct(){
+        $this->check = new CheckController();
     }
 
-    public function likeCancel($video_pk){
-    	if(Auth::user()){
-    		$like = new Like;
-    		$m_id = Auth::user()->member_pk;
-    		$check = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
-    		if($check){
-    			$like->where('m_id',$m_id)->where('video_pk',$video_pk)->delete();
-    			return response()->json([
-	    			'message'=>'success'
-	    		],200);
-    		}else{
-    			return response()->json([
-	    			'message'=>'you are not like this video'
-	    		],200);
-    		}
-    		
-    	}else{
-			return response()->json([
-	    		'message'=>'login please'
+    public function like($video_pk,Request $request){
+        $m_id = $this->check->check($request);
+        if(isset($m_id[0]['messages']) ){
+            return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
+        }
+    	$like = new Like;
+    	$likeCheck = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	if(!$likeCheck){
+    		/*수정필요*/
+    		$like->fill([
+	    		'm_id'=>$m_id,
+	    		'video_pk'=>$video_pk,
+    		]);
+    		$like->save();
+    		return response()->json([
+	    		'message'=>'you are like this video'
 	    	],200);
-		}
+    	}else{
+    		return response()->json([
+	    		'message'=>'already liked'
+	    	],200);
+    	}
+    }
+
+    public function likeCancel($video_pk,Request $request){
+        $m_id = $this->check->check($request);
+        if(isset($m_id[0]['messages']) ){
+            return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
+        }
+    	$like = new Like;
+    	$likeCheck = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	if($likeCheck){
+    		$like->where('m_id',$m_id)->where('video_pk',$video_pk)->delete();
+    		return response()->json([
+	    		'message'=>'like cancel this video'
+	    	],200);
+    	}else{
+    		return response()->json([
+	    		'message'=>'you are not like this video'
+	    	],200);
+    	}
+    		
     }
 }
