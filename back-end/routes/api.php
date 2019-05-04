@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 Route::post('/upload', 'VideoController@store');
 Route::get('/video','VideoController@index');
 //Route::get('/uploader', 'VideoController@uploader')->name('uploader');
+Route::get('/imgTest', 'VideoController@videoImage');
 Route::post('/upload', 'VideoController@store')->name('upload');
 Route::get('submit','VideoController@submit');
 
@@ -54,3 +55,4 @@ Route::get('books', 'WordController@show'); // 단어장 목록 보여주기
 Route::get('lineBook', 'LineController@show'); // 대사집 목록 보여주기
 Route::get('line/{l_id}', 'LineController@index'); // 대사 보여주기
 Route::get('deletedLine', 'LineController@destroy'); // 대사 삭제
+Route::post('pictest', 'LineController@savePicture'); // 사진 저장
