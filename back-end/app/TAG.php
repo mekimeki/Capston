@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     //
-    protected $table ='TAG_TB';
+    protected $table ='tag_tb';
     public $timestamps = false;
 
     public function VTag(){

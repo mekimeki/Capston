@@ -9,6 +9,7 @@ class Line extends Model
     //
     protected $table='LINE_TB';
     protected $timestamps = false;
+    protected $primarykey = 'line_pk';
     protected $guarded = [];
 
      public function LBook(){

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Folower extends Model
 {
     //
-    protected $table ='FOLOWER_TB';
+    protected $table ='follower_tb';
     public $timestamps = false;
     
 

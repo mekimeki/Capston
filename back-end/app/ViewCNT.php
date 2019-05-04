@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ViewCNT extends Model
 {
     //
-    protected $table ='VIEW_CNT_TB';
+    protected $table ='view_cnt_tb';
     public $timestamps = false;
 
     public function Video(){

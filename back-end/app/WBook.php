@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class WBook extends Model
 {
     //
-    protected $table='WBOOK_TB';
+    protected $table='wbook_tb';
     public $timestamps = false;
 
     public function Member(){

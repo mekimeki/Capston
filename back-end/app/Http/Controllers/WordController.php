@@ -84,7 +84,7 @@ class WordController extends Controller
     public function show() // 단어장 목록 보여주기
 
     {
-        $books = wbook::where('m_id', 1)->select('wbook_pk AS id', 'wbook_tt AS title')->get();
+        $books = wBook::where('m_id', 1)->select('wbook_pk AS id', 'wbook_tt AS title')->get();
         $books = json_encode($books, JSON_UNESCAPED_UNICODE);
         return $books;
         //아이디랑 제목 같이 넘김
@@ -92,16 +92,20 @@ class WordController extends Controller
 
     public function book($b_id = null)
     {
-        $books = wbook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
+        $books = wBook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
         $vocas = [];
-        if ($b_id == false) {
+
+
+        if($b_id == false) {
+
             $vocas = \DB::table('word_tb')
-                ->select('w_nm')
-                ->groupBy('w_nm')
-                ->get()->toArray();
+            ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
+            ->groupBy('w_nm')
+            ->get()->toArray();
         } else {
             $vocas = word::where('wbook_pk', $b_id)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
+
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
     }
@@ -120,6 +124,8 @@ class WordController extends Controller
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -192,3 +198,4 @@ class WordController extends Controller
         return "nope";
     }
 }
+

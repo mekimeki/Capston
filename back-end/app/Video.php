@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Video extends Model
 {
     //
-    protected $table = 'VIDEO_TB';
+    protected $table = 'video_tb';
     protected $guarded = [];
     public $timestamps = false;
 
