@@ -8,11 +8,12 @@ use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 /*
- * analysis = 
- *
- *
- *
- *
+ * analysis = GCP - STT -> comparison()
+ * comparison = get metaphone and minimize distance
+ * getMin = get min value
+ * getDistance = get text distance both origin and recording 
+ * voiceRecord = formating recorded blob to wav
+ * voiceExtraction = get origin wav to video
  */
 
 class VoiceAnalysisController extends Controller
@@ -172,5 +173,17 @@ class VoiceAnalysisController extends Controller
 
         return $this->analysis($path);
         
+    }
+
+    public function test(){
+        if(File_exists('./../python/test.py')){
+            $command = escapeshellcmd('python ./../python/test.py');
+            $returns;
+            exec($command);
+            \Log::debug($returns);
+            return "data ==== ".$returns;
+        }else {
+            return "no have...";
+        }
     }
 }

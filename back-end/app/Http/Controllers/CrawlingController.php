@@ -56,11 +56,22 @@ class CrawlingController extends Controller
 		preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
 		/*태그만제거*/
 		$mean = preg_replace("/<ul[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/ul>/i", '', $mean);
 		$mean = preg_replace("/<li[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/li>/i", '', $mean);
 		$mean = preg_replace("/<span[^>]*>/i", '', $mean);
+		$mean = preg_replace("/<\/span>/i", '', $mean);
 		$mean = preg_replace('/\s+/', '', $mean);
+		$means = explode("</daum:word>",$mean[0]);
+		array_pop($means);
+		$means = preg_replace("/<daum[^>]*>/i", '', $means);
+		
 		if($pronunciation && $mean){
-			return $pronunciation[0].' : '.$mean[0];
+			\Log::debug("type === ".gettype($pronunciation[0]));
+			\Log::debug("value === ".$pronunciation[0]);
+			\Log::debug("type === ".gettype($mean[0]));
+			
+			return $means;
 		}else{
 			return '검색 결과가 없습니다.';
 		}
@@ -92,7 +103,6 @@ class CrawlingController extends Controller
 		$pronunciation = preg_replace("/<h4[^>]*>/i", '', $pronunciation);
 		$pronunciation = preg_replace('/\s+/', '', $pronunciation);
 		
-		/////
 		
 		preg_match('/<div class="card_word #word #jp">(.*?)<\/ul>/is', $result, $mean);
 		/*특정 텍스트 제거*/

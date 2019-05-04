@@ -7,6 +7,7 @@ use App\Line;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
+use Illuminate\Http\UploadedFile;
 
 class LineController extends Controller
 {
@@ -137,5 +138,10 @@ class LineController extends Controller
         for($i=0; $i<$lines->count(); $i++) {
             line::where('line_pk', $lines[$i]->id)->delete();
         }
+    }
+
+    public function savePicture(Request $request, Uploaded $file){
+        $pic = $request->input('picture');
+        
     }
 }

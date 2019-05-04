@@ -94,7 +94,9 @@ class WordController extends Controller
     {
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
         $vocas = [];
+
         if($b_id == false) {
+
             $vocas = \DB::table('word_tb')
             ->select('w_nm')
             ->groupBy('w_nm')
@@ -135,6 +137,8 @@ class WordController extends Controller
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

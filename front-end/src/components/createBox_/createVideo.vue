@@ -20,79 +20,83 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';//vuex actions import
-import axios from 'axios';
+import { mapGetters, mapActions } from "vuex"; //vuex actions import
+import axios from "axios";
 export default {
-  data(){
-    return{
-      video:"",
-      seek_bar:"",
-      video_time:"",
-      move_time:"",
-      check_time:{
-        firstTime:"",
-        lastTime:"",
+  data() {
+    return {
+      video: "",
+      seek_bar: "",
+      video_time: "",
+      move_time: "",
+      check_time: {
+        firstTime: "",
+        lastTime: ""
       },
-      check:false,
-    }
+      check: false
+    };
   },
-  methods:{
-    ...mapActions(['video_cut_actions']),
-    mousedown_firstTime(){
+  methods: {
+    ...mapActions(["video_cut_actions"]),
+    mousedown_firstTime() {
       this.check_time.firstTime = this.video.currentTime;
     },
-    mouseup_lastTime(){
-      this.check_time.lastTime = this.video.duration * (this.seek_bar.value / 100);
-      if(this.check_time.firstTime >= this.check_time.lastTime){
+    mouseup_lastTime() {
+      this.check_time.lastTime =
+        this.video.duration * (this.seek_bar.value / 100);
+      if (this.check_time.firstTime >= this.check_time.lastTime) {
         alert("시간이 잘못 설정 되었습니다.");
         this.check_time.firstTime = "";
         this.check_time.lastTime = "";
       }
       this.video.play();
     },
-    cut(){
-      if(this.check_time.firstTime && this.check_time.lastTime ){
+    cut() {
+      if (this.check_time.firstTime && this.check_time.lastTime) {
         this.check = true;
-      }else{
+      } else {
         alert("아직 자를수 없습니다.");
       }
     },
-    cancel(){
+    cancel() {
       this.check = false;
       this.check_time.firstTime = "";
       this.check_time.lastTime = "";
     },
-    upload(){
+    upload() {
       this.video_cut_actions(this.check_time);
     }
   },
-  mounted:function(){
-    this.video = this.v_getter;//video element
-    this.seek_bar = this.seb_getter;//seek_bar element
+  mounted: function() {
+    this.video = this.v_getter; //video element
+    this.seek_bar = this.seb_getter; //seek_bar element
 
-    this.seek_bar.addEventListener("mousedown",() =>{
+    this.seek_bar.addEventListener("mousedown", () => {
       this.mousedown_firstTime();
     });
 
-    this.seek_bar.addEventListener("mouseup",() =>{
+    this.seek_bar.addEventListener("mouseup", () => {
       this.mouseup_lastTime();
     });
   },
-  updated:function(){
-    if(this.vc_getter){
-      this.$router.push({name:'subtitle', params:{check:this.vc_getter}});
+  updated: function() {
+    if (this.vc_getter) {
+      this.$router.push({
+        name: "subtitle",
+        params: { check: this.vc_getter }
+      });
     }
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      v_getter:'video_getter',
-      s_getter:'subtitle_getter',
-      sb_getter:'subtitle_buffer_getter',
-      seb_getter:'seek_bar_getter',
-      vc_getter:'video_cut_getters',
-    }),
-  },
-}
+      v_getter: "video_getter",
+      s_getter: "subtitle_getter",
+      sb_getter: "subtitle_buffer_getter",
+      seb_getter: "seek_bar_getter",
+      vc_getter: "video_cut_getters"
+    })
+  }
+};
 </script>
 
 <style lang="css" scoped>
