@@ -6,6 +6,7 @@ use App\Book;
 use App\Voca;
 use App\WBook;
 use App\Word;
+use App\VTestResult;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Snoopy;
 use Illuminate\Support\Arr;
@@ -27,7 +28,6 @@ class QuizController extends Controller
     {
         $id = 1;
         $vocas = word::where('wbook_pk', $id)->select('w_nm AS word')->inRandomOrder()->take(4)->get();
-        \Log::debug($vocas);
         $random = random_int(0, $vocas->count()-1);
         $quiz = $vocas->slice($random, 1);
         $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$quiz[$random]->word);
@@ -94,10 +94,15 @@ class QuizController extends Controller
     public function result(Request $request)
     {
         $results = $request->input('results');
-        \Log::debug($results);
-        // $result = explode(',', $results);
-        // \Log::debug($result);
-        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $results]);
+        $result = (int)$results;
+        \Log::debug(gettype($result).$result);
+
+        //\DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $result]);
+        $vtestresult = new VTestResult();
+        $vtestresult->m_id = 1;
+        $vtestresult->test_add = "numnum";
+        $vtestresult->test_score = $result;
+        $vtestresult->save();
 
         return "a";
     }

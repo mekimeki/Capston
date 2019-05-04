@@ -95,10 +95,11 @@ class WordController extends Controller
         $books = wBook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
         $vocas = [];
 
+
         if($b_id == false) {
 
             $vocas = \DB::table('word_tb')
-            ->select('*')
+            ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
             ->groupBy('w_nm')
             ->get()->toArray();
         } else {
@@ -116,9 +117,7 @@ class WordController extends Controller
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
 
         if ($mm == "T") {
-            for ($i = 0; $i < $books->count(); $i++) {
-                $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
-            }
+            $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         } else {
             $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }

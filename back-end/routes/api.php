@@ -67,7 +67,6 @@ Route::get('attend/{id}', 'AttendController@attendance');
 Route::get('showBook/{id}', 'BookController@show'); // n번 단어장 보여주기
 Route::get('showList', 'BookController@index'); // 단어장 목록 보여주기
 
-
 Route::post('/login','Member\MemberController@login');
 Route::get('/myVideo','Member\MemberController@myVideo');
 
@@ -203,4 +202,3 @@ Route::group(['prefix'=>'voca'],function(){
 Route::post('/csrf-token',function(){
 	return csrf_token() ;
 });
-

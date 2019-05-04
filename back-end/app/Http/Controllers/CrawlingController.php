@@ -124,6 +124,7 @@ class CrawlingController extends Controller
 
     }
 
+
 	public function searchJpT(Request $request){
 		$word = $request->word;
 		$this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$word.'&dic=jp');
@@ -266,7 +267,8 @@ class CrawlingController extends Controller
         $mean = preg_replace("/<\/div>/", '', $mean);
         $mean = preg_replace("/\t|\n/", '', $mean);
         $mean = preg_replace("/<\/li>/", '', $mean);
-        $mean = trim($mean[0]);
+		$mean = trim($mean[0]);
+		
         if ($matchFlag) {
             $array = explode("</a>", $mean);
             $arrays = [];
@@ -289,7 +291,7 @@ class CrawlingController extends Controller
     public function mean(Request $request) // 단어 뜻
 
     {
-        $word = $request->input('word');
+        $word = $request->input('clickWord');
         $this->snoopy->fetch('https://m.dic.daum.net/search.do?q=' . $word);
         $result = $this->snoopy->results;
 
