@@ -157,9 +157,4 @@ class LineController extends Controller
         }
         return "nope";
     }
-
-    public function savePicture(Request $request, Uploaded $file){
-        $pic = $request->input('picture');
-        
-    }
 }
