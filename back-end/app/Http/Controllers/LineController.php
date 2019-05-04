@@ -38,9 +38,43 @@ class LineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request) // 대사장 만들기
     {
-        //
+        $id = $request->input('line_id');
+        $title = $request->input('title');
+        $lang = $request->input('lang');
+        $lines = $request->input('lines');
+        
+        \Log::debug($title);
+        \Log::debug($words);
+        \Log::debug(gettype($words));
+        
+        if($lang == '일본어'){
+            $lang = 'JP';
+        }else if($lang == '한국어'){
+            $lang = 'KR';
+        }else if($lang == '영어'){
+            $lang = 'EN';
+        }else if($lang == '중국어'){
+            $lang = 'CN';
+        }else {
+            $lang = 'ND';
+        }
+
+        if (!$id) {
+            \DB::insert('insert into lbook_tb (m_id, lbook_tt, lbook_lan) values (?, ?, ?)', [1, $title, $lang]);
+            $id = \DB::getPdo()->lastInsertId();
+        }
+
+        // if($lines){
+        //     $line = explode(',', $lines);
+        //     for ($i=0; $i<count($line); $i++) {
+        //         \DB::insert('insert into line_tb (lbook_pk, line, explain, pic_add, v_id, start_dt) values(?, ?, ?, ?, ?)', [$id, $word[$i], "N", 0, "F"]);
+        //     }
+        // }
+
+        // insert orm
+        return "ok";
     }
 
     /**

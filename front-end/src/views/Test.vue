@@ -13,6 +13,7 @@
       <v-btn color="error" fab large dark v-on:click="recording()">
         <v-icon id="recording_icon">play_arrow</v-icon>
       </v-btn>
+
       <v-btn v-on:click="checkk()">
         check
       </v-btn>
@@ -114,6 +115,7 @@ export default {
 
       axios.post("http://172.26.3.143/api/create", form).then(res => {
         console.log("ok");
+
       });
     }
   },

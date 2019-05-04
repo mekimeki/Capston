@@ -45,10 +45,16 @@ Route::get('japan', 'QuizController@japanese'); // 일본어 퀴즈
 // 단어장
 
 Route::get('book/{b_id}', 'WordController@book'); // 단어장의 단어 보여주기
-Route::get('deletedWord', 'WordController@destroy'); // 단어 삭제
-Route::get('update/{w_id}', 'WordController@update'); // 단어 업데이트 (암기 미암기)
+Route::post('deletedWord', 'WordController@destroy'); // 단어 삭제
+Route::post('deletedBook', 'WordController@delete'); // 단어장 삭제
+Route::post('update', 'WordController@update'); // 단어 업데이트 (암기 미암기)
 Route::get('memo/{mm}', 'WordController@memo'); // 암기 미암기 단어 보여주기
 Route::get('books', 'WordController@show'); // 단어장 목록 보여주기
+Route::post('create', 'WordController@create'); // 단어장 추가
+Route::post('title', 'WordController@edit'); // 단어장 제목 수정
+
+Route::get('example/{word}', 'CrawlingController@example');
+Route::get('mean/{word}', 'CrawlingController@mean');
 
 //대사장
 
@@ -56,3 +62,8 @@ Route::get('lineBook', 'LineController@show'); // 대사집 목록 보여주기
 Route::get('line/{l_id}', 'LineController@index'); // 대사 보여주기
 Route::get('deletedLine', 'LineController@destroy'); // 대사 삭제
 Route::post('pictest', 'LineController@savePicture'); // 사진 저장
+
+
+//출석
+
+Route::get('attend/{id}', 'AttendController@attendance');
