@@ -53,17 +53,22 @@ Route::get('books', 'WordController@show'); // 단어장 목록 보여주기
 Route::post('create', 'WordController@create'); // 단어장 추가
 Route::post('title', 'WordController@edit'); // 단어장 제목 수정
 
-Route::get('example/{word}', 'CrawlingController@example');
-Route::get('mean/{word}', 'CrawlingController@mean');
+Route::post('example', 'CrawlingController@example');
+Route::post('mean', 'CrawlingController@mean');
 
 //대사장
 
 Route::get('lineBook', 'LineController@show'); // 대사집 목록 보여주기
 Route::get('line/{l_id}', 'LineController@index'); // 대사 보여주기
-Route::get('deletedLine', 'LineController@destroy'); // 대사 삭제
+Route::post('deletedLine', 'LineController@destroy'); // 대사 삭제
+Route::post('deletedLineBook', 'LineController@delete'); // 대사집 삭제
+Route::post('createLine', 'LineController@create'); // 대사집 추가
 Route::post('pictest', 'LineController@savePicture'); // 사진 저장
-
 
 //출석
 
 Route::get('attend/{id}', 'AttendController@attendance');
+
+//공개 단어장
+Route::get('showBook/{id}', 'BookController@show'); // n번 단어장 보여주기
+Route::get('showList', 'BookController@index'); // 단어장 목록 보여주기

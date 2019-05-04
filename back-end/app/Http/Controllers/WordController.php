@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\WBook;
 use App\Word;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Snoopy;
-use Illuminate\Support\Arr;
 
 class WordController extends Controller
 {
@@ -26,26 +24,27 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request) // 단어장 추가
+
     {
 
         $id = $request->input('book_id');
         $title = $request->input('title');
         $lang = $request->input('lang');
         $words = $request->input('words');
-        
+
         \Log::debug($title);
         \Log::debug($words);
         \Log::debug(gettype($words));
-        
-        if($lang == '일본어'){
+
+        if ($lang == '일본어') {
             $lang = 'JP';
-        }else if($lang == '한국어'){
+        } else if ($lang == '한국어') {
             $lang = 'KR';
-        }else if($lang == '영어'){
+        } else if ($lang == '영어') {
             $lang = 'EN';
-        }else if($lang == '중국어'){
+        } else if ($lang == '중국어') {
             $lang = 'CN';
-        }else {
+        } else {
             $lang = 'ND';
         }
 
@@ -54,9 +53,9 @@ class WordController extends Controller
             $id = \DB::getPdo()->lastInsertId();
         }
 
-        if($words){
+        if ($words) {
             $word = explode(',', $words);
-            for ($i=0; $i<count($word); $i++) {
+            for ($i = 0; $i < count($word); $i++) {
                 \DB::insert('insert into word_tb (wbook_pk, w_nm, morp, w_cnt, memo_st) values(?, ?, ?, ?, ?)', [$id, $word[$i], "N", 0, "F"]);
             }
         }
@@ -83,6 +82,7 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show() // 단어장 목록 보여주기
+
     {
         $books = wBook::where('m_id', 1)->select('wbook_pk AS id', 'wbook_tt AS title')->get();
         $books = json_encode($books, JSON_UNESCAPED_UNICODE);
@@ -101,19 +101,6 @@ class WordController extends Controller
             ->select('*')
             ->groupBy('w_nm')
             ->get()->toArray();
-
-
-                // $array[$i] = word::select('w_pk', 'w_nm', 'memo_st', 'wbook_pk')->groupBy('w_nm')->having('wbook_pk', $books[$i]->wbook_pk)->get()->toArray();
-                
-                // $array[$i] = \DB::table('word_tb')
-                // ->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')
-                // ->groupBy('word')
-                // ->havingRaw('wbook_pk', [$books[$i]->wbook_pk])
-                // ->get();
-
-                //$array[$i] = word::select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->where('wbook_pk', $books[$i]->wbook_pk)->get()->toArray();
-                // $vocas = array_merge($vocas, $array[$i]);
-            
         } else {
             $vocas = word::where('wbook_pk', $b_id)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
         }
@@ -124,12 +111,12 @@ class WordController extends Controller
 
     public function memo($mm = null)
     {
-        //classifyWord 
+        //classifyWord
 
         $books = wbook::where('m_id', 1)->select('wbook_pk')->get();
 
-        if($mm == "T") {
-            for($i=0; $i<$books->count(); $i++) {
+        if ($mm == "T") {
+            for ($i = 0; $i < $books->count(); $i++) {
                 $vocas = word::where('memo_st', $mm)->select('w_pk AS id', 'w_nm AS word', 'memo_st AS memorized')->get();
             }
         } else {
@@ -148,13 +135,14 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request) // 단어장 제목 수정
+
     {
         $title = $request->input('title'); // 타이틀이랑 id 두개 받아내기
         $id = $request->input('id');
 
         //$wbook = wbook::find('wbook_tt');
         if (wbook::where('wbook_pk', $id)->update(['wbook_tt' => $title])) {
-            return "ok";   
+            return "ok";
         }
         return "nope";
         // 그 멤버의 단어장 목록을 출력하고
@@ -170,7 +158,8 @@ class WordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request) // 암기 미암기
-    {   
+
+    {
         $memo_id = $request->input('id');
         $memo_flag = $request->input('flag');
         //\Log::debug($memo);
@@ -192,7 +181,7 @@ class WordController extends Controller
         $words = $request->input('selected');
         $vocas = explode(',', $words);
 
-        for($i=0; $i<count($vocas); $i++) {
+        for ($i = 0; $i < count($vocas); $i++) {
             word::where('w_pk', $vocas[$i])->delete();
         }
 
@@ -200,6 +189,7 @@ class WordController extends Controller
     }
 
     public function delete(Reqeust $request) // 단어장 삭제
+
     {
         $id = $request->input('id');
 
@@ -208,4 +198,5 @@ class WordController extends Controller
         }
         return "nope";
     }
-}  
+}
+
