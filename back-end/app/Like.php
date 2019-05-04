@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Like extends Model
 {
     //
-    protected $table ='LIKE_TB';
+    protected $table ='like_tb';
     protected $timestamps = false;
 
     public function Video(){

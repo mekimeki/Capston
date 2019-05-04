@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VTag extends Model
 {
     //
-    protected $table='VTAG_TB';
+    protected $table='vtag_tb';
     public $timestamps = false;
 
     public function Video(){

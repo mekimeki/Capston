@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LBookRecommend extends Model
 {
     //
-    protected $table='LBOOK_RECOMMEND_TB';
+    protected $table='lbook_recommend_tb';
     protected $timestamps = false;
     
     public function lbook(){
