@@ -104,6 +104,7 @@ class QuizController extends Controller
         $vtestresult->test_score = $result;
         $vtestresult->save();
 
+
         return "a";
     }
 
