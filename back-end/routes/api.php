@@ -67,3 +67,7 @@ Route::post('pictest', 'LineController@savePicture'); // 사진 저장
 //출석
 
 Route::get('attend/{id}', 'AttendController@attendance');
+
+//테스트 결과
+Route::get('testResult/{id}', 'TestResult\VocaTestResultController@getResult');
+

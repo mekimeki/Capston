@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class MTag extends Model
 {
     //
-    protected $table = 'MTAG_TB';
+    protected $table = 'mtag_tb';
     protected $timestamps = false;
     protected $guarded = [];
 

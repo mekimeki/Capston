@@ -26,5 +26,14 @@ class VocaTestResultController extends Controller
     		'test_score'=>$request->test_score,
     	]);
     	$result->save();
-    }
+		}
+		
+		public function getResult(Request $request){
+			$result = new VTestResult;
+			$result->get([
+				"m_id"=>$result->id,
+			]);
+			\Log::debug("result == ".$result);
+			return $result;
+		}
 }

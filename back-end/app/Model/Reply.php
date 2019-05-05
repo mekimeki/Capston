@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reply extends Model
 {
     //
-    protected $table ='REPLY_TB';
+    protected $table ='reply_tb';
     public $timestamps = false;
     protected $guarded = [];
 

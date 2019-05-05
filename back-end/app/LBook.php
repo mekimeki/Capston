@@ -9,7 +9,7 @@ class LBook extends Model
     //
     protected $table ='lbook_tb';
     public $timestamps = false;
-    protected $primarykey = 'LBOOK_PK';
+    protected $primarykey = 'lbook_pk';
 
     public function member(){
     	return $this->belongsTo(Member::class,'m_id','member_pk');
