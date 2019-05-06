@@ -51,6 +51,5 @@ class ConverVideoForThumbnail implements ShouldQueue
                 ->export()
                 ->toDisk('img')
                 ->save($video_pk.'.jpg');
-        return $frameTime;
     }
 }

@@ -48,7 +48,10 @@ class VideoWordController extends Controller
                     $word[$i]['start_time'],
                     $word[$i]['end_time']
                 ],
-                $word[$i]['w_exp']
+                [
+                    $word[$i]['vw_nm'],
+                    $word[$i]['w_exp']
+                ]
             ];
         }
         return $result;

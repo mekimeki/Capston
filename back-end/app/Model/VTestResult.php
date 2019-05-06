@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VTestResult extends Model
 {
     //
-    protected $table='votest_result_tb';
+    protected $table='VOTEST_RESULT_TB';
     public $timestamps = ['test_dt'];
     protected $guarded = [];
 

@@ -126,21 +126,15 @@ class VideoController extends Controller
       //$extention = $request->video->getClientOriginalExtension();
       $request->video->storeAs('public', $videoName);
       $video->save();
+
       $this->dispatch(new ConverVideoForImage($video_pk,$videoName));//,$duration
       return response()->json([
         'video_pk'=>$video_pk
       ],200);
     }
 
-    
-
     public function videoEdit($video_pk){
       $video = Video::find($video_pk);
-      $img = array();
-      for($i=0 ; $i<10 ; $i++){
-        $num = $i+1;
-        $img[$i] = asset('storage/img/'.$video_pk.'_'.$num.'.jpg');
-      }
       if(!$video){
         return response()->json([
         'message'=>'none file',
@@ -148,10 +142,19 @@ class VideoController extends Controller
       }
       return response()->json([
         'video'=>$video->v_add,
-        //'video'=>asset('api/video/streaming/'.$video_pk),
-        'img'=>$img,
       ]);
       return $video->v_add;
+    }
+
+    public function snapShot($video_pk){
+      $img = array();
+      for($i=0 ; $i<10 ; $i++){
+        $num = $i+1;
+        $img[$i] = asset('storage/img/'.$video_pk.'_'.$num.'.jpg');
+      }
+      return response()->json([
+        'img'=>$img,
+      ]);
     }
 
     public function streamingUpload(Request $request){
@@ -250,7 +253,6 @@ class VideoController extends Controller
             $video_pk.'_8'.'.jpg',
             $video_pk.'_9'.'.jpg',
             $video_pk.'_10'.'.jpg',
-            $video_pk.'_11'.'.jpg',
         ]);
       return response()->json([
         'message'=>'success',
@@ -280,6 +282,7 @@ class VideoController extends Controller
       ->join('vtag_tb','video_tb.video_pk','=','vtag_tb.video_id')
       ->join('tag_tb','tag_tb.tag_pk','=','vtag_tb.video_id')
       ->where('vtag_tb.tag_id','=',$tag)
+
       ->withCount('like','viewCNT','reply');
       //->paginate(1);
       return $video->count();
@@ -294,6 +297,7 @@ class VideoController extends Controller
       ->join('vtag_tb','video_tb.video_pk','=','vtag_tb.video_id')
       ->join('tag_tb','tag_tb.tag_pk','=','vtag_tb.video_id')
       ->withCount('like','viewCNT','reply')
+      //->whereNotNull('explain')
       ->paginate(1);
       //return $video;
       $test = $video->links();
@@ -304,20 +308,28 @@ class VideoController extends Controller
     //비디오 실행창
     public function view($video_pk){//10초 영상 재수정.mp4
       $video = Video::where('video_pk',$video_pk)->with('member')->withCount('like')->with('reply')->withCount('ViewCNT')->get();
-      $voca = new VocabularyController;
-      $voca = $voca->loadVoca($video_pk);
-      $word = new VideoWordController;
-      $word = $word->loadWord($video_pk);
-      $subtitle = new SubtitleController;
-      $subtitle = $subtitle->subtitleView($video_pk);
-      $video[0]['v_add'] = asset('storage/video/'.$video_pk.'.mp4');
-      $url = asset('api/video/steaming/'.$video_pk);
-      return response()->json([
-        'video'=>$video[0],
-        'subtitle'=>$subtitle,
-        'voca'=>$voca,
-        'word'=>$word,
-      ]);
+      
+      if(isset($video[0])){
+        $voca = new VocabularyController;
+        $voca = $voca->loadVoca($video_pk);
+        $word = new VideoWordController;
+        $word = $word->loadWord($video_pk);
+        $subtitle = new SubtitleController;
+        $subtitle = $subtitle->subtitleView($video_pk);
+        $video[0]['v_add'] = asset('storage/video/'.$video_pk.'.mp4');
+        //$url = asset('api/video/steaming/'.$video_pk);
+        return response()->json([
+          'video'=>$video[0],
+          'subtitle'=>$subtitle,
+          'voca'=>$voca,
+          'word'=>$word,
+        ]);
+      }else{
+        return response()->json([
+          'error'=>'none video'
+        ]);
+      }
+      
       //return $this->resultReturn(,'video');
     }
 
