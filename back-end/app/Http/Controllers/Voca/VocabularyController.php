@@ -7,9 +7,11 @@
  * 만든날:                        2019년 5월 4일
  * 수정일:                        2019년 5월 6일
  * 함수 목록
- * addVoca(Request) : Request(비디오ID(video_pk),문법(content),단어(word)) 문법 및 단어 추가
+ * addVoca(Request) : Request(비디오ID(video_pk),문법(content),단어(word)) 영상 업로드 시 문법 및 단어 추가
  * vocaSearch(Request) : Request(문법(voca)) 문법검색
  * loadVoca(비디오ID) : 비디오ID로 해당 비디오와 관련된 문법정보 반환
+ * updateVoca(Request) : Request(문법ID(vo_pk),문법(voca),설명(explain)) 문법 정보 수정
+ * insertVoca(Request) : Request(문법(voca),설명(explain)) 업로드된 영상의 문법정보 추가
  */
 namespace App\Http\Controllers\Voca;
 
@@ -34,7 +36,11 @@ class VocabularyController extends Controller
 		if(count($content)>0){
 			for($i=0 ; $i<count($content) ; $i++){
 				if($content[$i]['vo_pk'] == false){
-					$check = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+					//$check = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+					$check = Vocabulary::where([
+						'voca'=>$voca,
+						'explain'=>$explain
+					])->get();
 					if( count($check) == 0 ){
 						$data = new Vocabulary;
 						$data ->fill([
@@ -127,7 +133,11 @@ class VocabularyController extends Controller
     	$vo_pk = $request->vo_pk;
     	$voca = $request->voca;
     	$explain = $request->explain;
-    	$check = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+    	//$check = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+    	$check = Vocabulary::where([
+    		'voca'=>$voca,
+    		'explain'=>$explain
+    	])->get();
     	
     	if( count($check) == 0 ){
     		$vocabulary = Vocabulary::find($vo_pk);
@@ -161,7 +171,10 @@ class VocabularyController extends Controller
 
     	$voca = $request->voca;
     	$explain = $request->explain;
-    	$vocaCheck = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+    	$vocaCheck = Vocabulary::where([
+    		'voca'=>$voca,
+    		'explain'=>$explain
+    	])->get();
     	//return $explain;
     	if( count($vocaCheck) == 0 && isset($voca) && isset($explain) ){
     		Vocabulary::create([

@@ -132,7 +132,7 @@ Route::group(['prefix'=>'video'],function(){
 	Route::post('/like/{video_pk}','Video\LikeController@like');
 
 	//영상 추천취소
-	Route::get('/likeCancel/{video_pk}','Video\LikeController@likeCancel');
+	Route::post('/likeCancel/{video_pk}','Video\LikeController@likeCancel');
 
 	//추천취소
 	Route::get('/report/{video_pk}','Video\ReportController@report');
@@ -144,7 +144,7 @@ Route::group(['prefix'=>'video'],function(){
 	Route::get('streaming/{video_pk}','Video\VideoController@streaming');
 
 
-	Route::post('/viewCount','Video\ViewController@view');
+	Route::get('/viewCount','Video\ViewController@viewCount');
 
 	
 });
@@ -229,6 +229,8 @@ Route::group(['prefix'=>'vocaBook'],function(){
 	Route::post('/deleteBook','Voca\MemberVocaBookController@deleteVocaBook');
 
 	Route::post('/addVoca','Voca\MVOController@addVoca');
+
+	Route::post('/deleteVoca','Voca\MVOController@deleteVoca');
 });
 
 Route::post('/csrf-token',function(){
