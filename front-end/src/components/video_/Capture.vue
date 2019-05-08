@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
-    <button type="button" name="button" v-on:click="capture()">Capture</button>
-    <canvas id="canvasd" width="1300" height="1000"></canvas>
+    <button id="captureButton" type="button" name="button" v-on:click="capture()">Capture</button>
+    <canvas id="canvasd" width="1000" height="500"></canvas>
     <img id="image" v-bind:src="image_view" alt="" width="250" hegith="250">
     <p v-if="imageText">SAVE</p>
     <p v-else>NOT SAVE</p>
@@ -44,9 +44,6 @@ export default {
       }else{
 
       }
-    },
-    save(){
-
     },
   },
   beforeCreate:function(){},
