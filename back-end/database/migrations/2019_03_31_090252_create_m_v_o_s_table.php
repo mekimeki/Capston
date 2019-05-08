@@ -16,8 +16,8 @@ class CreateMVOSTable extends Migration
         Schema::create('mvo_tb', function (Blueprint $table) {
             $table->integer('mvobook_pk')->unsigned();
             $table->integer('vo_pk')->unsigned();
-            $table->foreign('mvobook_pk')->references('mvobook_pk')->on('mvobook_tb');
-            $table->foreign('vo_pk')->references('vo_pk')->on('vocabulary_tb');
+            $table->foreign('mvobook_pk')->references('mvobook_pk')->on('mvobook_tb')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('vo_pk')->references('vo_pk')->on('vocabulary_tb')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

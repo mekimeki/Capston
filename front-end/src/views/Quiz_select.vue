@@ -1,10 +1,5 @@
 <template lang="html">
-  <div>
-    <header_></header_>
-    <v-container>
-    <qselect_></qselect_>
-    </v-container>
-  </div>
+  
 </template>
 
 <script>

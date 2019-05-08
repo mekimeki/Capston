@@ -51,19 +51,13 @@
         </v-card>
       </v-dialog>
     </v-layout>
-
   </div>
 </template>
 
 <script>
-import axios from 'axios';//axios
-import record_ from '@/components/video_/Record';//record
-import { mapActions, mapGetters} from 'vuex';//vuex
-
+import axios from 'axios';
+import { mapActions, mapGetters} from 'vuex'
 export default {
-  components:{
-    record_
-  },
   data(){
     return{
       video:"",//video element
@@ -169,11 +163,19 @@ export default {
 
     this.subtitle_view_action(this.$route.query.video).then(result=>{
       this.subtitle_action(result);//store.js action
+      
       this.subtitle = this.s_getter;
-      this.interval = setInterval(()=>{
+      setInterval(()=>{
+        // console.log("setInterval");
         this.video_time_check = this.video.currentTime;
       },150);
-    });
+    },(error)=>{alert("연결을 확인해 주세요")});
+  },
+  beforeUpdate:function(){
+    //console.log("subtitle beforeUpdate");
+  },
+  updated:function(){
+    // console.log("subtitle update");
   },
   computed:{
     ...mapGetters({
@@ -185,8 +187,9 @@ export default {
     }),
   },
   watch:{
-    video_time_check: function(data){//subtitle view methods
+    video_time_check: function(data){
       for (let i = 0; i < this.subtitle.length; i++) {
+
         if(this.video.currentTime.toFixed(1) === parseInt(this.subtitle[i][1][0]).toFixed(1)){
           this.subtitle_open = this.subtitle[i][2]+"#"+i;
         }

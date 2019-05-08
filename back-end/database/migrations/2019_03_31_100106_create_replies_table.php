@@ -14,7 +14,7 @@ class CreateRepliesTable extends Migration
     public function up()
     {
         Schema::create('reply_tb', function (Blueprint $table) {
-            $table->increments('replay_pk');
+            $table->increments('reply_pk');
             $table->integer('video_id')->unsigned();
             $table->integer('replier_id');
             $table->string('reply');

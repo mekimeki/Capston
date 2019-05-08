@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container>
-    <v-layout row wrap>
-      <v-flex xs12 sm8 md8>
+    <v-layout>
+      <v-flex xs12>
         <video_></video_>
         <subtitle_></subtitle_>
       </v-flex>
@@ -48,7 +48,6 @@ import video_ from '@/components/video_/Video2';
 import capture_ from '@/components/video_/Capture';
 import subtitle_ from '@/components/video_/Subtitle';
 import content_ from '@/components/video_/Contents';
-import comment_ from '@/components/video_/Comment'
 export default {
   name:"video_see",
   components:{

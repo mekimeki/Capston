@@ -8,6 +8,7 @@ class MTag extends Model
     //
     protected $table = 'MTAG_TB';
     protected $timestamps = false;
+    protected $primarykey = '';
     protected $guarded = [];
 
     public function Member(){

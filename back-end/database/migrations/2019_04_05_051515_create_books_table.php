@@ -16,7 +16,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->increments('b_id');
             $table->unsignedInteger('m_id');
-            $table->foreign('m_id')->references('m_id')->on('members')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('m_id')->references('member_pk')->on('member_tb')->onUpdate('cascade')->onDelete('cascade');
             $table->string('language');
         });
     }

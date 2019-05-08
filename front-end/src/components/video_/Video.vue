@@ -6,9 +6,7 @@
       <video id="video" v-on:timeupdate="seek_timeupdate()" :src="videoLink">
       </video>
       <div id="videoController">
-        <span>
-          <span id="seekBarTime">{{video_time}}</span>
-        </span>
+        <span id="seekBarTime">{{video_time}}</span>
         <input id="seekBar" type="range" name="" value="0"
           v-on:change="seek_change()"
           v-on:dblclick="video_loop(true)"
@@ -29,6 +27,9 @@
         </span>
       </div>
     </div>
+      <!-- Wathch-time:{{watch_time}}
+      first-time:{{first_loop_time}}
+      last-time:{{last_loop_time}} -->
   </div>
 </template>
 
@@ -41,7 +42,7 @@ export default {
   data() {
     return {
       //video values
-      videoLink: "/media/test.c4629d06.mp4",//video src
+      videoLink: "/media/test.6397655f.mp4",//video src
       video: "",//play video
       play_btn : "",//play button
       seek_bar : "", // play bar
@@ -77,10 +78,10 @@ export default {
     play(){//play on/off
       if (this.video.paused){
         this.video.play();
-        this.play_btn.style.backgroundImage = "url("+require('@/assets/video-stop.png')+")";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/play-stop.png')+")";
       }else{
         this.video.pause();
-        this.play_btn.style.backgroundImage = "url("+require('@/assets/video-play.png')+")";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/play.png')+")";
 
       }
     },
@@ -99,7 +100,7 @@ export default {
         if(this.first_loop_time == 0){
           this.seek_bar.style.background = "linear-gradient(to right, red 0% 0%, blue 0% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
         }
-        this.play_btn.style.backgroundImage = "url("+require('@/assets/video-stop.png')+")";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/play-stop.png')+")";
         this.now_time.style.position = "relative";
         this.now_time.style.left = this.now_time.style.left = parseInt(this.seek_bar.value)+"%";
 
@@ -107,7 +108,7 @@ export default {
           this.watch_time = this.video.currentTime;
         }
       }else{//not play
-        this.play_btn.style.backgroundImage = "url("+require('@/assets/video-play.png')+")";
+        this.play_btn.style.backgroundImage = "url("+require('@/assets/play.png')+")";
       }
     },
     mouse_down(){
@@ -123,10 +124,9 @@ export default {
     mouse_move(evt){
       if(this.first_loop_time === 0){
         this.seek_bar.style.background = "linear-gradient(to right, red 0% 0%, blue 0% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
-      }else if(this.first_loop_time != 0){
-        if(this.last_loop_time === 0){
-          this.seek_bar.style.background = "linear-gradient(to right, red "+this.linear+"% "+this.linear+"%, yellow "+this.linear+"% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
-        }
+      }else{
+        console.log("??");
+        this.seek_bar.style.background = "linear-gradient(to right, red "+this.linear+"% "+this.linear+"%, yellow "+this.linear+"% "+parseInt(this.seek_bar.value)+"%, red 0% 0%)";
       }
     },
     audio_change(){//audio volume control
@@ -163,21 +163,16 @@ export default {
     },
     video_loop(check){
       if(check){//check true -> dblclick
-        console.log("dblclick");
-        if(this.last_loop_time != ""){
-          this.last_loop_time = 0;
-          this.first_loop_time = 0;
-          this.loop_check = false;
-        }else{
-          this.first_loop_time = this.video.currentTime;
-          this.video.pause();
-          this.linear = this.seek_bar.value;
-        }
+        this.first_loop_time = this.video.currentTime;
+        console.log("dblclcik");
+        this.video.pause();
+        this.linear = this.seek_bar.value;
       }else{//check false -> click
-        console.log("click");
         if(this.first_loop_time!= ""){
           if(this.last_loop_time!= ""){
-            console.log("???");
+            this.last_loop_time = 0;
+            this.first_loop_time = 0;
+            this.loop_check = false;
           }else{
             this.last_loop_time = this.video.currentTime;
             this.loop_check = true;
@@ -189,8 +184,10 @@ export default {
   created: function() {
   },
   beforeMount: function(){
+    // console.log("beforeMout");
   },
   mounted: function() {
+
     if(this.$route.name === 'v-video'){//viewo view axios
       this.video_link_view_action(this.$route.query.video).then(result =>{
         this.videoLink = result.video;
@@ -201,7 +198,15 @@ export default {
         this.videoLink = result.video;
       });
     }
+
     //video
+    // axios video streming
+    // let url = "http://172.26.3.246/test";
+    //
+    // axios.get(url).then((res)=>{
+    //   alert("axios",res.data);
+    // },(error)=>{alert("연결을 확인해 주세요")});
+
     this.video = document.getElementById("video");//video
     this.play_btn = document.getElementById("playBtn");//play
     this.seek_bar = document.getElementById("seekBar");//seek bar
@@ -212,20 +217,20 @@ export default {
     this.speed_bar = document.getElementById("speedBar");//speed bar
     this.speed_btn = document.getElementById("speedBtn");//speedn btn
     this.now_time = document.getElementById("seekBarTime");
-    //action
+    // this.$store.dispatch('video_action',this.video);//vuex actions test
     this.video_action(this.video);//vuex actions
-    this.seek_bar_action(this.seek_bar);//vuex mapActions
-    this.video.onloadeddata = () =>{
-      this.video.play();
-    }
+    this.seek_bar_action(this.seek_bar);
   },
   beforeUpdate: function() {
+    // console.log("video beforeUpdate");
+    // this.video = document.getElementById("video");//video
   },
   updated: function(){
+    // console.log("video update");
   },
   computed:{
     video_time(){
-      return this.time_change(Math.floor(parseInt(this.time)));
+      return this.time_change(this.time);
     },
   },
   watch: {
@@ -250,6 +255,7 @@ export default {
   #videoController{
     position:relative;
     width:100%;
+
     height:60px;
     top:-80px;
     visibility: hidden;
@@ -267,6 +273,7 @@ export default {
   }
 
 
+
   /* buttons css */
   .btn{
     text-indent:-10000px;
@@ -277,7 +284,7 @@ export default {
   }
   #playBtn{
     background-size:100%;
-    background-image:url("../../assets/video-play.png");
+    background-image:url("../../assets/play.png");
   }
   #audioBtn{
     width:20%;
@@ -297,7 +304,9 @@ export default {
     position:sticky;
     -webkit-appearance:none;
     /* background:red; */
+
     width:95.1%;
+
     height:.2rem;
     background:linear-gradient(to right, red 0% 0%, blue 0% 0%, red 0% 0%);
     cursor:pointer;
@@ -323,7 +332,6 @@ export default {
     width:10%;
     height:.2rem;
     visibility: hidden;
-    background:linear-gradient(to right, red 0% 0%, blue 0% 100%, red 0% 0%);
   }
   #audioBar::-webkit-slider-thumb{
     -webkit-appearance:none;
@@ -364,14 +372,15 @@ export default {
   #seekBarTime{
     color:white;
     position: relative; left: 0%;
-    float:left;
-    width:50px;
-    size:10;
   }
   #seekBarLastTime{
+
     color:white;
     width:8%;
+
     position: absolute;
+    border:1px solid red;
+    border-radius: 10px;
   }
 /*
   @media only screen and (max-width:1200px){
@@ -398,9 +407,9 @@ export default {
       visibility: inherit;
       position:absolute;
       top:60%;
+
     }
   }
-
   @media only screen and (max-width:600px){
     #videoplayer:hover #videoController{
 

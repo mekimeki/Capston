@@ -36,12 +36,20 @@
     <div class="" v-show="up_getters.firstTime&&up_getters.lastTime">
       <v-btn v-on:click="move()">다음으로</v-btn>
     </div>
-  </v-container>
+    <div v-show="check == true">
+      <img src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes-3/3/72-512.png" alt="" width="200" height="200">
+      <v-btn color="success" v-on:click="cancel()">취소</v-btn>
+      <v-btn color="success" v-on:click="upload()">업로드</v-btn>
+      <div class="" v-if="vc_getter">
+        <span>완료</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';//vuex actions import
-import axios from 'axios';
+import { mapGetters, mapActions } from "vuex"; //vuex actions import
+import axios from "axios";
 export default {
   data(){
     return{
@@ -129,6 +137,7 @@ export default {
       }else{
         this.open = false;
       }
+      this.video.play();
     },
     upload(){
       let upload_data = {//setTime
@@ -202,8 +211,18 @@ export default {
     }),
   },
   watch: {
+
   },
-}
+  computed: {
+    ...mapGetters({
+      v_getter: "video_getter",
+      s_getter: "subtitle_getter",
+      sb_getter: "subtitle_buffer_getter",
+      seb_getter: "seek_bar_getter",
+      vc_getter: "video_cut_getters"
+    })
+  }
+};
 </script>
 
 <style lang="css" scoped>

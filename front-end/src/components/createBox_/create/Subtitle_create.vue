@@ -21,6 +21,7 @@
 </template>
 
 <script>
+
 import video_ from "@/components/video_/Video2";
 import createSubtitle_ from "@/components/createBox_/CreateSubtitle";
 import createInput_ from "@/components/createBox_/CreateInput";
@@ -33,6 +34,7 @@ export default {
     createInput_,
     subtitle_,
     createSubtitleOption_,
+
   },
   data(){
     return{

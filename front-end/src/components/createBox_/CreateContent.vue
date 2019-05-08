@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="">
+
     <v-tabs color="white" slider-color="black">
       <v-tab v-for="tent in cp_getter" ripple>
           {{ tent.name }}
@@ -68,6 +69,6 @@ export default {
 <style lang="css" scoped>
 #scroll_div{
   overflow: scroll;
-  height:500px;
+  height:300px;
 }
 </style>

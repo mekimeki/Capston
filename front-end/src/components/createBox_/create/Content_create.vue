@@ -12,7 +12,8 @@
         </v-layout>
       </v-flex>
       <v-flex xs12 sm5 md5 class="pa-2">
-        <content_></content_>
+        <createInput_></createInput_>
+        <createContent_></createContent_>
       </v-flex>
     </v-layout>
   </v-container>

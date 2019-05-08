@@ -75,7 +75,6 @@
 
 
     </v-tabs>
-
   </div>
 </template>
 
@@ -190,7 +189,7 @@ export default {
       this.check_view(data,this.b_getter[0],this.content_check);
       this.check_view(data,this.b_getter[1],this.word_check); // check_time 동시에 증가 되는 문제 해결 해야함
     }
-  },
+  }
 }
 </script>
 

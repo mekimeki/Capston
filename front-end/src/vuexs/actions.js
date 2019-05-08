@@ -1,10 +1,12 @@
 import axios from 'axios';
+
 import Service from '../api/service';
 // 172.26.4.110
 const service = new Service("http://172.26.4.110/");//axios api service class created
 // 172.26.3.143
+
 const actions = {
-  video_action : ({commit},payload) => {//video action
+  video_action : ({commit},payload) => {//video actions
     commit('video_mutation',payload);
   },
   video_link_action: ({commit},payload) =>{ //video link action
@@ -38,10 +40,7 @@ const actions = {
     console.log(payload);
     commit('subtitle_buffer_mutation',payload);
   },
-  subtitle_word_action : ({commit},payload) => {
-    return service.subtitle_word("http://localhost/Capstone_practice/project_videoPlayer/api/test2.php",payload);
-  },
-  seek_bar_action : ({commit},payload) => {//video seek_bar action
+  seek_bar_action : ({commit},payload) => {//video seek_bar actions
     commit('seek_bar_mutation',payload);
   },
   capture_action : ({commit},payload) => {//capture element action
@@ -79,10 +78,10 @@ const actions = {
     if(check){
       commit('logout_mutation');
     }else{
-      alert("logoutX");
+     alert("logoutX");
     }
   },
-  upload_actions : ({commit},payload) => {//upload action
+  upload_actions : ({commit},payload,check) => {
     const config = {
       onUploadProgress: function(progressEvent) {
         let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )

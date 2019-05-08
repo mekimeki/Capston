@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="">
+
     <span v-show="sb_getter.length === 1">+</span>
     <div id="scroll_div" v-on:scroll="scroll()">
       <v-layout row wrap>
@@ -52,24 +53,24 @@
 </template>
 
 <script>
+import axios from "axios";
 import {mapState,mapGetters,mapActions} from 'vuex';
-import axios from 'axios';
 export default {
   data(){
     return{
       video:"",
+      subtitle_box:[],
+      //
       scroll_div:"",
       scroll_bottom:"",
-      content:[],
-      record_box:[],
+      scroll_top:"",
       scroll_num:{
         first:0,
         last:100,
       },
       terval:"",
+      //
       video_time_check:"",
-      percent_data:0,
-      open:false,
     }
   },
   methods:{
@@ -105,39 +106,25 @@ export default {
         "textArea":"Content Box",
       })
     },
-    delete_btn(check){
+    subtitle_middle_delete(check){
       if(check === 0){
-        this.content.shift();
+        this.subtitle_box.shift();
       }else{
-        this.content.splice(check,1);
+        this.subtitle_box.splice(check,1);
       }
-    },
-    save_btn(){
-      this.open = true;
-      let data = {
-        video : this.$route.query.video,
-        content: this.content,
-      }
-      this.upload_subtitle_actions(data);
-      let inter = setInterval(() => {
-        this.percent_data = this.percent;
-        if(this.percent_data === 100){
-          console.log("clear");
-          clearInterval(inter);
-        }
-      }, 100);
     },
     scroll(){
       this.scroll_bottom = this.scroll_div.scrollTop;
     },
-    record(num,evt){
-      evt.target.innerHTML = "mic";
-      this.record_box.push({
-        firstTime:this.content[num].firstTime,
-        lastTime:this.content[num].lastTime,
-        mic:true,
+    subtitle_save(){
+      let form = new FormData();
+      form.append("subtitle",JSON.stringify(this.subtitle_box));
+      let url = `http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestVideo.php`;
+      axios.post(url,form).then( (res) => {
+        console.log(res.data);
+      }).catch( error => {
+        console.log('failed', error);
       });
-
     }
   },
   mounted:function(){
@@ -153,7 +140,7 @@ export default {
       console.log("an",result);
       this.subtitle_action(result.subtitle);
       for (let i = 0; i < this.s_getter.length; i++) {
-        this.content.push({
+        this.subtitle_box.push({
           "firstTime": this.s_getter[i][1][0],
           "lastTime": this.s_getter[i][1][1],
           "textArea":this.s_getter[i][2],
@@ -170,17 +157,17 @@ export default {
   updated:function(){
     while (this.sb_getter.length != 0) {
       let i = 0;
-      for (i; i < this.content.length; i++) {
-        if (this.content[i].firstTime > this.sb_getter[0].firstTime) {
+      for (i; i < this.subtitle_box.length; i++) {
+        if (this.subtitle_box[i].firstTime > this.sb_getter[0].firstTime) {
           break;
         }else{
-          if(this.content.length === i){
+          if(this.subtitle_box.length === i){
             i = 0;
             break;
           }
         }
       }
-      this.content.splice(i,0,{
+      this.subtitle_box.splice(i,0,{
         "firstTime":this.sb_getter[0].firstTime,
         "lastTime":this.sb_getter[0].lastTime,
         "textArea":this.sb_getter[0].textArea,
@@ -196,6 +183,7 @@ export default {
       sb_getter:'subtitle_buffer_getter',
       up_getters:'upload_getters',
       percent:'percent_getter',
+
     }),
   },
   watch:{
@@ -206,9 +194,9 @@ export default {
     },
     video_time_check:function(data){
       //코드 수정 필요
-      for (let i = 0; i < this.content.length; i++) {
-        //
-        if (this.content[i].firstTime.toFixed(1) === data.toFixed(1)) {
+      let input = document.getElementsByClassName("textarea");
+      for (let i = 0; i < this.subtitle_box.length; i++) {
+        if (this.subtitle_box[i].firstTime.toFixed(1) === data.toFixed(1)) {
           if(this.scroll_num.first<=i && i<= this.scroll_num.last){
           }else{
             this.scroll_num.last = this.scroll_num.last +i;
@@ -222,23 +210,19 @@ export default {
               this.terval = setInterval(()=>{
                 this.video_time_check = this.video.currentTime;
               },100);
-            },this.content[i].lastTime - this.content[i].firstTime);
+            },this.subtitle_box[i].lastTime - this.subtitle_box[i].firstTime);
           },100);
-          //
-        }else{
-          if(this.content[i].lastTime.toFixed(1) === data.toFixed(1)){
-            let input = document.getElementsByClassName("textarea");
-            input[i].style.border = "none";
-          }
         }
-      }//for end
+      }
     },
   }
+
 }
 </script>
 
 <style lang="css" scoped>
 #scroll_div{
+
   height:800px;
   overflow-y:scroll;
   overflow-x:scroll;

@@ -18,7 +18,9 @@ class Member extends Authenticatable
     protected $primaryKey = 'member_pk';
     protected $table = 'member_tb';
     public $timestamps = false;
+    protected $hidden = ['password'];
     protected $guarded = [];
+
 
 
 

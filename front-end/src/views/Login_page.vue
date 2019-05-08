@@ -1,16 +1,16 @@
 <template lang="html">
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap>
-      <v-flex xs12 sm6>
-        <v-card class="pa-2">
+      <v-flex>
+        <v-card>
           <img
-          src="https://img.huffingtonpost.com/asset/5b3c7f602000004200b961ba.jpeg?ops=scalefit_630_noupscale"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIBf9WyBle6QKL58EizMmabk4_qo7iJd6t-KoRMYkc75AoKx_r"
           alt="다양한 방법으로 공부해 보아요"
-          width="100%"
-          >
+          width="200"
+          height="470">
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex>
         <router-view></router-view>
       </v-flex>
     </v-layout>
