@@ -86,6 +86,12 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/audio'),
         ],
+
+        'local_pic' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/picture'),
+            'url' => env('APP_URL').'/picture',
+        ]
     ],
 
 ];

@@ -15,7 +15,7 @@ class BookController extends Controller
      */
     public function index() // 공개 단어장 목록
     {
-        $list = wbook::where('m_id', 1)->select('m_id as member', 'wbook_pk as id', 'wbook_tt as title')->get();
+        $list = wbook::where('wbook_public', 'T')->select('m_id as member', 'wbook_pk as id', 'wbook_tt as title')->get();
         $list = json_encode($list, JSON_UNESCAPED_UNICODE);
         return $list;
     }
