@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Vocabulary extends Model
 {
     //
+
     protected $table='vocabulary_tb';
+
+    protected $primaryKey = 'vo_pk';
+
     public $timestamps = false;
     protected $guarded = [];
 

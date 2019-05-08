@@ -14,7 +14,7 @@ class CreateAttendancesTable extends Migration
     public function up()
     {
         Schema::create('attendance_tb', function (Blueprint $table) {
-            $table->increments('member_pk');
+            $table->integer('member_pk')->unsigned();
             $table->timestamp('attd_dt');
             $table->foreign('member_pk')->references('member_pk')->on('member_tb');
         });

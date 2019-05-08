@@ -28,12 +28,21 @@ namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
 use App\Model\Member;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Encryption\DecryptException;
+use App\Http\Controllers\Member\CheckController;
+use \Firebase\JWT\JWT;
 
 class MemberController extends Controller
 {
     //
+	public $check;
+    public function __construct(){
+    	$this->check = new CheckController();
+    }
+
 	public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'nickname' => 'required|string|max:100|unique:member_tb',
@@ -49,10 +58,10 @@ class MemberController extends Controller
         }
 
         $member = new Member;
-        $member->fill($request->all());
+        $member->fill($request->only('email','password','nickname'));
         $member->password = bcrypt($request->password);
         $member->save();
-        
+       
         return response()->json([
             'status' => 'success',
             'data' => $member
@@ -73,18 +82,27 @@ class MemberController extends Controller
 	        ], 200);
 	    }
 	    if(Auth::attempt($data)){
-	    	$user = Member::where('email',$request->email)->first();
-	    	Auth::loginUsingId($user->member_pk);
-	    	session()->put('login_session',$user);
+	    	$jwt = JWT::encode(Auth::user(), 'login-key','HS256');
 	    	return response()->json([
-	    		'status'=>'login success'
+	    		'status'=>'login success',
+	    		'token'=>$jwt,
 	    	],200);
 	    }else{
 	    	return response()->json([
 	    		'status'=>'login fail'
 	    	],200);
 	    }
-	    
+	}
+
+	public function check(Request $request){
+		if(!$request->token){
+			return json([
+				'messages'=>'you are not have token'
+			],400);
+		}	
+		$user = (array)JWT::decode($request->token,'login-key',array('HS256'));
+		return $user;
+		return $user['member_pk'];
 	}
 
 	public function logout(){
@@ -101,7 +119,21 @@ class MemberController extends Controller
 		}
 	}
 
-	public function getRelationshipData($model,$count){
+	public function getRelationshipData($member_pk,$model,$count){
+		
+		if($count){
+				$result = Member::select('member_pk','email','nickname')->where('member_pk',$member_pk)->withCount($model)->get();
+				return response()->json([
+					$model=>$result[0][$model.'_count'],
+				]);;
+			}else{
+				$result = Member::select('member_pk','email','nickname')->where('member_pk',$member_pk)->with($model)->get();
+				//return $result[0];
+				return response()->json([
+					$model=>$result[0],
+				]);;
+		}
+		/*
 		if(Auth::user()){
 			if($count){
 				$result = Member::select('member_pk','email','nickname')->where('member_pk',Auth::user()->member_pk)->withCount($model)->get();
@@ -119,47 +151,91 @@ class MemberController extends Controller
 				'status'=>'login please'
 			]);
 		}
+		*/
 	}
 
 	//100LS결과
-	public function SResult(){
-		return $this->getRelationshipData('SResUlt',false);
+	public function SResult(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'SResUlt',false);
 	}
 
 	//나의비디오
-	public function myVideo(){
-		return $this->getRelationshipData('video',false);
+	public function myVideo(Request $request){
+		$member_pk = $this->check->check($request);
+
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'video',false);
 	}
 
 	//구독자수
-	public function folowerCount(){
-		return $this->getRelationshipData('folower',true);
+	public function folowerCount(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'folower',true);
 	}
 
 	//나의 단어장
-	public function myWordBook(){
-		return $this->getRelationshipData('wbook',false);
+	public function myWordBook(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'wbook',false);
 	}
 
 	//어휘시험결과
-	public function VTestResult(){
-		return $this->getRelationshipData('VTestResult',false);
+	public function VTestResult(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'VTestResult',false);
 	}
 
 	//회원어휘집
-	public function MVOBook(){
-		return $this->getRelationshipData('MVOBook',false);
+	public function MVOBook(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'MVOBook',false);
 	}
 
 	//대사앨범
-	public function LBook(){
-		return $this->getRelationshipData('LBook',false);	
+	public function LBook(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
+		return $this->getRelationshipData($member_pk,'LBook',false);	
 	}
 
 	//페이지네이션 (테스트중)
-	public function pagenation(){
+	public function pagenation(Request $request){
+		$member_pk = $this->check->check($request);
+		if(isset($member_pk[0]['messages']) ){
+			return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+		}
 		$page = Member::paginate(3);
 		return $page;
+	}
+
+	public function token(){
+		$token = encrypt(1);
+		//$token = decrypt($token);
+		return $token;
+	}
+
+	public function test(){
+		return $this->check->Test();
 	}
 
 }

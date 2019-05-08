@@ -7,7 +7,11 @@ use App\Tag;
 class Video extends Model
 {
     //
+
     protected $table = 'video_tb';
+
+    protected $primaryKey = 'video_pk';
+
     protected $guarded = [];
     public $timestamps = false;
 

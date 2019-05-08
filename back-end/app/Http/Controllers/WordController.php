@@ -70,9 +70,18 @@ class WordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) // 북마크한 단어 저장
     {
-        //
+        $all = $request->all();
+        \Log::debug($all);
+        // $w_nm = $request->input('w_nm');
+        // $m_id = $request->input('m_id');
+
+        // \DB::table('word_tb')->insert([
+        //     'wbook_pk'=>1, 'word'=>$w_nm, 'morp'=>"N", 'w_cnt'=>0, 'memo_st'=>"F"
+        // ]);
+
+        return "ok";
     }
 
     /**
@@ -84,7 +93,7 @@ class WordController extends Controller
     public function show() // 단어장 목록 보여주기
 
     {
-        $books = wBook::where('m_id', 1)->select('wbook_pk AS id', 'wbook_tt AS title')->get();
+        $books = wbook::where('m_id', 1)->select('wbook_pk AS id', 'wbook_tt AS title')->get();
         $books = json_encode($books, JSON_UNESCAPED_UNICODE);
         return $books;
         //아이디랑 제목 같이 넘김
@@ -92,15 +101,13 @@ class WordController extends Controller
 
     public function book($b_id = null)
     {
-        $books = wBook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
-
-        \Log::debug($books);
+        $books = wbook::where('m_id', 1)->select('wbook_pk')->get()->toArray();
         $vocas = [];
 
         if ($b_id == false) {
             $vocas = \DB::table('word_tb')
                 ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
-                ->whereIn('wbook_pk',$booksBefore)
+                ->whereIn('wbook_pk',$books)
                 ->groupBy('w_nm')
                 ->get()->toArray();
 
@@ -128,6 +135,7 @@ class WordController extends Controller
                 ->where('memo_st', $mm)
                 ->groupBy('w_nm')
                 ->get()->toArray();
+
 
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -181,7 +189,7 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request) // 단어 삭제
     {
         $words = $request->input('selected');
         $vocas = explode(',', $words);

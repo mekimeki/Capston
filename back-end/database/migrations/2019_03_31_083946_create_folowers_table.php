@@ -16,8 +16,8 @@ class CreateFolowersTable extends Migration
         Schema::create('folower_tb', function (Blueprint $table) {
             $table->integer('m_id')->unsigned();;
             $table->integer('folower_id')->unsigned();;
-            $table->foreign('m_id')->references('member_pk')->on('member_tb');
-            $table->foreign('folower_id')->references('member_pk')->on('member_tb');
+            $table->foreign('m_id')->references('member_pk')->on('member_tb')->onDelete('cascade');
+            $table->foreign('folower_id')->references('member_pk')->on('member_tb')->onDelete('cascade');
         });
     }
 
