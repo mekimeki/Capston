@@ -44,14 +44,15 @@ class ConverVideoForImage implements ShouldQueue
         $video_pk = $this->video_pk;
         
         $videoName = $this->videoName;
+        
         $media = FFMpeg::fromDisk('public')->open($videoName);;//fromDisk('video')->open($video_pk.'.mp4');
-        $durationInMiliseconds = $media->getDurationInMiliseconds();
+        $durationInSeconds = $media->getDurationInSeconds();
         
         for($i=0 ; $i<10 ; $i++){
             $num = $i+1;
             FFMpeg::fromDisk('public')//$this->video->disk
                 ->open($videoName)
-                ->getFrameFromSeconds($durationInMiliseconds/(10-$i))
+                ->getFrameFromSeconds($durationInSeconds/(10-$i))
                 ->export()
                 ->toDisk('img')
                 ->save($video_pk.'_'.$num.'.jpg');

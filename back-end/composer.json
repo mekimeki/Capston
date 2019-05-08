@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-cors": "^0.11.3",
+        "benlipp/srt-parser": "^1.1",
         "fideloper/proxy": "^4.0",
         "firebase/php-jwt": "^5.0",
         "google/cloud-language": "^0.19.0",

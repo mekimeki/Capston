@@ -16,8 +16,8 @@ class CreateMTAGSTable extends Migration
         Schema::create('mtag_tb', function (Blueprint $table) {
             $table->increments('tag_id');
             $table->integer('member_id')->unsigned();
-            $table->foreign('tag_id')->references('tag_pk')->on('tag_tb');
-            $table->foreign('member_id')->references('member_pk')->on('member_tb');
+            $table->foreign('tag_id')->references('tag_pk')->on('tag_tb')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('member_id')->references('member_pk')->on('member_tb')->onDelete('cascade');
         });
     }
 

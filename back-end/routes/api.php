@@ -69,8 +69,6 @@ Route::get('attend/{id}', 'AttendController@attendance');
 Route::get('showBook/{id}', 'BookController@show'); // n번 단어장 보여주기
 Route::get('showList', 'BookController@index'); // 단어장 목록 보여주기
 
-//
-
 Route::post('/login','Member\MemberController@login');
 Route::get('/myVideo','Member\MemberController@myVideo');
 
@@ -116,14 +114,14 @@ Route::group(['prefix'=>'video'],function(){
 	//스트리밍영상 업로드
 	Route::post('/streamingUpload','Video\VideoController@streamingUpload');//
 
+	//스냅샷 주소
+	Route::get('/snapShot/{video_pk}','Video\VideoController@snapShot');
+
 	//마지막 비디오 등록
 	Route::post('/enrollment','Video\VideoController@videoEnrollment');
 
 	//비디오태그
 	Route::get('/tag','Video\VideoController@videoTag');
-
-	//썸네일 업로드
-	Route::post('/videoImageUpload','Video\VideoController@videoImageUpload');
 
 	//나의 비디오 페이지
 	Route::get('/myVideoPage','Video\VideoController@myVideoPage');
@@ -135,7 +133,7 @@ Route::group(['prefix'=>'video'],function(){
 	Route::post('/like/{video_pk}','Video\LikeController@like');
 
 	//영상 추천취소
-	Route::get('/likeCancel/{video_pk}','Video\LikeController@likeCancel');
+	Route::post('/likeCancel/{video_pk}','Video\LikeController@likeCancel');
 
 	//추천취소
 	Route::get('/report/{video_pk}','Video\ReportController@report');
@@ -143,11 +141,24 @@ Route::group(['prefix'=>'video'],function(){
 	//추천취소
 	Route::get('/reportCancel/{video_pk}','Video\ReportController@reportCancel');//
 
+
 	Route::get('streaming/{video_pk}','Video\VideoController@streaming');
 
-	Route::post('/viewCount','Video\ViewController@view');
+
+	Route::get('/viewCount','Video\ViewController@viewCount');
 
 	
+});
+
+Route::group(['prefix'=>'videoInfo'],function(){
+
+	Route::get('/subtitle/{video_pk}','Subtitle\SubtitleController@subtitleView');
+
+	Route::get('/address/{video_pk}','Video\VideoPlayController@addressInfo');
+
+	Route::get('/content/{video_pk}','Video\VideoPlayController@contentInfo');
+
+	Route::get('/explain/{video_pk}','Video\VideoPlayController@explain');
 });
 
 Route::group(['prefix'=>'comment'],function(){
@@ -178,12 +189,15 @@ Route::group(['prefix'=>'member'],function(){
 	//출석체크
 	Route::get('/attendance','Member\AttendanceController@attendance');
 
+
 	Route::get('/SResult','Member\MemberController@SResult');
+
+	Route::post('/addVoca','Voca\MVOController@addVoca');
 });
 
 Route::group(['prefix'=>'word'],function(){
 
-	Route::get('/load/{id}','Word\VideoWordController@loadWord');
+	Route::get('/load/{video_pk}','Word\VideoWordController@loadWord');
 
 	Route::get('/myBook','Member\MemberController@myWordBook');
 
@@ -201,8 +215,26 @@ Route::group(['prefix'=>'voca'],function(){
 
 	Route::post('/add','Voca\VocabularyController@addVoca');
 
+	Route::post('/update','Voca\VocabularyController@updateVoca');
+
+	Route::post('/insert','Voca\VocabularyController@insertVoca');
+
+});
+
+Route::group(['prefix'=>'vocaBook'],function(){
+
+	Route::post('/addBook','Voca\MemberVocaBookController@addVocaBook');
+
+	Route::post('/updateBook','Voca\MemberVocaBookController@updateVocaBook');
+
+	Route::post('/deleteBook','Voca\MemberVocaBookController@deleteVocaBook');
+
+	Route::post('/addVoca','Voca\MVOController@addVoca');
+
+	Route::post('/deleteVoca','Voca\MVOController@deleteVoca');
 });
 
 Route::post('/csrf-token',function(){
 	return csrf_token() ;
 });
+

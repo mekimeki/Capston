@@ -110,6 +110,7 @@ class WordController extends Controller
                 ->whereIn('wbook_pk',$books)
                 ->groupBy('w_nm')
                 ->get()->toArray();
+
         } else {
             $vocas = \DB::table('word_tb')
                 ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
@@ -134,6 +135,7 @@ class WordController extends Controller
                 ->where('memo_st', $mm)
                 ->groupBy('w_nm')
                 ->get()->toArray();
+
 
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;

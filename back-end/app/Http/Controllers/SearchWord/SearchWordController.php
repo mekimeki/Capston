@@ -26,61 +26,21 @@ class SearchWordController extends Controller
 
 	public function searchEn(Request $request){
 		$word = $request->word;
-		if($word==''){
-			return 'false';
-		}
 		$this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$word);////https://alldic.daum.net/search.do?q=text&dic=eng
 		$result = $this->snoopy->results;
-
-		//
-		preg_match('/<span class="txt_emph1">(.*?)<\/span>/is', $result, $pronunciation);
-		/*태그만제거*/
-		$pronunciation = preg_replace("/<span[^>]*>/i", '', $pronunciation);
-		$pronunciation = preg_replace('/\s+/', ' ', $pronunciation);
-
-		//
 		
-		preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
 		/*태그만제거*/
-		$mean = preg_replace("/<ul[^>]*>/i", '', $mean);
-		$mean = preg_replace("/<li[^>]*>/i", '', $mean);
-		$mean = preg_replace("/<span[^>]*>/i", '', $mean);
-		$mean = preg_replace('/\s+/', '', $mean);
+		preg_match('/<span class="txt_emph1">(.*?)<\/span>/is', $result, $pronunciation);
+		
+		/*태그 와 태그 내용 통째로 제거*/
+		preg_match('/<div class="card_word #word #eng">(.*?)<\/ul>/is', $result, $mean);
+		$mean= preg_replace("!<div(.*?)<\/div>!is","",$mean);
+		
+		/*태그만제거*/
 		if($pronunciation && $mean){
 			return response()->json([
 				'word'=>strip_tags($pronunciation[0]),
-				'mean'=>strip_tags($mean[0])
-			]);
-			return $pronunciation[0].' : '.$mean[0];
-		}else{
-			return '검색 결과가 없습니다.';
-		}
-	}
-
-	public function searchEn2(Request $request){
-		$word = $request->word;
-		$this->snoopy->fetch('https://alldic.daum.net/search.do?q='.$word);////https://alldic.daum.net/search.do?q=text&dic=eng
-		$result = $this->snoopy->results;
-		return $result;
-		//
-		preg_match('<div class="card_word #word #eng">(.*?)<\ul class="list_search">/is', $result, $pronunciation);
-		return $pronunciation;
-		/*태그만제거*/
-		$pronunciation = preg_replace("/<span[^>]*>/i", '', $pronunciation);
-		$pronunciation = preg_replace('/\s+/', ' ', $pronunciation);
-
-		//
-		
-		preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
-		/*태그만제거*/
-		$mean = preg_replace("/<ul[^>]*>/i", '', $mean);
-		$mean = preg_replace("/<li[^>]*>/i", '', $mean);
-		$mean = preg_replace("/<span[^>]*>/i", '', $mean);
-		$mean = preg_replace('/\s+/', '', $mean);
-		if($pronunciation && $mean){
-			return response()->json([
-				'word'=>$pronunciation[0],
-				'mean'=>$mean[0]
+				'mean'=>strip_tags($mean[0]),
 			]);
 			return $pronunciation[0].' : '.$mean[0];
 		}else{

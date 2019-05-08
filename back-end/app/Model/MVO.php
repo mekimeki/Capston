@@ -8,7 +8,7 @@ class MVO extends Model
 {
     //
     protected $table='MVO_TB';
-    protected $timestamps = false;
+    public $timestamps = false;
     protected $guarded = [];
 
     public function MVOBook(){

@@ -5,7 +5,7 @@
  * 클래스 설명:                   영상 신고
  * 만든이:                        3-WDJ 3조 メキメキ 1701281 최찬민
  * 만든날:                        2019년 5월 4일
- * 수정일:                        2019년 5월 4일
+ * 수정일:                        2019년 5월 7일
  * 함수 목록
  * report(비디오ID,Request) : Request(jwt토큰)영상 신고
  * reportCancel(비디오ID,Request) : Request(jwt토큰)영상 신고취소
@@ -35,7 +35,10 @@ class ReportController extends Controller
         }
 
     	$report = new Report;
-    	$reportCheck = $report->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	$reportCheck = $report->where([
+            'm_id'=>$m_id,
+            'video_pk'=>$video_pk
+        ])->first();
     	if(!$reportCheck){
     		/*수정필요*/
     		$report->fill([
@@ -60,7 +63,10 @@ class ReportController extends Controller
         }
 
     	$report = new Report;
-    	$reportCheck = $report->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	$reportCheck = $report->where([
+            'm_id'=>$m_id,
+            'video_pk'=>$video_pk
+        ])->first();
     	if($reportCheck){
     		$report->where('m_id',$m_id)->where('video_pk',$video_pk)->delete();
     		return response()->json([

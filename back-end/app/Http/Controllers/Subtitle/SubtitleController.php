@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Video;
 use Illuminate\Support\Facades\Storage;
+use Benlipp\SrtParser\Parser;
 
 class SubtitleController extends Controller
 {
@@ -52,6 +53,7 @@ class SubtitleController extends Controller
         $arr_total = array();//array
         $num = 0;//
         $check = (int)$arr[0]+1;//first number check
+        //return $arr;
         $arr_total[$num] = "";//total array;
         ///1 for
         for ($i=0; $i <count($arr) ; $i++) {
@@ -111,7 +113,7 @@ class SubtitleController extends Controller
     }
 
     public function subtitleEdit(Request $request){//$firstTime,$lastTime
-
+      
       $firstTime = $request->firstTime;
       $lastTime = $request->lastTime;
       $video_pk = $request->video_pk;
@@ -142,28 +144,33 @@ class SubtitleController extends Controller
     }
 
     public function produceSubtitle(Request $request){//Request $request
-      //return $request;
+     
       
       $data = $request->data;//
       $data = json_decode($data,true);
+
       //return $request->video_pk;
       $video_pk = $request->video_pk;//
-      if($data){
 
+      if($data){
         $txt = "";
         for ($i=0; $i <count($data) ; $i++) {
-          $msf = explode('.',$data[$i]['firstTime']);
-          $data[$i]['firstTime'] = gmdate('H:i:s,',$data[$i]['firstTime']).$msf[1];
           
+          $msf = explode('.',$data[$i]['firstTime']);
+
+          $msf[1] = substr($msf[1], 0, 3);
+          
+          $data[$i]['firstTime'] = gmdate('H:i:s,',$data[$i]['firstTime']).$msf[1];//
 
           $msl = explode('.',$data[$i]['lastTime']);
-          $data[$i]['lastTime'] = gmdate('H:i:s,',$data[$i]['lastTime']).$msl[1];
+          $msl[1] = substr($msl[1], 0, 3);
+          $data[$i]['lastTime'] = gmdate('H:i:s,',$data[$i]['lastTime']).$msl[1];//.$msl[1]
           
-
-          $txt = $txt.($i+1)."\n".$data[$i]['firstTime']." --> ".$data[$i]['lastTime']."\n".$data[$i]['textArea']."\n\n";
+          
+          $txt = $txt.($i+1)."\r\n".$data[$i]['firstTime']." --> ".$data[$i]['lastTime']."\r\n".$data[$i]['textArea']."\r\n\r\n";
 
         }
-
+        
         Storage::disk('subtitle')->put($video_pk.'.srt', $txt);
         Storage::disk('public')->delete($video_pk.'.srt');
         $video = Video::find($video_pk);
@@ -179,4 +186,15 @@ class SubtitleController extends Controller
         ]);
       }
     }
+
+
+    public function test(){
+      $text= "1"."\r\n"."00:00:00,920 --> 00:00:05,601"."\r\n"."ㅎㄹㄹㄹㄹ"."\r\n\r\n".
+      "2"."\r\n"."00:00:01,920 --> 00:00:06,601"."\r\n"."ddddddd"."\r\n\r\n".
+      "3"."\r\n"."00:00:02,920 --> 00:00:07,601"."\r\n"."43244"."\r\n\r\n".
+      "4"."\r\n"."00:00:03,920 --> 00:00:08,601"."\r\n"."dfsdfs"."\r\n\r\n".
+      "5"."\r\n"."00:00:04,920 --> 00:00:09,644"."\r\n"."ddddddfs"."\r\n\r\n";
+      Storage::disk('subtitle')->put('999.srt', $text);
+    }
+
 }

@@ -17,7 +17,7 @@ class CreateLBookRecommendsTable extends Migration
             $table->integer('lbook_id')->unsigned();
             $table->integer('m_id')->unsigned();
             $table->char('lbook_rec',1)->default('F');
-            $table->foreign('lbook_id')->references('lbook_pk')->on('lbook_tb');
+            $table->foreign('lbook_id')->references('lbook_pk')->on('lbook_tb')->onDelete('cascade');
             $table->foreign('m_id')->references('m_id')->on('lbook_tb');
         });
     }

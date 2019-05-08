@@ -8,6 +8,7 @@ class MVOBook extends Model
 {
     //
     protected $table='MVOBOOK_TB';
+    protected $primaryKey = 'mvobook_pk';
     public $timestamps = false;
     protected $guarded = [];
 

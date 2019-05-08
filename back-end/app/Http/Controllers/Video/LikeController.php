@@ -33,7 +33,11 @@ class LikeController extends Controller
             return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
         }
     	$like = new Like;
-    	$likeCheck = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	//$likeCheck = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+        $likeCheck = $like->where([
+            'm_id'=>$m_id,
+            'video_pk'=>$video_pk
+        ])->first();
     	if(!$likeCheck){
     		/*수정필요*/
     		$like->fill([
@@ -57,9 +61,15 @@ class LikeController extends Controller
             return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
         }
     	$like = new Like;
-    	$likeCheck = $like->where('m_id',$m_id)->where('video_pk',$video_pk)->first();
+    	$likeCheck = $like->where([
+            'm_id'=>$m_id,
+            'video_pk'=>$video_pk
+        ])->first();
     	if($likeCheck){
-    		$like->where('m_id',$m_id)->where('video_pk',$video_pk)->delete();
+    		$like->where([
+                'm_id'=>$m_id,
+                'video_pk'=>$video_pk
+            ])->delete();
     		return response()->json([
 	    		'message'=>'like cancel this video'
 	    	],200);

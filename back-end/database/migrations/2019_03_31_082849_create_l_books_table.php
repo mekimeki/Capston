@@ -18,7 +18,7 @@ class CreateLBooksTable extends Migration
             $table->integer('m_id')->unsigned();
             $table->string('lbook_tt');
             $table->string('lbook_lan');
-            $table->foreign('m_id')->references('member_pk')->on('member_tb');
+            $table->foreign('m_id')->references('member_pk')->on('member_tb')->onDelete('cascade');
         });
     }
 
