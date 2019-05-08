@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
-use App\Voca;
 use App\WBook;
 use App\Word;
 use App\VTestResult;
@@ -97,12 +95,12 @@ class QuizController extends Controller
         $result = (int)$results;
         \Log::debug(gettype($result).$result);
 
-        //\DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $result]);
-        $vtestresult = new VTestResult();
-        $vtestresult->m_id = 1;
-        $vtestresult->test_add = "numnum";
-        $vtestresult->test_score = $result;
-        $vtestresult->save();
+        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $result]);
+        // $vtestresult = new VTestResult();
+        // $vtestresult->m_id = 1;
+        // $vtestresult->test_add = "numnum";
+        // $vtestresult->test_score = $result;
+        // $vtestresult->save();
 
 
         return "a";
