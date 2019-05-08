@@ -1,161 +1,68 @@
 <template lang="html">
   <div class="">
-    <span>{{sb_getter.length}}</span>
-    <div id="scroll_div"
-    v-on:scroll="scroll()">
-      <div class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
-        <input type="text" name="" value="" v-model="tent.firstTime">~
-        <input type="text" name="" value="" v-model="tent.lastTime">
-        <v-textarea
-        outline
-        name="input-7-4"
-        label="Outline textarea"
-        value="자막을 작성 하시오."
-        v-model="tent.textarea">
-        </v-textarea>
-        <v-btn color="success" v-on:click="create_btn(i)">추가</v-btn>
-        <v-btn color="success" v-on:click="delete_btn(i)">삭제</v-btn>
-      </div>
-    </div>
-    <div class="">
-      <v-btn color="success" v-on:click="">저장</v-btn>
+
+    <v-tabs color="white" slider-color="black">
+      <v-tab v-for="tent in cp_getter" ripple>
+          {{ tent.name }}
+      </v-tab>
+      <v-tab-item v-for="content in cp_getter">
+        <v-card v-for="tent in content.content">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">{{tent.voca}}</h3>
+              <div>
+                <input type="text" name="" value="" v-model="tent.explain">
+              </div>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat color="orange">
+              <v-icon>check</v-icon>등록됨
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
+
+    <v-btn large fab v-on:click="click_save()">SAVE</v-btn>
+    <div class="" v-show="up_getters.content">
+      <v-btn large fab v-on:click="move()">다음</v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import {mapState,mapGetters,mapActions} from 'vuex';
-import axios from 'axios';
+import {mapActions,mapGetters} from 'vuex';
 export default {
   data(){
     return{
-      video:"",
-      scroll_div:"",
-      scroll_bottom:"",
-
-      content:[],
-      scroll_num:{
-        first:0,
-        last:100,
-      },
-
-      terval:"",
-      //
-      video_time_check:"",
+      video:'',
     }
   },
   methods:{
-    ...mapActions(['subtitle_action']),
-    create_btn(check){
-      this.content.splice(check+1,0,{
-        "firstTime":this.content[check].lastTime+1,
-        "lastTime":this.content[check].lastTime+3,
-        "textArea":"Content Box",
-      })
-    },
-    delete_btn(check){
-      if(check === 0){
-        this.content.shift();
-      }else{
-        this.content.splice(check,1);
+    ...mapActions(['search_content_action','search_word_action','upload_content_action']),
+    click_save(){
+      let data = {
+        video:this.$route.query.video,
+        content:this.cp_getter[0].content,
+        word:this.cp_getter[1].content,
       }
+      this.upload_content_action(data);
     },
-    save_btn(){
-
+    move(){
+      this.$router.push({name:'message', query:{video:this.$route.query.video}});
     },
-    scroll(){
-      console.log("?");
-      this.scroll_bottom = this.scroll_div.scrollTop;
-    }
   },
   mounted:function(){
     this.video = this.v_getter;
-    this.scroll_div = document.getElementById('scroll_div');
-    let url = "";
-    if (true) { //subtitle create
-      url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"//url path
-    }else{ //content create
-    } //
-    //
-    axios.get(url).then((res)=>{
-      this.subtitle_action(res.data);
-      for (let i = 0; i < this.s_getter.length; i++) {
-        this.content.push({
-          "firstTime": this.s_getter[i][1][0],
-          "lastTime": this.s_getter[i][1][1],
-          "textArea":this.s_getter[i][2],
-        });
-      }
-    },(error)=>{alert("연결을 확인해 주세요")});
-    //
-    this.terval = setInterval(()=>{//체크 변수
-      this.video_time_check = this.video.currentTime;
-    },100);
-  },
-  beforeUpdate:function(){
-  },
-  updated:function(){
-    console.log("check updated");//2num loop
-    while (this.sb_getter.length != 0) {
-      let i = 0;
-      for (i; i < this.content.length; i++) {
-        if (this.content[i].firstTime > this.sb_getter[0].firstTime) {
-          break;
-        }else{
-          if(this.content.length === i){
-            i = 0;
-            break;
-          }
-        }
-      }
-      this.content.splice(i,0,{
-        "firstTime":this.sb_getter[0].firstTime,
-        "lastTime":this.sb_getter[0].lastTime,
-        "textArea":this.sb_getter[0].textArea,
-      });
-      this.sb_getter.splice(0,1);
-    }
   },
   computed:{
     ...mapGetters({
-      v_getter:'video_getter',
-      s_getter:'subtitle_getter',
-      sb_getter:'subtitle_buffer_getter',
+      v_getter:"video_getter",
+      up_getters:"upload_getters",
+      cp_getter:"content_preview_getter",
     }),
   },
-  watch:{
-    scroll_bottom:function(data){
-      if(Math.ceil(data) >= Math.floor(this.scroll_div.scrollHeight-this.scroll_div.clientHeight)){
-        this.scroll_num.last = this.scroll_num.last + 100;
-      }
-    },
-    video_time_check:function(data){
-      //코드 수정 필요
-      for (let i = 0; i < this.content.length; i++) {
-        //
-        if (this.content[i].firstTime.toFixed(1) === data.toFixed(1)) {
-          if(this.scroll_num.first<=i && i<= this.scroll_num.last){
-          }else{
-            this.scroll_num.last = this.scroll_num.last +i;
-          }
-
-          //
-          setTimeout(()=>{
-            clearInterval(this.terval);
-            let input = document.getElementsByClassName("textarea");
-            input[i].style.backgroundColor = "blue";
-            input[i].scrollIntoView({behavior:'smooth'});
-            setTimeout(()=>{
-              this.terval = setInterval(()=>{
-                this.video_time_check = this.video.currentTime;
-              },100);
-            },this.content[i].lastTime - this.content[i].firstTime);
-          },100);
-          //
-        }//if end
-      }//for end
-    },
-  }
 }
 </script>
 

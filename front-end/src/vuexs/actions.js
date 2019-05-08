@@ -1,89 +1,173 @@
 import axios from 'axios';
 
+import Service from '../api/service';
+// 172.26.4.110
+const service = new Service("http://172.26.4.110/");//axios api service class created
+// 172.26.3.143
+
 const actions = {
   video_action : ({commit},payload) => {//video actions
     commit('video_mutation',payload);
   },
-  subtitle_action : ({commit},payload) => {//subtitle actions
+  video_link_action: ({commit},payload) =>{ //video link action
+    return service.video_link("api/video/edit/",payload);
+  },
+  subtitle_answer_action: ({commit},payload) => { //subtitle answer action
+    return service.subtitle_answer("api/subtitle/edit",payload);
+  },
+  subtitle_open_action: ({commit},payload) =>{//subtitle open action
+    return service.subtitle_open('http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php');
+  },
+  subtitle_preview_action: ({commit},payload) =>{
+    commit('subtitle_preview_mutation',payload);
+  },
+  content_action: ({commit},payload) => {
+    commit('content_mutation',payload);
+  },
+  content_answer_action: ({commit},payload) => {
+    return service.content_answer("http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php");
+  },
+  content_preview_content_action: ({commit},payload) =>{
+    commit('content_preview_content_mutation',payload);
+  },
+  content_preview_word_action: ({commit},payload) =>{
+    commit('content_preview_word_mutation',payload);
+  },
+  subtitle_action : ({commit},payload) => {//subtitle action
     commit('subtitle_mutation',payload);
   },
-  subtitle_buffer_action : ({commit},payload) => {//subtitle create input subtitle buffer actions
+  subtitle_buffer_action : ({commit},payload) => {//subtitle create input subtitle buffer action
+    console.log(payload);
     commit('subtitle_buffer_mutation',payload);
   },
   seek_bar_action : ({commit},payload) => {//video seek_bar actions
     commit('seek_bar_mutation',payload);
   },
-  login_actions : ({commit},payload) => {//login actions
-    if(!(payload.email&&payload.password)){
-      alert("빈칸 입니당");
+  capture_action : ({commit},payload) => {//capture element action
+    commit('capture_mutation',payload);
+  },
+  capture_data_action : ({commit},payload) =>{
+    commit('capture_data_mutation',payload);
+  },
+  bookmark_action : ({commit},payload) =>{
+    commit('bookamrk_mutation',payload);
+  },
+  bookmark_image_action : ({commit},payload) =>{
+    commit('bookmark_image_mutation',payload);
+  },
+  percent_action : ({commit},payload) => {//capture element action
+    commit('upload_percent_mutation',payload);
+  },
+  login_actions : ({commit},payload) => {//login action
+    service.login("api/login",payload).then(result => {
+      localStorage.setItem('login',result.token);
+      service.login_check("api/token",result.token).then(result => {
+        commit('login_mutation',result);
+      });
+    });
+  },
+  login_check_actions : ({commit},payload) => {//login check action
+    if(payload){
+      service.login_check("api/token",payload).then(result => {
+        commit('login_mutation',result);
+      });
+    }
+  },
+  logout_actions : ({commit}) => {//logout action
+    let check = confirm("本当にlogout?");
+    if(check){
+      commit('logout_mutation');
     }else{
-      let url = "";//login url;
-
-      let form = new FormData();
-      form.append("email",payload.email);
-      form.append("password",payload.password);
-
-      axios.post(url).then((res)=>{
-        console.log(res.data);
-      },(error)=>{alert("연결을 확인해 주세요")});
-      commit('login_mutation',payload);
+     alert("logoutX");
     }
   },
   upload_actions : ({commit},payload,check) => {
-    let form = new FormData();
-    if (check) {
-      form.append("video",payload);
-      commit('upload_mutation',true);
-    }else{
-      form.append("subtitle",payload);
-      commit('upload_mutation',false);
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
+      }
     }
-
-    // let url_token = "http://172.26.3.246/get-token"
-    // // let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/TestUpload.php";
-    // let url = "http://172.26.3.246/upload"
-    // axios.get(url_token).then((res)=>{
-    //   //
-    //   console.log(res.data);
-    //   if (res.data) {
-    //     form.append("_token",res.data);
-    //     console.log(form);
-    //     axios.post(url,form).then((res) => {
-    //       console.log(res.data);
-    //       if(res.data){
-    //         if(check){
-    //           commit('upload_mutation',true);
-    //         }else {
-    //           commit('upload_mutation',false);
-    //         }
-    //       }else{
-    //         alert("업로드 실패");
-    //       }
-    //     }).catch( error => {
-    //       console.log('failed', error);
-    //     });
-    //   }
-    //   //
-    // }).catch( error => {
-    //   console.log('failed',error);
-    // });
-
+    if (payload.check) {//video
+      service.csrf_check("csrf-token").then(result => {
+        service.upload("api/video/originalUpload",payload.file,result,localStorage.getItem('login'),"",config)
+        .then(result => {
+          commit('upload_mutation',result);
+        });
+      });
+    }else{//subtitle
+      service.csrf_check("csrf-token").then(result => {
+        service.upload("api/subtitle/originalUpload",payload.file,result,localStorage.getItem('login'),payload.video_pk,config)
+        .then(result => {
+          commit('upload_mutation',result);
+        });
+      });
+    }
   },
   video_cut_actions : ({commit},payload) => {
-    let form = new FormData();
-    form.append("time",JSON.stringify(payload));
-    let url = `http://localhost/FFMPEGTEST/ffmpeg_test.php`;
-    alert("준비중입니다.");
-    axios.post(url,form).then( (res) => {
-      console.log(res.data);
-      if(res.data){
-        // alert("준비 끝 났습니다.");
-        console.log("준비끝");
-        commit('video_cut_mutation',true);
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
       }
-    }).catch( error => {
-      console.log('failed', error);
+    }
+    service.video_cut_upload('api/video/streamingUpload',payload,config).then(result => {
+      commit('video_cut_mutation',result);
     });
+  },
+  upload_subtitle_actions: ({commit},payload) =>{
+    const config = {
+      onUploadProgress: function(progressEvent) {
+        var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+        commit('upload_percent_mutation',percentCompleted);
+      }
+    }
+    service.subtitle_upload("api/subtitle/produce",payload,config).then(result=>{
+      console.log('fff',result);
+      commit('upload_subtitle_mutations',result);
+    });
+  },
+  search_content_action: ({commit},payload) =>{
+    return service.search_content('api/voca/search',payload);
+  },
+  search_word_action:({commit},payload) =>{
+    return service.search_word('api/word/searchEn',payload);
+  },
+  search_action:({commit},payload) =>{
+    return service.search('api/searchEn',payload);
+  },
+  upload_content_action:({commit},payload) =>{
+    return service.content_upload('api/voca/add',payload).then(result=>{
+      commit('upload_content_mutations',result);
+    });
+  },
+  upload_created_action: ({commit},payload) =>{
+    return service.upload_created('api/video/enrollment',payload);
+  },
+  share_actions: ({commit},payload)=>{
+    return service.share('',payload);
+  },
+  video_cut_image_action: ({commit},payload) =>{
+    return service.video_cut_image('api/video/snapShot/',payload);
+  },
+  //video view actions
+  video_link_view_action: ({commit},payload) =>{
+    return service.video_link_view('/api/videoInfo/address/',payload);
+  },
+  subtitle_view_action: ({commit},payload) =>{
+    return service.subtitle_view('/api/videoInfo/subtitle/',payload);
+  },
+  content_view_action: ({commit},payload) =>{
+    return service.content_view('/api/videoInfo/content/',payload);
+  },
+  content_explain_action: ({commit},payload) =>{
+    return service.content_explain('',payload);
+  },
+  bookmark_save_action: ({commit},payload) =>{
+    return service.bookmark('/api/getLine',payload);
+  },
+  video_explain_action: ({commit},payload) =>{
+    return service.video_explain('/api/videoInfo/explain/',payload);
   }
 }
 

@@ -1,13 +1,16 @@
 <template lang="html">
   <div class="">
-    <video_></video_>
-    <hr>
-    <createVideo_></createVideo_>
+    <v-flex xs6 sm6 md6 id="center">
+        <video_></video_>
+    </v-flex>
+    <v-flex xs12 sm12 md12>
+      <createVideo_></createVideo_>
+    </v-flex>
   </div>
 </template>
 
 <script>
-import video_ from "@/components/video_/Video";
+import video_ from "@/components/video_/Video2";
 import createVideo_ from "@/components/createBox_/CreateVideo";
 export default {
   components:{
@@ -23,4 +26,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#center{
+  left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:auto;
+
+}
 </style>

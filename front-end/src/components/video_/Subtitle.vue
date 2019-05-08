@@ -1,12 +1,56 @@
 <template lang="html">
   <div class="">
-    <button type="button" name="button"
-    v-on:click="select(subtitle_open)"
-    >자막:{{subtitle_open}}</button>
-    <div class="" v-for="line in subtitle_line">
-      <button type="button" name="button"
-      >{{line['text']['content']}}</button>
+    <!-- button_s -->
+    <div id="btn_box">
+      <span>
+        <v-btn fab small v-on:click="subtitle_stop($event)">
+          <v-icon>blur_on</v-icon>
+        </v-btn>
+        <v-btn fab small v-on:click="record_open()">
+          <v-icon>mic</v-icon>
+        </v-btn>
+      </span>
     </div>
+    <!-- subtite -->
+
+    <v-tooltip v-model="show" top>
+      <template v-slot:activator="{ on }">
+        <div top id="subtitle_box"
+        >
+          <span
+            id="subtitle_span"
+            v-on:mouseup="select_drag($event,subtitle_open.split('#')[0])"
+          >{{subtitle_open.split('#')[0]}}</span>
+          <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="subtitle_bookmark(subtitle_open.split('#')[0])">bookmark</v-icon>
+        </div>
+      </template>
+      <span id="tooltop"></span>
+      <v-icon small color="white" v-on:click="word_bookmark($event,false)">add</v-icon>
+      <v-icon small color="white" v-on:click="show=false">clear</v-icon>
+    </v-tooltip>
+
+
+    <!-- selected word_s  -->
+    <v-layout row wrap>
+      <v-flex v-for="line in subtitle_word">
+        <v-btn fab small color="orange" class="pa-1 ma-1" v-on:click="word_bookmark($event,true)">{{line['text']['content']}}</v-btn>
+      </v-flex>
+    </v-layout>
+
+    <!-- <record_></record_> -->
+
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" id="record" height="500">
+        <v-card>
+          <v-layout justify-end>
+            <v-btn color="orange" icon dark @click="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-layout>
+          <record_></record_>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </div>
 </template>
 
@@ -16,37 +60,110 @@ import { mapActions, mapGetters} from 'vuex'
 export default {
   data(){
     return{
-      video:"",
-      subtitle:[],
-      video_time_check:"",
-      subtitle_open:"",
-      subtitle_line:[],
+      video:"",//video element
+      subtitle:[],//subtitle
+      interval:"",//video time check interval
+      video_time_check:"",//video time check
+      subtitle_open:"",//subtitle open
+      subtitle_word:[],//word search button list
+      show:false,//tooltip open
+      location:{
+        _x:'',
+        _y:'',
+      },
+      dialog:false,
     }
   },
   methods:{
-    ...mapActions(['subtitle_action']),
-    select(subtitle){
-      let form = new FormData();
-      form.append("data",subtitle);
-      let url = "http://localhost/Capstone_practice/project_videoPlayer/api/test2.php";
-      axios.post(url,form).then((res) => {
-        this.subtitle_line = res.data;
-        console.log("성공",this.subtitle_line[0]['text']['content']);
-      }).catch( error => {
-        console.log('failed', error);
+    ...mapActions(['subtitle_action','subtitle_word_action','subtitle_open_action','search_action','bookmark_action','bookmark_image_action','subtitle_view_action']),
+    drag(evt){
+      let location = document.getElementById('subtitle_box').getBoundingClientRect();
+      //이벤트 좀더 넣어서 정확하게
+
+    },
+    record_open(){
+      this.dialog = true;
+      if(!this.video.paused){
+        this.video.pause();
+      }
+    },
+    drop(evt){
+      /*
+        영역 밖에 나갔을 때 처리
+        좀더 저확하게 맞추는게 필요
+      */
+      document.getElementById('subtitle_box').style.top = -100+evt.offsetY+"px";
+      document.getElementById('subtitle_box').style.left = 120+evt.offsetX+"px";
+    },
+    word_select(subtitle){//word search
+      this.subtitle_word_action(subtitle).then(result=>{
+        this.subtitle_word = result;
       });
     },
-  },
-  beforeCreate:function(){},
-  created:function(){},
-  beforeMout:function(){
-
+    select_drag(evt,subtitle){//drag search event
+      let selectionText = document.getSelection();
+      document.getElementById('tooltop').innerHTML = selectionText;
+      if (document.getElementById('tooltop').innerHTML) {
+        this.show = true;
+      }else{
+        this.word_select(subtitle);
+      }
+    },
+    word_bookmark(evt,check){
+      let word;
+      if (check) {
+        word = evt.target.innerHTML;
+      }else{
+        word = document.getElementById('tooltop').innerHTML;
+      }
+      this.search_action(word).then(result =>{
+        if(result === 'undefined'){
+          alert("is not search result");
+        }else{
+          word = word+ "#";
+          for (let i = 0; i < result.length; i++) {
+            word = word +"\n"+ result[i];
+          }
+          this.bookmark_action(word);
+        }
+      }).
+      catch(result => {
+        alert(result);
+      });
+    },
+    subtitle_bookmark(value){
+      this.cp_getter.click();
+      this.bookmark_image_action(this.cpd_getter);
+      this.bookmark_action(value);
+    },
+    subtitle_stop(evt){//subtitle stop
+      if(evt.target.innerHTML === "blur_on"){
+        evt.target.innerHTML = "blur_off";
+        this.subtitle_open = "";
+        clearInterval(this.interval);
+      }else{
+        evt.target.innerHTML = "blur_on";
+        this.interval = setInterval(()=>{
+          this.video_time_check = this.video.currentTime;
+        },150);
+      }
+    },
   },
   mounted:function(){
-    this.video = this.v_getter;
-    let url = "http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php"
-    axios.get(url).then((res)=>{
-      this.subtitle_action(res.data);//store.js action
+    this.video = this.v_getter;//video
+    // subtitle 불러오는 부분 생각 해보기
+
+    // this.subtitle_open_action('').then(result =>{
+    //   this.subtitle_action(result);//store.js action
+    //   this.subtitle = this.s_getter;
+    //   this.interval = setInterval(()=>{
+    //     this.video_time_check = this.video.currentTime;
+    //   },150);
+    // });
+
+    this.subtitle_view_action(this.$route.query.video).then(result=>{
+      this.subtitle_action(result);//store.js action
+      
       this.subtitle = this.s_getter;
       setInterval(()=>{
         // console.log("setInterval");
@@ -64,18 +181,19 @@ export default {
     ...mapGetters({
       v_getter:'video_getter',
       s_getter:'subtitle_getter',
+      cp_getter:'capture_getter',
+      cpd_getter:'capture_data_getter',
+      a:'bookmark_image_getter',
     }),
   },
   watch:{
     video_time_check: function(data){
       for (let i = 0; i < this.subtitle.length; i++) {
-        if(this.video.currentTime.toFixed(1) === this.subtitle[i][1][0].toFixed(1)){
-          this.subtitle_open = this.subtitle[i][2];
-          // for (let s = 2; s < this.subtitle[i].length; s++) { // 이부분만 고치면 됨
-          //   this.subtitle_open= this.subtitle_open + "|" + this.subtitle[i][s];
-          // }
+
+        if(this.video.currentTime.toFixed(1) === parseInt(this.subtitle[i][1][0]).toFixed(1)){
+          this.subtitle_open = this.subtitle[i][2]+"#"+i;
         }
-        else if(this.video.currentTime.toFixed(1) === this.subtitle[i][1][1].toFixed(1)){
+        else if(this.video.currentTime.toFixed(1) === parseInt(this.subtitle[i][1][1]).toFixed(1)){
           this.subtitle_open = "";
         }
       }
@@ -85,4 +203,38 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#record{
+  height:50% !important;
+  top:50% !important;
+}
+#subtitle_box{
+  color:white;
+  background: black;
+  position: relative;
+  display: inline-block;
+  height:100%;
+  left:30%;
+  top:-155px;
+  cursor:pointer;
+  opacity: 0.6;
+}
+#subtitle_box:hover{
+  background: orange;
+}
+/* #subtitle_span:hover{
+  background: orange;
+} */
+#btn_box{
+  /* float:right; */
+  position:absolute;
+  top:90px;
+}
+.btn{
+  float:left;
+}
+
+#bookmark_check:hover{
+  background: white;
+  border-radius: 10px;
+}
 </style>

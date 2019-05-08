@@ -10,24 +10,43 @@
    <v-layout row wrap>
      <v-flex xs12 sm6 md6 class="pa-1">
        <v-card class="video">
-         <div class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
-           drop Zone video
-
-           <div class="" v-show="image_video">
-             <img v-bind:src="image_video" alt="" class="img" width="180" height="120"/>
-             <br>
-             <br>
-             <button class="btn" id="videobtn" v-on:click="remove_file($event)">REMOVE</button>
-             <span>|</span>
-             <button class="btn" type="submit" name="button" v-on:click="file_upload()">Upload</button>
-           </div>
-
-         </div>
+         <v-card-text class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
+           <v-icon>subscriptions</v-icon>DROP ZONE
+           <br>
+           <v-icon large v-show="!image_video" style="width:100%; height:100%;">add</v-icon>
+           <v-card-text class="" v-show="image_video">
+             <video id="video_preview" :src="image_video" autoplay width="100%" height="100%" muted="muted"></video>
+             <!-- <img v-bind:src="image_video" alt="" class="img" width="180" height="120"/> -->
+             <v-spacer></v-spacer>
+              <button id="videobtn" type="button" name="button"v-on:click="remove_file($event)">
+                <v-icon>delete</v-icon>
+                remove
+              </button>
+              <hr>
+              <button type="button" name="button" v-on:click="file_upload_video($event)">
+                <v-icon>get_app</v-icon>
+                upload
+              </button>
+              <hr>
+              <v-progress-circular
+                :rotate="360"
+                :size="100"
+                :width="15"
+                :value="percent"
+                color="teal"
+                v-model="percent_video"
+              >
+                {{percent_video}}
+              </v-progress-circular>
+           </v-card-text>
+         </v-card-text>
          <label>
            <input class="hidden" id="videoInput" type="file" name="video" v-on:change="on_change($event)" multiple>
          </label>
          <div class="">
-           <v-btn color="success" v-on:click="file_select_video($event)">video file select</v-btn>
+           <v-btn color="success" v-on:click="file_select_video($event)">
+             <v-icon>add</v-icon>
+             video select</v-btn>
            <span>{{video_file_name}}</span>
          </div>
        </v-card>
@@ -35,31 +54,46 @@
 
       <v-flex xs12 sm6 md6 class="pa-1">
         <v-card class="subtitle">
-          <div class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
-            drop Zone subtitle
-
-            <div class="" v-show="image_subtitle">
-              <img v-bind:src="image_subtitle" alt="" class="img" width="180" height="120"/>
-              <br>
-              <br>
-              <button class="btn" id="subtitlebtn" v-on:click="remove_file($event)">REMOVE</button>
-              <span>|</span>
-              <button class="btn" type="submit" name="button" v-on:click="file_upload($event)">Upload</button>
-            </div>
-
-          </div>
+          <v-card-text class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
+            <v-icon>subtitles</v-icon>DROP ZONE
+            <br>
+            <v-icon large v-show="!image_subtitle" style="width:100%; height:100%;">add</v-icon>
+            <v-card-text class="" v-show="image_subtitle">
+              <img v-bind:src="image_subtitle" alt="" class="img" width="200px" height="220px"/>
+              <v-spacer></v-spacer>
+               <button id="subtitlebtn" type="button" name="button"v-on:click="remove_file($event)">
+                 <v-icon>delete</v-icon>
+                 remove</button>
+                 <hr>
+               <button type="button" name="button" v-on:click="file_upload_subtitle($event)">
+                 <v-icon>get_app</v-icon>
+                 upload</button>
+               <hr>
+               <v-progress-circular
+                 :rotate="360"
+                 :size="100"
+                 :width="15"
+                 :value="percent_subtitle"
+                 color="teal"
+               >
+                 {{percent_subtitle}}
+               </v-progress-circular>
+            </v-card-text>
+          </v-card-text>
           <label>
             <input class="hidden" id="subtitleInput" type="file" name="subtitle" v-on:change="on_change($event)">
           </label>
           <div class="">
-            <v-btn color="success" v-on:click="file_select_subtitle($event)">subtitle file select</v-btn>
+            <v-btn color="success" v-on:click="file_select_subtitle($event)">
+              <v-icon>add</v-icon>
+              subtitle select</v-btn>
             <span>{{subtitle_file_name}}</span>
           </div>
         </v-card>
       </v-flex>
-      <!-- change  -->
-      <div class="">
-        {{up_getters}}
+
+      <div class="" v-if="up_getters.video">
+        <v-btn v-on:click="move()">다음으로</v-btn>
       </div>
       <div class="">
         <div class="" v-if="up_getters.subtitle">
@@ -139,9 +173,13 @@ export default {
         this.video_file_name = file.name;
       }
     },
-    create_subtitle_file(file) {//create file subtitle methods
-      if (file.name.substring(file.name.length,file.name.length-3) != 'srt') {
-        alert('subtitle를 선택해라');//subtitle 선택하기
+
+    create_subtitle_file(file) { //create file subtitle methods
+      if(this.percent === 100){
+        this.percent_action(0);
+      }
+      if (file.name.substring(file.name.length, file.name.length - 3) != 'srt') {//srt filter
+        alert('subtitle를 선택해라'); //subtitle
         return;
       }else{
         this.image_subtitle = this.image_view_subtitle;
@@ -163,7 +201,21 @@ export default {
     file_upload(){//다시
       if (this.video_file_name) {
         if (this.files.length) {
-          this.upload_actions(this.files[0],true);//upload
+
+          let payload = {
+            file : this.file_data.video,//
+            check: true,
+          }
+          this.upload_actions(payload); //upload
+          let inter = setInterval(() => {
+            this.percent_video = this.percent;
+            if(this.percent_video === 100){
+              if(this.up_getters.video){
+                alert('ready subtitle upload');
+                clearInterval(inter);
+              }
+            }
+          }, 100);
         }
       }else if(this.subtitle_file_name){
         if (this.files.length) {
@@ -182,6 +234,10 @@ export default {
     ...mapGetters({
       up_getters:'upload_getters',
     })
+
+  },
+  watch:{
+
   }
 
 }
@@ -202,7 +258,8 @@ export default {
 .hidden{
   display: none;
 }
-button:hover{
-  color:blue;
+.dropzone{
+  width:100%;
+  height:100%;
 }
 </style>
