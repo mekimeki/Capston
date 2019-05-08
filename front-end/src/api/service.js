@@ -95,5 +95,29 @@ export default class Service {
     this.from.append('data',data);
     return this.service_post(request,this.from);
   }
-
+  quiz_quest(request,data){
+    return this.service_get(this.domain+request);
+  }
+  token_(request){
+    return this.service_get(this.domain+request);
+  }
+  quiz_post(request,data,token){
+    this.form.append('results',data);
+    this.form.append('_token',token);
+    return this.service_post(this.domain+request,this.form);
+  }
+  // word_delete_post(request,data,token){
+  //   this.form.append('results', data);
+  //   this.form.append('_token',token);
+  //   console.log("요청준비중입니다")
+  //   return this.service_post(this.domain+request,this.form);
+  // }
+ 
+  
 }
+
+// login(request,data){
+//   this.form.append("email",data.email);
+//   this.form.append("password",data.password);
+//   return this.service_post(this.domain+request,this.form);
+// }

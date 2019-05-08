@@ -17,7 +17,6 @@
                                         <v-btn class="subheading" flat>{{ book.title }}</v-btn>
                                     </li>
                                 </div>
-
                             </ul>
                         </v-flex>
                     </v-card-text>
@@ -54,20 +53,19 @@
 
         <!-- modal of words crawling -->
         <div class="text-xs-center">
-            <v-dialog v-model="crawl" width="1000">
-                <v-card color="light-blue lighten-3">
-                    <v-container fill-heights fluid pa-2 text-xs-left>
+            <v-dialog v-model="crawl" width="600px">
+                <v-card fill-height color="orange lighten-3">
+                    <v-container fill-height fluid pa-2 text-xs-left>
                         <v-layout fill-height>
                             <v-flex xs12 align-end flexbox>
-                                
                                 <v-card flat color="white">
-                                    {{ mainWord }}
+                                    <v-img :src="lines[selectNumber].pic_add" contain></v-img>
                                 </v-card>
-
-                                <v-card v-for="(crawlMean, a) in crawlMeans" :key="(crawlMean, a)" flat color="white">
-                                    <span v-if="a==0"><div class="py-2"></div></span>
-                                    {{ crawlMean }}
-                                    <span v-if="a==6"><div class="py-2"></div></span>
+                                <v-card flat color="white">
+                                    {{ lines[selectNumber].line }}
+                                </v-card>
+                                <v-card flat color="white">
+                                    {{ lines[selectNumber].explain }}
                                 </v-card>
 
                                 <v-card v-for="(crawlWord, i) in crawlWords" :key="(crawlWord, i)" flat color="white">
@@ -75,14 +73,14 @@
                                     {{ crawlWord }}
                                     <span v-if="i==9"><div class="py-2"></div></span>
                                 </v-card>
-                                
+
                             </v-flex>
                         </v-layout>
                     </v-container>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" flat @click="crawl = false">
-                            I accept
+                            확인
                         </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -93,9 +91,9 @@
         <v-flex justify-start white xs12 sm12 md12>
             <v-toolbar-items>
                 <v-bottom-nav :active.sync="bottomNav" :value="true" color="white">
-                    <v-btn color="blue" flat v-for="(menu,m) in menus" :key="(menu,m)" v-bind:value="menu.value" @click="allWord(m)">{{menu.word}}</v-btn>
+                    <v-btn color="blue" flat v-for="(menu,m) in menus" :key="(menu,m)" v-bind:value="menu.value" @click="allWord()">{{menu.word}}</v-btn>
                     <v-btn color="blue" flat v-for="(book,i) in books" :key="(book,i)" v-bind:value="book.id" @click="selectedWordsQuest(i)">{{book.title}}</v-btn>
-                    <v-btn></v-btn>
+                    <!-- <v-btn></v-btn> -->
                 </v-bottom-nav>
             </v-toolbar-items>
         </v-flex>
@@ -106,7 +104,7 @@
                 <v-layout v-model="box" justify-end>
                     <v-card-text>
                         <h3>
-                            <div>・ 나의 단어장</div>
+                            <div>・ 나의 대사장</div>
                         </h3>
                     </v-card-text>
 
@@ -117,30 +115,26 @@
                     <v-icon color="grey darken-3" v-on:click="click('d')">delete</v-icon>
                 </v-layout>
                 <v-layout justify-center row wrap>
-                    <v-flex v-for="(word, i) in words" :key="(word, i)" v-bind="{ [`xs${flex}`]: true }" md2>
-                        <v-card color="light-blue lighten-3">
+                    <v-flex v-for="(line, i) in lines" :key="(line, i)" v-bind="{ [`xs${flex}`]: true }" md2>
+                        <v-card color="orange lighten-3">
                             <v-card-text style="padding: 5px 10px">
                                 <v-layout justify-end>
 
                                     <!-- selected checked -->
-                                    <v-checkbox v-model="selected" v-bind:value="word.id" @change="checked(i)" height="1px" v-if="box==true" color="grey darken-3"></v-checkbox>
+                                    <v-checkbox v-model="selected" v-bind:value="line.id" @change="checked(i)" height="1px" v-if="box==true" color="grey darken-3"></v-checkbox>
 
-                                    <!--start of like icon-->
-                                    <v-icon v-if="word.memorized=='T'" id="memorized" color="red accent-2" v-on:click.stop="changeHeart(i)">
-                                        turned_in
-                                    </v-icon>
-                                    <v-icon v-else id="memorized" color="red accent-2" v-on:click.stop="changeHeart(i)">
-                                        turned_in_not
-                                    </v-icon>
                                 </v-layout>
                             </v-card-text>
 
                             <!--cards of words-->
-                            <v-container fill-heights fluid pa-2 text-xs-center>
+                            <v-container fill-height fluid pa-2 text-xs-center>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                        <v-card @click="crawlingQuest(word.word), crawl = true" color="whtie">
-                                            {{ word.word }}
+                                        <v-card>
+                                            <v-img @click="crawl = true, changeNumber(i)" :src="line.pic_add"></v-img>
+                                            <v-card @click="crawl = true, changeNumber(i)">
+                                                {{ line.line }}
+                                            </v-card>
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
@@ -156,8 +150,9 @@
 
 <script>
 import axios from "axios";
-import { constants } from "crypto";
-// import { mapActions } from 'vuex';
+import {
+    constants
+} from "crypto";
 
 //  wordQuest => 단어 미암기 변환
 //  allWord => 전체단어, 미암기단어, 암기단어 호출
@@ -180,20 +175,11 @@ export default {
     data() {
         return {
             menus: [{
-                    word: '전체 단어',
-                    value: 'all'
-                },
-                {
-                    word: '암기 단어',
-                    value: 'memory'
-                },
-                {
-                    word: '미암기 단어',
-                    value: 'unmemory'
-                }
-            ],
+                word: '전체 단어',
+                value: 'all'
+            }],
             books: [],
-            words: [],
+            lines: [],
             flex: 6,
             box: false,
             selected: [],
@@ -210,11 +196,11 @@ export default {
             crawl: false,
             crawlWords: [],
             crawlMeans: [],
-            mainWord: ''
+            mainWord: '',
+            selectNumber: 0
         };
     },
     methods: {
-        // ...mapActions(['word_delete_actions']),
         //  start of 단어 출력 및 분류 
         wordQuest(changeID, flag) {
             const baseURI = "http://172.26.2.194/api/update"
@@ -232,18 +218,14 @@ export default {
                     return false;
                 })
         },
-        allWord(m) {
-            if (m == 0) {
-                var baseURI = "http://172.26.2.194/api/book/0";
-            } else if (m == 1) {
-                var baseURI = "http://172.26.2.194/api/memo/T";
-            } else {
-                var baseURI = "http://172.26.2.194/api/memo/F";
-            }
+        allWord() {
+            
+                var baseURI = "http://172.26.2.194/api/line/0";
+        
             axios
                 .get(baseURI)
                 .then(res => {
-                    this.words = res.data;
+                    this.lines = res.data;
                     console.log("ok", res);
                     this.selected = []
                 })
@@ -251,16 +233,16 @@ export default {
                     console.log("failed", error);
                 })
         },
-        changeHeart(i) {
-            console.log(this.words[i].memorized);
-            if (this.words[i].memorized == "T") {
-                this.wordQuest(this.words[i].id, "F")
-                this.words[i].memorized = "F";
-            } else {
-                this.wordQuest(this.words[i].id, "T")
-                this.words[i].memorized = "T";
-            }
-        },
+        // changeHeart(i) {
+        //     console.log(this.lines[i].memorized);
+        //     if (this.lines[i].memorized == "T") {
+        //         this.wordQuest(this.lines[i].id, "F")
+        //         this.lines[i].memorized = "F";
+        //     } else {
+        //         this.wordQuest(this.lines[i].id, "T")
+        //         this.lines[i].memorized = "T";
+        //     }
+        // },
         classifyQuest(classifyWord = '') {
             var form = new FormData();
             const baseURI = "http://172.26.2.194/api/book/0";
@@ -268,8 +250,8 @@ export default {
             axios
                 .get(baseURI, form)
                 .then(res => {
-                    this.words = res.data;
-                    console.log("ok", this.words);
+                    this.lines = res.data;
+                    console.log("ok", this.lines);
                     this.selected = []
                 })
                 .catch(error => {
@@ -311,12 +293,12 @@ export default {
             this.category = '';
         },
         selectedWordsQuest(i) {
-            const baseURI = "http://172.26.2.194/api/book/" + this.books[i].id;
+            const baseURI = "http://172.26.2.194/api/line/" + this.books[i].id;
             axios
                 .get(baseURI)
                 .then(res => {
-                    console.log("ok", res);
-                    this.words = res.data;
+                    console.log("select ok", res);
+                    this.lines = res.data;
                 })
                 .catch(error => {
                     console.log("failed", error);
@@ -328,14 +310,14 @@ export default {
 
         //  start of 체크박스 선택 및 삭제 요청
         checked(po) {
-            if (this.selected.length == this.words.length) {
+            if (this.selected.length == this.lines.length) {
                 this.toggle = true
             } else {
                 this.toggle = false
             }
-            let idx = this.selectWords.indexOf(this.words[po].word);
+            let idx = this.selectWords.indexOf(this.lines[po].word);
             if (idx < 0) {
-                this.selectWords.push(this.words[po].word);
+                this.selectWords.push(this.lines[po].word);
             } else {
                 this.selectWords.splice(idx, 1)
             }
@@ -357,14 +339,14 @@ export default {
             }
         },
         toggleAll() {
-            if (this.selected.length == this.words.length) {
+            if (this.selected.length == this.lines.length) {
                 this.selected = []
                 this.selectWords = []
             } else {
-                this.selected = this.words.slice().map(x => {
+                this.selected = this.lines.slice().map(x => {
                     return x.id
                 })
-                this.selectWords = this.words.slice().map(x => {
+                this.selectWords = this.lines.slice().map(x => {
                     return x.word
                 })
             }
@@ -377,10 +359,10 @@ export default {
                     form.append("_token", response.data);
                     console.log(this.selected)
                     axios
-                        .post("http://172.26.2.194/api/deletedWord", form)
+                        .post("http://172.26.2.194/api/deletedLine", form)
                         .then(response => {
                             console.log("response ==>>>> ", response.data);
-                            this.words = response.data
+                            this.lines = response.data
                             this.selected = []
                         })
                         .catch(error => {
@@ -408,25 +390,28 @@ export default {
                     console.log("failed", error);
                 });
         },
+        changeNumber(i) {
+            this.selectNumber = i;
+        }
     },
 
     beforeCreate() {
-        var baseURI = "http://172.26.2.194/api/book/0";
+        var baseURI = "http://172.26.2.194/api/line/0";
         axios
             .get(baseURI)
             .then(res => {
-                this.words = res.data;
-                console.log("ok", this.words);
+                this.lines = res.data;
+                console.log("beforeCreate OK", this.lines);
             })
             .catch(error => {
                 console.log("failed", error);
             });
-        baseURI = "http://172.26.2.194/api/books";
+        baseURI = "http://172.26.2.194/api/lineBook";
         axios
             .get(baseURI)
             .then(res => {
                 this.books = res.data;
-                console.log("okk", this.books);
+                console.log("okkkkkkkkkkkkk", this.books);
             })
             .catch(error => {
                 console.log("failed", error);

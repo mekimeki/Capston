@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-const main = () => {
-  return import("./views/Main.vue");
-};
 const login_page = () => {
   return import("./views/Login_page");
 };
@@ -20,37 +17,33 @@ import create_content from '@/components/createBox_/create/Content_create';
 import create_message from '@/components/createBox_/create/CreateMessage';
 //
 import start from './views/Start_page'; //start page
-import quiz_select from './views/Quiz_select'; //quiz
-import quiz_one from './views/Quiz_one';
+import recommend from '@/components/mainPage_/Recommend'; //recommend video of main page
+import register_video from '@/components/mainPage_/Register'; //register video fo main page
 
+import quiz_select from '@/components/quizPage_/Qselect'; //quiz
+import word_book from '@/components/wordBook_/AllWord'; //my word book
+import snap_book from '@/components/snapBook_/AllSnap'; //my snap book
+import gogo_book from '@/components/gogoBook_/GogoBoard'; //gogo book
 
-import word_book from '@/components/wordBook_/AllWord';
+import my_page from '@/components/myPage_/MyPage'; //gogo book
 
-import gogo_book from '@/components/gogoBook_/GogoBoard';
-
-import recommend from '@/components/mainPage_/Recommend';
-
-import register_video from '@/components/mainPage_/Register';
-
-import all_word from './views/Word_book';
-
-//beforeEnter methods
-const login_check = (path,query_check) => (to,from,next) => {//login and query check
-  //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
-  if(localStorage.getItem('login')){//user check
-    if(query_check){
-      if(to.query[query_check]){//query check
-        next();
-      }else{
-        next('/');
-      }
-    }else{
-      next(path);
-    }
-  }else{
-    next(path);
-  }
-}
+// //beforeEnter methods
+// const login_check = (path,query_check) => (to,from,next) => {//login and query check
+//   //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
+//   if(localStorage.getItem('login')){//user check
+//     if(query_check){
+//       if(to.query[query_check]){//query check
+//         next();
+//       }else{
+//         next('/');
+//       }
+//     }else{
+//       next(path);
+//     }
+//   }else{
+//     next(path);
+//   }
+// }
 
 
 export default new Router({
@@ -61,30 +54,43 @@ export default new Router({
       name:'start',
       component:start,
     },
-    { //main
+    {
       path:'/main',
-      name:'main',
-      component:main,
+      name:'recommend',
+      component:recommend,
+      children:[
+      {
+      path:'/main',
+      name:'register',
+      component:register_video,
+    },
+      ]
     },
     { //quizSelect
       path:'/qselect',
       name:'qselect',
       component:quiz_select,
     },
-    { //quizOne
-      path:'/quizOne',
-      name:'quizOne',
-      component:quiz_one,
-    },
+    
     { //allWord
       path:'/allWord',
       name:'allWord',
       component:word_book,
     },
+    { //allWord
+      path:'/snapWord',
+      name:'snapWord',
+      component:snap_book,
+    },
     { //gogoBoard
       path:'/gogoBoard',
       name:'gogoBoard',
       component:gogo_book,
+    },
+    { //myPage
+      path:'/myPage',
+      name:'myPage',
+      component:my_page,
     },
     { //video
       path:'/video',

@@ -1,9 +1,12 @@
 <template>
 <v-container>
-    <v-layout wrap row>
-        <v-flex pl-3 pt-5 pb-4 xs12 sm12>
-            <span><li class="title">GOGO 추천집</li></span>
+    <v-layout py-4 wrap row>
+        <v-flex pl-4 ml-5 pb-4 mt-4 xs12 sm12 md12>
+            <span><div class="title">・ GOGO 추천집</div></span>
         </v-flex>
+        <!-- <v-flex pt-4 mt-3 pr-5 xs6 sm6 md2>
+            <v-select style="width:85%" :items="items" box label="정렬"></v-select>
+        </v-flex> -->
         <v-flex xs12 sm12>
             <paginated-list :list-array="pageArray" />
         </v-flex>
@@ -21,7 +24,8 @@ export default {
     },
     data() {
         return {
-            pageArray: []
+            pageArray: [],
+            items: ['좋아요수','조회수']
         }
     },
     created() {

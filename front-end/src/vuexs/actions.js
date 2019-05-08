@@ -1,4 +1,8 @@
 import axios from 'axios';
+import Service from '../api/service'
+
+const service = new Service('http://172.26.3.143/');
+
 
 const actions = {
   video_action : ({commit},payload) => {//video actions
@@ -84,7 +88,36 @@ const actions = {
     }).catch( error => {
       console.log('failed', error);
     });
-  }
+  },
+
+  quest_actions : ({ commit },payload) => {
+    return service.quiz_quest('api/quiz',payload);
+  },
+
+  quest_post_actions : ({commit},payload) =>{
+    service.token_('get-token').then(result =>{
+      if(result){
+        return service.quiz_post('api/quiz',payload,result);
+      }
+    }).catch(result =>{
+      alert('_token error');
+    });
+  },
+
+  // word_delete_actions : ({ commit }, payload) =>{
+  //   service.token_('get-token').then(result => {
+  //     console.log(result)
+  //     if(result) {
+  //       return service.word_delete_post('api/deletedWord',payload,result);
+  //     }
+  //   }).catch(result => {
+  //     alert('word delete error')
+  //   })
+  // },
+
+ 
+
+
 }
 
 export default actions;

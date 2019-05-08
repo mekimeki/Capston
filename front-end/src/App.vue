@@ -57,7 +57,7 @@
                 <v-container px-0 pt-1 pb-2 ma-1>
                     <v-layout row>
                         <v-toolbar-side-icon class="pt-1" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                        <span class="pl-3 pt-3 title font-weight-black">MEKIMEKI.GO語</span>
+                        <a id="logo" href="main" class="pl-3 pt-3 title font-weight-black">MEKIMEKI.GO語</a>
                         <span class="pl-3 pt-1 mt-3 caption" >영상을 이용한 어학 학습 서비스</span>
                     </v-layout>
                 </v-container>
@@ -71,7 +71,7 @@
         prepend-inner-icon="search"
         label="Search"
         class="hidden-sm-and-down"
-      ></v-text-field> -->
+    ></v-text-field> -->
         <v-spacer></v-spacer>
         <v-btn icon>
             <v-icon color="grey darken-2">video_call</v-icon>
@@ -86,7 +86,7 @@
             <v-avatar size="40px" tile>
                 <img class="logo"
             :src="require(`@/assets/Start/logo.png`)"
-          >
+        >
         </v-avatar>
         </v-btn>
     </v-toolbar>
@@ -97,6 +97,7 @@
 export default {
     data: () => ({
         drawer: false,
+        link:"main",
         items: [{
                 icon: "home",
                 text: "홈페이지",
@@ -110,7 +111,7 @@ export default {
             {
                 icon: "video_call",
                 text: "영상 제작",
-                link: "video"
+                link: "create/upload"
             },
             {
                 icon: "favorite",
@@ -125,14 +126,9 @@ export default {
             {
                 icon: "keyboard_arrow_up",
                 "icon-alt": "keyboard_arrow_down",
-                text: "단어집",
+                text: "Go集집",
                 model: false,
                 children: [{
-                        icon: "import_contacts",
-                        text: "나의 단어집",
-                        link: "allWord"
-                    },
-                    {
                         icon: "import_contacts",
                         text: "나의 어휘집",
                         link: "allWord"
@@ -140,7 +136,7 @@ export default {
                     {
                         icon: "import_contacts",
                         text: "나의 대사집",
-                        link: "allWord"
+                        link: "snapWord"
                     },
                     {
                         icon: "import_contacts",
@@ -148,6 +144,11 @@ export default {
                         link: "gogoBoard"
                     }
                 ]
+            },
+            {
+                icon: "face",
+                text: "마이페이지",
+                link: "myPage"
             },
             {
                 icon: "help",
@@ -167,5 +168,9 @@ export default {
 <style>
 .icon {
     font-size: 50px;
+}
+#logo {
+    cursor: pointer;
+    text-decoration:none;
 }
 </style>

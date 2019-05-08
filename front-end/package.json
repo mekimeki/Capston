@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^2.8.0",
     "vue": "^2.6.10",
+    "vue-chartjs": "^3.4.2",
     "vue-router": "^3.0.2",
     "vuetify": "^1.5.6",
     "vuex": "^3.1.0"
@@ -37,8 +39,15 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console":"off",
-      "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+      "no-console": "off",
+      "no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": false
+        }
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"

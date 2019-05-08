@@ -55,27 +55,27 @@ export default {
   data: () => ({
     cards: [
       {
-        title: "1. 대사 순서 맞추기",
+        title: "1. 알맞은 단어 고르기",
         src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
         flex: 2
       },
       {
-        title: "2. 사진으로 연상하기",
+        title: "2. 알맞은 뜻 고르기",
         src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
         flex: 2
       },
       {
-        title: "3. 단어 읽는 방법",
+        title: "3. 대사 맞추기",
         src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
         flex: 2
       },
       {
-        title: "4. 단어 퍼즐",
+        title: "4. 카드 뒤집기 게임",
         src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
         flex: 2
       },
       {
-        title: "5. 빈칸 채우기",
+        title: "5. 대사 빈칸 채우기",
         src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
         flex: 2
       }
