@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VG extends Model
 {
     //
-    protected $table ='VG_TB';
+    protected $table ='vg_tb';
     public $timestamps = false;
     protected $guarded = [];
 

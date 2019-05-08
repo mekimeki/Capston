@@ -1,19 +1,44 @@
 <template lang="html">
   <div class="">
     <!-- audio record -->
-    <div class="line">
-      <audio id="audio" controls src=""></audio>
-      <!-- <video id="video" autoplay poster="posterimage.jpg" controls></video> -->
+    <div id="scroll_div">
+      <v-card class="ma-2" v-for="(sub,i) in s_getter" color="orange">
+        <v-btn fab small v-on:click="preview_play($event,i)">
+          <v-icon>play_arrow</v-icon>
+        </v-btn>
+        <v-btn fab small v-on:click="recording($event)">
+          <v-icon>mic</v-icon>
+        </v-btn>
+        <span>{{s_getter[i][1][0]}}</span>
+        <span>~</span>
+        <span>{{s_getter[i][1][1]}}</span>
+        <span>:</span>
+        <span>{{s_getter[i][2]}}</span>
+      </v-card>
     </div>
     <br>
-    <div class="line">
-      <!-- <v-btn color="success" type="button" name="button" v-on:click="start()">녹음</v-btn>
-      <v-btn color="success" type="button" name="button" v-on:click="stop_save()">녹음끝</v-btn>
-      <v-btn color="success" type="button" name="button" v-on:click="save()">저장</v-btn> -->
-      <v-btn color="error" fab large dark v-on:click="recording()">
-        <v-icon id="recording_icon">play_arrow</v-icon>
-      </v-btn>
-    </div>
+    <v-card color="orange" class="ma-2">
+      <v-layout justify-center>
+        <audio_></audio_>
+        <!-- <audio id="audio" controls src=""></audio> -->
+      </v-layout>
+    </v-card>
+    <!-- modal -->
+    <v-layout row justify-center>
+     <v-dialog v-model="dialog" persistent max-width="290">
+       <template v-slot:activator="{ on }">
+       </template>
+       <v-card>
+         <v-layout justify-center>
+           <v-btn fab large v-on:click="recording($event)" color="red">
+             <v-icon>
+               mic
+             </v-icon>
+           </v-btn>
+         </v-layout>
+       </v-card>
+     </v-dialog>
+   </v-layout>
   </div>
 </template>
 
@@ -21,7 +46,12 @@
 
 // import video_ from '@/components/video_/Video';
 import axios from 'axios';
+import { mapActions, mapGetters} from 'vuex';//vuex
+import audio_ from '@/components/video_/Audio';
 export default {
+  components:{
+    audio_,
+  },
   data(){
     return {
       audio:"",//audio
@@ -32,15 +62,36 @@ export default {
       audioURL:"",//audo URL
       check:true,
       recording_icon:"",
+      video_end_check:"",
+      dialog:false,
     }
   },
   methods:{
-    recording(){
+    preview_play(evt,num){
+      evt.target.innerHTML = 'pause';
+      this.video.currentTime = this.s_getter[num][1][0];
+      if(!this.video.paused){
+        this.video.pause();
+      }
+
+      this.video.play();
+      let inter = setInterval(()=>{
+        if(this.video.currentTime.toFixed(1) === this.s_getter[num][1][1].toFixed(1)){
+          evt.target.innerHTML = 'play_arrow';
+          clearInterval(inter);
+          this.video.pause();
+        }
+      });
+    },
+    recording(evt){
       if(this.check){
         this.record.start();
-        alert("녹음 시작");
         this.check = false;
-        this.recording_icon.innerHTML = "pause";
+        if(!this.video.paused){
+          this.video.pause();
+        }
+        this.dialog = true;
+        evt.target.innerHTML = 'mic';
       }else{
         this.record.stop();//recording stop
 
@@ -59,9 +110,9 @@ export default {
           this.save();
 
         });
-        alert("녹음 종료");
         this.check = true;
-        this.recording_icon.innerHTML = "play_arrow";
+        evt.target.innerHTML = 'mic_off';
+        this.dialog = false;
       }
     },
     save(){//audio blob to file data
@@ -77,6 +128,7 @@ export default {
     }
   },
   mounted:function(){
+    this.video = this.v_getter;
     this.audio = document.getElementById('audio');//audio
     // this.video = document.getElementById('video');//video test
     this.recording_icon = document.getElementById("recording_icon");
@@ -93,12 +145,43 @@ export default {
     }).catch((err)=>{
       console.log("error",err.message);//error message
     });
-  }
+  },
+  computed:{
+    ...mapGetters({
+      v_getter:'video_getter',
+      s_getter:'subtitle_getter',
+    }),
+  },
 }
 </script>
 
 <style lang="css" scoped>
 .line{
   border:2px solid black;
+}
+#scroll_div{
+  overflow: scroll;
+  height:300px;
+}
+span{
+  color:white;
+  text-transform: uppercase;
+}
+#animation{
+  animation-iteration-count: infinite;
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 50%;
+    width: 50%
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
 }
 </style>

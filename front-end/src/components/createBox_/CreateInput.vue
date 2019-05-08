@@ -1,20 +1,21 @@
 <template lang="html">
   <div class="">
-    <input type="text" name="" value="" v-model="check_time.first">
-    ~
-    <input type="text" name="" value="" v-model="check_time.last">
-    <v-textarea
-      outline
-      label="자막작성"
-      rows="5"
-      v-on:click="time_check(true)"
-      v-model="subtitle_write"
-    >
-    </v-textarea>
-    <v-btn
-    color="success"
-    v-on:click="time_check(false)"
-    >추가</v-btn>
+    <v-card color="orange" class="white--text ma-1">
+      <v-card-title>
+        <label class="pr-2">START:</label>
+        <input type="text" name="" value="" v-model="firstTime">
+        <label>EDN:</label>
+        <input type="text" name="" value="" v-model="lastTime">
+
+        <v-text-field
+          label="Create Subtitle"
+          v-on:click="time_check(true)"
+          v-model="subtitle_write"
+        >
+        </v-text-field>
+        <v-icon color="white" medium v-on:click="time_check(false)">add_circle_outline</v-icon>
+      </v-card-title>
+    </v-card>
   </div>
 </template>
 
@@ -37,6 +38,12 @@ export default {
   },
   methods:{
     ...mapActions(['subtitle_buffer_action']),
+    time_change(seconds){
+      let hour = parseInt(seconds/3600);
+      let min = parseInt((seconds%3600)/60);
+      let sec = seconds%60;
+      return hour+":"+min+":" + sec;
+    },
     time_check(check){
       if(check){
         this.check_time.first = this.video.currentTime;
@@ -70,6 +77,12 @@ export default {
       v_getter:"video_getter",
       s_getter:"subtitle_getter",
     }),
+    firstTime:function(){
+      return this.time_change(Math.ceil(this.check_time.first));
+    },
+    lastTime:function(){
+      return this.time_change(Math.ceil(this.check_time.last));
+    }
   },
   watch:{
     create_number(data){

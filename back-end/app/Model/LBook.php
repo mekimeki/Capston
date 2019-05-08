@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LBook extends Model
 {
     //
-    protected $table ='LBOOK_TB';
+    protected $table ='lbook_tb';
     public $timestamps = false;
     protected $primarykey = 'LBOOK_PK';
     protected $guarded = [];

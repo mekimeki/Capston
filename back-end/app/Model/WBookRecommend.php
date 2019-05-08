@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class WBookRecommend extends Model
 {
     //
-    protected $table='WBOOK_RECOMMEND_TB';
+    protected $table='wbook_recommend_tb';
     public $timestamps = false;
     protected $guarded = [];
 

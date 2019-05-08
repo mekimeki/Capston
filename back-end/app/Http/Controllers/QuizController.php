@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
-use App\Voca;
 use App\WBook;
 use App\Word;
 use Illuminate\Http\Request;
@@ -94,10 +92,12 @@ class QuizController extends Controller
     public function result(Request $request)
     {
         $results = $request->input('results');
-        \Log::debug($results);
-        // $result = explode(',', $results);
-        // \Log::debug($result);
-        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $results]);
+
+        $result = (int)$results;
+        \Log::debug(gettype($result).$result);
+
+        \DB::insert('insert into votest_result_tb (m_id, test_add, test_score) values (?, ?, ?)', [1, "numnum", $result]);
+
 
         return "a";
     }

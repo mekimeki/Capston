@@ -15,11 +15,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Model\LBook;
+use App\Http\Controllers\Member\CheckController;
 
 
 class LineBookController extends Controller
 {
     //
+
+    public function __construct(){
+      $this->check = new CheckController();
+    }
+    
     public function insert(Request $request){
     	if(Auth::user()){
     		$m_id = Auth::user()->member_pk;

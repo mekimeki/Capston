@@ -17,10 +17,11 @@ class CreateVideosTable extends Migration
             $table->increments('video_pk');
             $table->integer('m_id')->unsigned();
             $table->string('v_tt');
+            $table->text('explain')->nullable();
             $table->string('v_add');
             $table->string('sub_add');
             $table->string('trans_sub_add')->nullable();
-            $table->date('d_date');
+            $table->date('d_date')->nullable();
             $table->foreign('m_id')->references('member_pk')->on('member_tb');
         });
     }

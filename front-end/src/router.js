@@ -27,28 +27,48 @@ import gogo_book from '@/components/gogoBook_/GogoBoard'; //gogo book
 
 import my_page from '@/components/myPage_/MyPage'; //gogo book
 
-// //beforeEnter methods
-// const login_check = (path,query_check) => (to,from,next) => {//login and query check
-//   //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
-//   if(localStorage.getItem('login')){//user check
-//     if(query_check){
-//       if(to.query[query_check]){//query check
-//         next();
-//       }else{
-//         next('/');
-//       }
-//     }else{
-//       next(path);
-//     }
-//   }else{
-//     next(path);
-//   }
-// }
+
+import all_word from './views/Word_book';
+
+import test from './views/Test.vue';
+
+//beforeEnter methods
+
+//
+import audio from '@/components/video_/Audio';
+import video2 from '@/components/video_/Video2';
+//
+const login_check = (path,query_check) => (to,from,next) => {//login and query check
+  //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
+  if(localStorage.getItem('login')){//user check
+    if(query_check){
+      if(to.query[query_check]){//query check
+        next();
+      }else{
+        next('/');
+      }
+    }else{
+      next(path);
+    }
+  }else{
+    next(path);
+  }
+}
 
 
 export default new Router({
   mode:'history',//#を消す。
   routes:[
+    {
+      path:'/audio',
+      name:'audio',
+      component:audio,
+    },
+    {
+      path:'/video2',
+      name:'video2',
+      component:video2,
+    },
     { //start
       path:'/',
       name:'start',
@@ -60,6 +80,7 @@ export default new Router({
       component:recommend,
       children:[
       {
+
       path:'/main',
       name:'register',
       component:register_video,
