@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class MVOBook extends Model
 {
     //
-    protected $table='MVOBOOK_TB';
+
+    protected $table='mvobook_tb';
+
     protected $primaryKey = 'mvobook_pk';
     public $timestamps = false;
     protected $guarded = [];

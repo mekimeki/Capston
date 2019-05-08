@@ -62,7 +62,6 @@ Route::post('createLine', 'LineController@create'); // 대사장 추가
 Route::post('getLine', 'LineController@save'); // 대사 저장
 
 //출석
-
 Route::get('attend/{id}', 'AttendController@attendance');
 
 //공개 단어장
@@ -238,3 +237,10 @@ Route::post('/csrf-token',function(){
 	return csrf_token() ;
 });
 
+//테스트 결과
+Route::get('testResult', 'TestResult\VocaTestResultController@getResult');
+
+//100LS
+Route::post('voice/extraction', 'VoiceAnalysisController@voiceExtraction');
+Route::post('voice/record','VoiceAnalysisController@voiceRecord');
+Route::get('voice/test', 'VoiceAnalysisController@test');

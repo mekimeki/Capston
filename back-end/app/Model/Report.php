@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     //
-    protected $table ='REPORT';
+    protected $table ='report_tb';
     public $timestamps = false;
     protected $guarded = [];
 

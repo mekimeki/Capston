@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 import librosa
 import numpy
 import matplotlib.pylab as plt
+import sys
 
 
 def extract_max(pitches, magnitudes, shape):
@@ -28,6 +31,7 @@ def plot(vector, name, xlabel=None, ylabel=None):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.plot()
+    # plt.show()
     plt.savefig(name)
 
 
@@ -37,6 +41,9 @@ def set_variables(sample_f, duration, window_time, fmin, fmax, overlap):
     # windowsize = number of samples in one window
     window_size = sample_f/1000 * window_time
     hop_length = total_samples / window_size
+    # print("hop_length ====",hop_length)
+    # print("window size ====", window_size)
+
     # Calculate number of windows needed
     needed_nb_windows = total_samples / (window_size - overlap)
     n_fft = needed_nb_windows * 2.0
@@ -54,51 +61,35 @@ def analyse(y, sr, n_fft, hop_length, fmin, fmax):
     pitches, magnitudes = extract_max(pitches, magnitudes, shape)
 
     pitches1 = smooth(pitches, window_len=50)
-    # pitches2 = smooth(pitches, window_len=55)
-    # pitches3 = smooth(pitches, window_len=60)
-    # pitches4 = smooth(pitches, window_len=40)
-    plot(pitches1, 'pitches1')
+    plot(pitches1, 'originWave', 'time', 'Hz')
     return pitches1
 
-    # plot(pitches1, 'pitches1')
-    # plot(pitches2, 'pitches2')
-    # plot(pitches3, 'pitches3')
-    # plot(pitches4, 'pitches4')
-    # plot(magnitudes, 'magnitudes')
-    # plot(y, 'audio')
 
 def main():
-    # Set all wanted variables
-
-    # we want a sample frequency of 16 000
     sample_f = 16000
     
-    # We want a windowsize of 30 ms
     window_time = 60
 
     fmin = 80
     fmax = 500
 
-    # We want an overlap of 10 ms
     overlap = 20
-     
-    # y = audio time series
-    # sr = sampling rate of y
 
     y, sr = librosa.load(
         "C:/Capston/back-end/public/audio/origin.wav", sr=sample_f)
-
-    # for recording wav
-    duration = int(librosa.get_duration(y=y, sr=sr))
     
+    # for recording wav
+    duration = librosa.get_duration(y=y, sr=sr)
+    # print("duration ==== ", duration)
+
     total_samples, window_size, needed_nb_windows, n_fft, hop_length =set_variables(
         sample_f, duration, window_time, fmin, fmax, overlap)
 
     n_fft = int(n_fft)
     hop_length = int(hop_length)
 
-    return analyse(y, sr, n_fft, hop_length, fmin, fmax)
+    sys.exit(analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist())
 
 
 if __name__ == "__main__":
-    data = main()
+    main()

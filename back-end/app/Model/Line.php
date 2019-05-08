@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Line extends Model
 {
     //
-    protected $table='LINE_TB';
+    protected $table='line_tb';
     protected $timestamps = false;
     protected $primarykey = 'line_pk';
     protected $guarded = [];
