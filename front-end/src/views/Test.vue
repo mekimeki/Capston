@@ -86,11 +86,13 @@ export default {
       }); //create file data
       let form = new FormData(); //form create
       form.append("audio", file); // file data to form append
+      form.append("originText", "Anya haseo");
       let url = "http://localhost/voice/record"; //url
       axios
         .post(url, form)
         .then(res => {
           //axios to url
+          this.blob = "";
           console.log(res.data); //check
         })
         .catch(error => {
@@ -113,8 +115,8 @@ export default {
       form.append("lang", "한국어");
       form.append("words", ["test", "test22"]);
 
-      axios.post("http://172.26.3.143/api/create", form).then(res => {
-        console.log("ok");
+      axios.post("http://localhost/api/create", form).then(res => {
+        console.log("ok", res);
 
       });
     }
