@@ -10,13 +10,22 @@
      <v-flex xs12 sm6 md6 class="pa-1">
        <v-card class="video">
          <v-card-text class="dropzone" id="video" v-on:dragover.prevent v-on:drop="on_drop($event)">
-           drop Zone video
+           <v-icon>subscriptions</v-icon>DROP ZONE
+           <br>
+           <v-icon large v-show="!image_video" style="width:100%; height:100%;">add</v-icon>
            <v-card-text class="" v-show="image_video">
-             <video id="video_preview" :src="image_video" autoplay width="150" height="150" muted="muted"></video>
+             <video id="video_preview" :src="image_video" autoplay width="100%" height="100%" muted="muted"></video>
              <!-- <img v-bind:src="image_video" alt="" class="img" width="180" height="120"/> -->
              <v-spacer></v-spacer>
-              <button id="videobtn" type="button" name="button"v-on:click="remove_file($event)">remove</button>
-              <button type="button" name="button" v-on:click="file_upload_video($event)">upload</button>
+              <button id="videobtn" type="button" name="button"v-on:click="remove_file($event)">
+                <v-icon>delete</v-icon>
+                remove
+              </button>
+              <hr>
+              <button type="button" name="button" v-on:click="file_upload_video($event)">
+                <v-icon>get_app</v-icon>
+                upload
+              </button>
               <hr>
               <v-progress-circular
                 :rotate="360"
@@ -34,7 +43,9 @@
            <input class="hidden" id="videoInput" type="file" name="video" v-on:change="on_change($event)" multiple>
          </label>
          <div class="">
-           <v-btn color="success" v-on:click="file_select_video($event)">video file select</v-btn>
+           <v-btn color="success" v-on:click="file_select_video($event)">
+             <v-icon>add</v-icon>
+             video select</v-btn>
            <span>{{video_file_name}}</span>
          </div>
        </v-card>
@@ -43,12 +54,19 @@
       <v-flex xs12 sm6 md6 class="pa-1">
         <v-card class="subtitle">
           <v-card-text class="dropzone" id="subtitle" v-on:dragover.prevent v-on:drop="on_drop($event)">
-            drop Zone subtitle
+            <v-icon>subtitles</v-icon>DROP ZONE
+            <br>
+            <v-icon large v-show="!image_subtitle" style="width:100%; height:100%;">add</v-icon>
             <v-card-text class="" v-show="image_subtitle">
-              <img v-bind:src="image_subtitle" alt="" class="img" width="180" height="120"/>
+              <img v-bind:src="image_subtitle" alt="" class="img" width="200px" height="220px"/>
               <v-spacer></v-spacer>
-               <button id="subtitlebtn" type="button" name="button"v-on:click="remove_file($event)">remove</button>
-               <button type="button" name="button" v-on:click="file_upload_subtitle($event)">upload</button>
+               <button id="subtitlebtn" type="button" name="button"v-on:click="remove_file($event)">
+                 <v-icon>delete</v-icon>
+                 remove</button>
+                 <hr>
+               <button type="button" name="button" v-on:click="file_upload_subtitle($event)">
+                 <v-icon>get_app</v-icon>
+                 upload</button>
                <hr>
                <v-progress-circular
                  :rotate="360"
@@ -65,13 +83,15 @@
             <input class="hidden" id="subtitleInput" type="file" name="subtitle" v-on:change="on_change($event)">
           </label>
           <div class="">
-            <v-btn color="success" v-on:click="file_select_subtitle($event)">subtitle file select</v-btn>
+            <v-btn color="success" v-on:click="file_select_subtitle($event)">
+              <v-icon>add</v-icon>
+              subtitle select</v-btn>
             <span>{{subtitle_file_name}}</span>
           </div>
         </v-card>
       </v-flex>
       <div class="" v-if="up_getters.video">
-        <b-btn v-on:click="move()">다음으로</b-btn>
+        <v-btn v-on:click="move()">다음으로</v-btn>
       </div>
    </v-layout>
   </v-container>
@@ -171,7 +191,7 @@ export default {
         this.percent_action(0);
       }
       if (file.name.substring(file.name.length, file.name.length - 3) != 'srt') {//srt filter
-        alert('subtitle를 선택해라'); //subtitle 선택하기
+        alert('subtitle를 선택해라'); //subtitle
         return;
       } else {
         this.file_data.subtitle = file;
@@ -196,15 +216,17 @@ export default {
       if (this.video_file_name) {
         if (this.files.length) {
           let payload = {
-            file : this.file_data.video,//file 넣는거 따로 하던가 해야겠다.
+            file : this.file_data.video,//
             check: true,
           }
           this.upload_actions(payload); //upload
           let inter = setInterval(() => {
             this.percent_video = this.percent;
             if(this.percent_video === 100){
-              console.log("clear");
-              clearInterval(inter);
+              if(this.up_getters.video){
+                alert('ready subtitle upload');
+                clearInterval(inter);
+              }
             }
           }, 100);
         }
@@ -248,12 +270,6 @@ export default {
     })
   },
   watch:{
-    // page_move:function(data){
-    //   //subtitle 도 체크할 방법 찾기
-    //   if(this.up_getters.video){
-    //     this.$router.push({name:'c-video', query:{video:this.up_getters.video}});
-    //   }
-    // },
   }
 }
 </script>
@@ -261,5 +277,9 @@ export default {
 <style lang="css" scoped>
 .hidden{
   display: none;
+}
+.dropzone{
+  width:100%;
+  height:100%;
 }
 </style>

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Service from '../api/service';
-
+// 172.26.4.110
 const service = new Service("http://172.26.4.110/");//axios api service class created
-
+// 172.26.3.143
 const actions = {
   video_action : ({commit},payload) => {//video action
     commit('video_mutation',payload);
@@ -16,16 +16,26 @@ const actions = {
   subtitle_open_action: ({commit},payload) =>{//subtitle open action
     return service.subtitle_open('http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php');
   },
+  subtitle_preview_action: ({commit},payload) =>{
+    commit('subtitle_preview_mutation',payload);
+  },
   content_action: ({commit},payload) => {
     commit('content_mutation',payload);
   },
   content_answer_action: ({commit},payload) => {
     return service.content_answer("http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php");
   },
+  content_preview_content_action: ({commit},payload) =>{
+    commit('content_preview_content_mutation',payload);
+  },
+  content_preview_word_action: ({commit},payload) =>{
+    commit('content_preview_word_mutation',payload);
+  },
   subtitle_action : ({commit},payload) => {//subtitle action
     commit('subtitle_mutation',payload);
   },
   subtitle_buffer_action : ({commit},payload) => {//subtitle create input subtitle buffer action
+    console.log(payload);
     commit('subtitle_buffer_mutation',payload);
   },
   subtitle_word_action : ({commit},payload) => {
@@ -38,7 +48,13 @@ const actions = {
     commit('capture_mutation',payload);
   },
   capture_data_action : ({commit},payload) =>{
-    commit('capture_data_mutation',service.capture_image('api/?',payload));
+    commit('capture_data_mutation',payload);
+  },
+  bookmark_action : ({commit},payload) =>{
+    commit('bookamrk_mutation',payload);
+  },
+  bookmark_image_action : ({commit},payload) =>{
+    commit('bookmark_image_mutation',payload);
   },
   percent_action : ({commit},payload) => {//capture element action
     commit('upload_percent_mutation',payload);
@@ -108,16 +124,51 @@ const actions = {
       }
     }
     service.subtitle_upload("api/subtitle/produce",payload,config).then(result=>{
+      console.log('fff',result);
       commit('upload_subtitle_mutations',result);
     });
   },
-  search_action: ({commit},payload) =>{
-    return service.search('',payload);
+  search_content_action: ({commit},payload) =>{
+    return service.search_content('api/voca/search',payload);
   },
-  upload_content_actions:({commit},payload) =>{
-    return service.content_upload('',payload).then(result=>{
-      commit('upload_content_mutation',result);
+  search_word_action:({commit},payload) =>{
+    return service.search_word('api/word/searchEn',payload);
+  },
+  search_action:({commit},payload) =>{
+    return service.search('api/searchEn',payload);
+  },
+  upload_content_action:({commit},payload) =>{
+    return service.content_upload('api/voca/add',payload).then(result=>{
+      commit('upload_content_mutations',result);
     });
+  },
+  upload_created_action: ({commit},payload) =>{
+    return service.upload_created('api/video/enrollment',payload);
+  },
+  share_actions: ({commit},payload)=>{
+    return service.share('',payload);
+  },
+  video_cut_image_action: ({commit},payload) =>{
+    return service.video_cut_image('api/video/snapShot/',payload);
+  },
+  //video view actions
+  video_link_view_action: ({commit},payload) =>{
+    return service.video_link_view('/api/videoInfo/address/',payload);
+  },
+  subtitle_view_action: ({commit},payload) =>{
+    return service.subtitle_view('/api/videoInfo/subtitle/',payload);
+  },
+  content_view_action: ({commit},payload) =>{
+    return service.content_view('/api/videoInfo/content/',payload);
+  },
+  content_explain_action: ({commit},payload) =>{
+    return service.content_explain('',payload);
+  },
+  bookmark_save_action: ({commit},payload) =>{
+    return service.bookmark('/api/getLine',payload);
+  },
+  video_explain_action: ({commit},payload) =>{
+    return service.video_explain('/api/videoInfo/explain/',payload);
   }
 }
 

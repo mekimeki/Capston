@@ -7,22 +7,25 @@
       <v-flex sm8>
         <v-card class="pa-4">
           <v-text-field
-            label="타이틀"
+            label="TITLE"
+            v-model="create_text.title"
           ></v-text-field>
           <v-textarea
-            label="설명"
+            label="EXPLANATION"
+            v-model="create_text.explain"
           ></v-textarea>
           <v-text-field
-            label="카테고리"
+            label="CATEGORY"
           ></v-text-field>
         </v-card>
-        <v-btn>제작</v-btn>
+        <v-btn v-on:click="click_upload_created()">CREATE</v-btn>
       </v-flex>
     </v-layout>
   </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 import video_ from '@/components/video_/Video';
 export default {
   components:{
@@ -32,13 +35,24 @@ export default {
     return{
       create_text:{
         title:'',
-        content:'',
+        explain:'',
         category:'',
       }
     }
   },
   methods:{
-
+    ...mapActions(['upload_created_action']),
+    click_upload_created(){
+      let data = {
+        video_pk: this.$route.query.video,
+        text: this.create_text,
+      }
+      this.upload_created_action(data).then(result=>{
+        if(result){
+          this.$router.push({name:'main'});
+        }
+      });
+    }
   },
   mounted:function(){
 

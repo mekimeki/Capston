@@ -1,10 +1,10 @@
 <template lang="html">
-  <div>
+  <div id="box">
     <div id="videoplayer">
-      <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted="muted">
-      </video>
-      <!-- <video id="video" :src="videoLink" v-on:timeupdate="seek_timeupdate()" muted="muted">
+      <!-- <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted='muted'>
       </video> -->
+      <video id="video" v-on:timeupdate="seek_timeupdate()" :src="videoLink">
+      </video>
       <div id="videoController">
         <span>
           <span id="seekBarTime">{{video_time}}</span>
@@ -22,7 +22,7 @@
         <span id="videoAudio">
           <input id="audioBar" type="range" name="" value="100" v-on:change="audio_change()">
           <button class="btn" id="audioBtn" type="button" name="button" v-on:click="audioOn_off()">on</button>
-        </span id="videoSpeend">
+        </span>
         <span id="videoSpeed">
           <input id="speedBar" type="range" name="" value="10" v-on:change="speed_change()">
           <button class="btn" id="speedBtn" type="button" name="button">on</button>
@@ -34,7 +34,7 @@
 
 <script>
 import { mapActions } from 'vuex'//vuex actions import
-import axios from 'axios';//axios import
+
 
 export default {
   name:"video_",//component name
@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['video_action','seek_bar_action','video_link_action']),//vuex actions connect
+    ...mapActions(['video_action','seek_bar_action','video_link_action','video_link_view_action']),//vuex actions connect
     time_change(seconds){
       let hour = parseInt(seconds/3600);
       let min = parseInt((seconds%3600)/60);
@@ -111,17 +111,13 @@ export default {
       }
     },
     mouse_down(){
-      if(this.video.paused){
-
-      }else{
+      if(!this.video.paused){
         this.video.pause();
       }
     },
     mouse_up(){
       if(this.video.paused){
         this.video.play();
-      }else{
-
       }
     },
     mouse_move(evt){
@@ -149,16 +145,14 @@ export default {
         this.audio_bar.value = 1;
         this.audio_btn.style.backgroundImage = "url("+require('@/assets/audio-stop.png')+")";
       }else{
-        video.muted = false;
+        this.video.muted = false;
         this.audio_bar.value = this.firstValue_audio;
         this.audio_btn.style.backgroundImage = "url("+require('@/assets/audio-play.png')+")";
       }
       this.audio_bar.style.background = "linear-gradient(to right, red 0% 0%, blue 0% "+parseInt(this.audio_bar.value)+"%, red 0% 0%)";
     },
     speed_change(){
-      if(this.video.paused){
-
-      }else{
+      if(!this.video.paused){
         this.video.pause();
       }
       this.speed = this.speed_bar.value;
@@ -197,10 +191,16 @@ export default {
   beforeMount: function(){
   },
   mounted: function() {
-    //axios
-    // this.video_link_action(this.$route.query.video).then(result =>{
-    //   this.videoLink = result;
-    // });
+    if(this.$route.name === 'v-video'){//viewo view axios
+      this.video_link_view_action(this.$route.query.video).then(result =>{
+        this.videoLink = result.video;
+      });
+    }else{
+      //axios
+      this.video_link_action(this.$route.query.video).then(result =>{
+        this.videoLink = result.video;
+      });
+    }
     //video
     this.video = document.getElementById("video");//video
     this.play_btn = document.getElementById("playBtn");//play
@@ -242,37 +242,30 @@ export default {
 }
 </script>
 <style lang="css" scoped>
-
-
 /* video css scoped is now file only css*/
   #video{
     width:100%;
     height:100%;
   }
   #videoController{
-    position:sticky;
+    position:relative;
     width:100%;
-    height:110px;
-    /* border:1px solid black; */
-
-    /* visibility: hidden; */
+    height:60px;
+    top:-80px;
+    visibility: hidden;
+    margin-bottom:-10%;
   }
   #videoplayer{
+    position: relative;
     width:100%;
     height:100%;
-
-    float:left;
   }
-  /* #videoplayer:hover #videoController{
+  #videoplayer:hover #videoController{
     visibility: inherit;
-    position:absolute;
-  } */
+    position:relative;
+    top:-80px;
+  }
 
-  /* #videoContainer{
-    background: black;
-    width:100%;
-    height:100%;
-  } */
 
   /* buttons css */
   .btn{
@@ -304,7 +297,7 @@ export default {
     position:sticky;
     -webkit-appearance:none;
     /* background:red; */
-    width:96.5%;
+    width:95.1%;
     height:.2rem;
     background:linear-gradient(to right, red 0% 0%, blue 0% 0%, red 0% 0%);
     cursor:pointer;
@@ -369,24 +362,70 @@ export default {
     visibility: inherit;
   }
   #seekBarTime{
-    border:1px solid red;
-    border-radius: 10px;
+    color:white;
     position: relative; left: 0%;
     float:left;
     width:50px;
     size:10;
   }
   #seekBarLastTime{
+    color:white;
     width:8%;
     position: absolute;
   }
+/*
+  @media only screen and (max-width:1200px){
+    #videoplayer:hover #videoController{
 
-
-  /* @media only screen and (max-width:800px){
-    #videoContainer{
-      width:90%;
-      height:80%;
+      visibility: inherit;
+      position:absolute;
+      top:70%;
     }
+  }
 
+  @media only screen and (max-width:1000px){
+    #videoplayer:hover #videoController{
+
+      visibility: inherit;
+      position:absolute;
+      top:70%;
+    }
+  }
+
+  @media only screen and (max-width:800px){
+    #videoplayer:hover #videoController{
+
+      visibility: inherit;
+      position:absolute;
+      top:60%;
+    }
+  }
+
+  @media only screen and (max-width:600px){
+    #videoplayer:hover #videoController{
+
+      visibility: inherit;
+      position:absolute;
+      top:50%;
+    }
+  }
+
+  @media only screen and (max-width:400px){
+    #videoplayer:hover #videoController{
+
+      visibility: inherit;
+      position:absolute;
+      top:40%;
+    }
+  }
+
+  @media only screen and (max-width:200px){
+    #videoplayer:hover #videoController{
+
+      visibility: inherit;
+      position:absolute;
+      top:30%;
+    }
   } */
+
 </style>

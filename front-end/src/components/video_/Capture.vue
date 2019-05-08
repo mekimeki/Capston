@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <button id="captureButton" type="button" name="button" v-on:click="capture()">Capture</button>
-    <canvas id="canvasd" width="1300" height="1000"></canvas>
+    <canvas id="canvasd" width="1000" height="500"></canvas>
     <img id="image" v-bind:src="image_view" alt="" width="250" hegith="250">
   </div>
 </template>
@@ -37,8 +37,6 @@ export default {
           this.image.style.display = "none";
         }, 3000);
       }
-    },
-    save(){
     },
   },
   beforeCreate:function(){},

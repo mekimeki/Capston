@@ -22,6 +22,7 @@ export default {
     ...mapActions(['login_check_actions']),
   },
   mounted:function(){
+    // console.log(localStorage.getItem('login'));
     // this.login_check_actions(localStorage.getItem('login'));
   }
 }

@@ -24,6 +24,11 @@ import quiz_select from './views/Quiz_select'; //quiz
 import quiz_one from './views/Quiz_one';
 import all_word from './views/Word_book';
 //beforeEnter methods
+
+//
+import audio from '@/components/video_/Audio';
+import video2 from '@/components/video_/Video2';
+//
 const login_check = (path,query_check) => (to,from,next) => {//login and query check
   //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
   if(localStorage.getItem('login')){//user check
@@ -44,6 +49,16 @@ const login_check = (path,query_check) => (to,from,next) => {//login and query c
 export default new Router({
   mode:'history',//#を消す。
   routes:[
+    {
+      path:'/audio',
+      name:'audio',
+      component:audio,
+    },
+    {
+      path:'/video2',
+      name:'video2',
+      component:video2,
+    },
     { //start
       path:'/',
       name:'start',

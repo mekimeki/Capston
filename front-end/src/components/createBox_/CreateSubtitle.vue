@@ -1,32 +1,49 @@
 <template lang="html">
   <div class="">
-    <span>{{sb_getter.length}}</span>
-    <div id="scroll_div"
-    v-on:scroll="scroll()">
-      <div class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
-        <input type="text" name="" value="" v-model="tent.firstTime">~
-        <input type="text" name="" value="" v-model="tent.lastTime">
-        <v-textarea
-        outline
-        name="input-7-4"
-        label="Outline textarea"
-        value="자막을 작성 하시오."
-        v-model="tent.textArea">
-        </v-textarea>
-        <v-btn color="success" v-on:click="create_btn(i)">추가</v-btn>
-        <v-btn color="success" v-on:click="delete_btn(i)">삭제</v-btn>
-        <span class="" v-if="!up_getters.subtitle_">
-          <v-btn><v-icon v-on:click="record(i,$event)">mic_off</v-icon></v-btn>
-        </span>
-      </div>
+    <span v-show="sb_getter.length === 1">+</span>
+    <div id="scroll_div" v-on:scroll="scroll()">
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md12 class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
+          <v-card color="orange" class="white--text ma-1">
+            <v-card-title>
+              <label class="pr-2">START:</label>
+              <input v-bind:value="time_change(Math.ceil(tent.firstTime))" v-on:keyup="keyup_time_change($event,i,true)">
+              <label>EDN:</label>
+              <input v-bind:value="time_change(Math.ceil(tent.lastTime))" v-on:keyup="keyup_time_change($event,i,false)">
+              <v-icon color="white" medium v-on:click="create_btn(i)">add_circle_outline</v-icon>
+              <v-icon color="white" medium v-on:click="delete_btn(i)">delete</v-icon>
+              <v-text-field
+                v-model="tent.textArea">
+              </v-text-field>
+            </v-card-title>
+          </v-card>
+          <!-- <span class="" v-if="!up_getters.subtitle_">
+            <v-btn><v-icon v-on:click="record(i,$event)">mic_off</v-icon></v-btn>
+          </span> -->
+        </v-flex>
+
+      </v-layout>
     </div>
     <div class="">
-      <v-btn color="success" v-on:click="save_btn()">저장</v-btn>
-      <template v-if="open">
-        <v-flex>
-           <v-progress-linear v-model="precent_video_cut"></v-progress-linear>
-        </v-flex>
-      </template>
+      <v-btn fab color="orange" v-on:click="save_btn()">
+        <v-icon color="white">get_app</v-icon>
+      </v-btn>
+
+        <v-dialog
+          v-model="open"
+          hide-overlay
+          persistent
+          width="300"
+        >
+          <v-card>
+            <v-card-text>
+              Please stand by
+              <v-progress-linear v-model="percent_data"></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
+
     </div>
     <div class="" v-if="up_getters.subtitle_">
       <v-btn color="success" v-on:click="move()">다음으로</v-btn>
@@ -56,10 +73,30 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['subtitle_action','upload_subtitle_actions','upload_content_actions','percent_action','subtitle_answer_action']),
+    ...mapActions(['subtitle_action','upload_subtitle_actions','upload_content_actions','percent_action','subtitle_answer_action','subtitle_preview_action']),
     move(){
       this.percent_action(0);
       this.$router.push({name:'content', query:{video:this.up_getters.subtitle_.video_pk}});
+    },
+    keyup_time_change(evt,num,check){
+      if (check) {
+        this.content[num].firstTime = this.time_second(evt.target.value);//초로 바꿔야함
+      }else{
+        this.content[num].lastTime = this.time_second(evt.target.value);//초로 바꿔야함
+      }
+    },
+    time_change(seconds){
+      let hour = parseInt(seconds/3600);
+      let min = parseInt((seconds%3600)/60);
+      let sec = seconds%60;
+      return hour+":"+min+":" + sec;
+    },
+    time_second(time){
+      let time_s = time.split(":");
+      let hour = parseInt((time_s[0] * 60) * 60);
+      let min = parseInt(time_s[1] * 60);
+      let sec = parseInt(time_s[2]);
+      return hour + min + sec;
     },
     create_btn(check){
       this.content.splice(check+1,0,{
@@ -113,6 +150,7 @@ export default {
     }
     this.subtitle_answer_action(data)
     .then(result=>{
+      console.log("an",result);
       this.subtitle_action(result.subtitle);
       for (let i = 0; i < this.s_getter.length; i++) {
         this.content.push({
@@ -122,6 +160,7 @@ export default {
         });
       }
     });
+
     let inter = setInterval(() => {
       this.video_time_check = this.video.currentTime;
     }, 100);
@@ -148,6 +187,7 @@ export default {
       });
       this.sb_getter.splice(0,1);
     }
+    this.subtitle_preview_action(this.content);
   },
   computed:{
     ...mapGetters({
@@ -155,7 +195,7 @@ export default {
       s_getter:'subtitle_getter',
       sb_getter:'subtitle_buffer_getter',
       up_getters:'upload_getters',
-      percent:'percent_getter'
+      percent:'percent_getter',
     }),
   },
   watch:{
@@ -177,7 +217,7 @@ export default {
             clearInterval(this.terval);
             let input = document.getElementsByClassName("textarea");
             input[i].style.border = "2px solid blue";
-            input[i].scrollIntoView({behavior:'smooth'});
+            input[i].scrollIntoView({behavior:'smooth'}); //instant
             setTimeout(()=>{
               this.terval = setInterval(()=>{
                 this.video_time_check = this.video.currentTime;
@@ -199,7 +239,17 @@ export default {
 
 <style lang="css" scoped>
 #scroll_div{
-  overflow: scroll;
-  height:500px;
+  height:800px;
+  overflow-y:scroll;
+  overflow-x:scroll;
+  white-space:nowrap;
 }
+/* .btn{
+  position: absolute;
+  visibility: hidden;
+}
+.textarea:hover .btn{
+  position: relative;
+  visibility: inherit;
+} */
 </style>

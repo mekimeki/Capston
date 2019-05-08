@@ -1,69 +1,67 @@
 <template lang="html">
   <div class="">
-    <v-tabs color="white" slider-color="red" >
-      <v-tab v-for="content in contents" ripple>
-        <v-btn>
-          {{ content.name }}
-        </v-btn>
+    <v-tabs color="white" slider-color="black">
+      <v-tab v-for="tent in cp_getter" ripple>
+          {{ tent.name }}
       </v-tab>
-      <v-tab-item v-for="content in contents">
-        <v-card flat>
-          <div id="scroll_div">
-            <div v-for="(tent, i) in content.content">
-              <v-textarea
-                outline
-                name="input-7-4"
-                label="Outline textarea"
-                v-model="tent.textArea"
-              >
-              </v-textarea>
-              <v-btn>삭제</v-btn>
-              <b-btn>추가</b-btn>
+      <v-tab-item v-for="content in cp_getter">
+        <v-card v-for="tent in content.content">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">{{tent.voca}}</h3>
+              <div>
+                <input type="text" name="" value="" v-model="tent.explain">
+              </div>
             </div>
-          </div>
-          <v-textarea
-            outline
-            name="input-7-4"
-            label="Outline textarea"
-            v-model="search"
-          >
-          </v-textarea>
-          <v-btn v-on:click="click_search(content.name,search)">
-            검색
-          </v-btn>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat color="orange">
+              <v-icon>check</v-icon>등록됨
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-tab-item>
     </v-tabs>
-    <v-btn>SAVE</v-btn>
+
+    <v-btn large fab v-on:click="click_save()">SAVE</v-btn>
+    <div class="" v-show="up_getters.content">
+      <v-btn large fab v-on:click="move()">다음</v-btn>
+    </div>
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {mapActions,mapGetters} from 'vuex';
 export default {
   data(){
     return{
-      contents:[//book mark
-        {name:'content',content:[]},
-        {name:'word',content:[]},
-      ],
-      search:"",
+      video:'',
     }
   },
   methods:{
-    ...mapActions(['search_action','upload_content_actions']),
-    click_search(name,search){
-      //axios 요청
-      console.log(name);
-      console.log(search);
-      this.search_action('');
-    },
+    ...mapActions(['search_content_action','search_word_action','upload_content_action']),
     click_save(){
-      this.content_action('');
-    }
+      let data = {
+        video:this.$route.query.video,
+        content:this.cp_getter[0].content,
+        word:this.cp_getter[1].content,
+      }
+      this.upload_content_action(data);
+    },
+    move(){
+      this.$router.push({name:'message', query:{video:this.$route.query.video}});
+    },
   },
   mounted:function(){
-  }
+    this.video = this.v_getter;
+  },
+  computed:{
+    ...mapGetters({
+      v_getter:"video_getter",
+      up_getters:"upload_getters",
+      cp_getter:"content_preview_getter",
+    }),
+  },
 }
 </script>
 
