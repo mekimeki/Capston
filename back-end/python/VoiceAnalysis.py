@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 import librosa
 import numpy
 import matplotlib.pylab as plt
+import sys
 
 
 def extract_max(pitches, magnitudes, shape):
@@ -28,7 +31,7 @@ def plot(vector, name, xlabel=None, ylabel=None):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.plot()
-    plt.show()
+    # plt.show()
     plt.savefig(name)
 
 
@@ -38,8 +41,8 @@ def set_variables(sample_f, duration, window_time, fmin, fmax, overlap):
     # windowsize = number of samples in one window
     window_size = sample_f/1000 * window_time
     hop_length = total_samples / window_size
-    print("hop_length ====",hop_length)
-    print("window size ====", window_size)
+    # print("hop_length ====",hop_length)
+    # print("window size ====", window_size)
 
     # Calculate number of windows needed
     needed_nb_windows = total_samples / (window_size - overlap)
@@ -77,7 +80,7 @@ def main():
     
     # for recording wav
     duration = librosa.get_duration(y=y, sr=sr)
-    print("duration ==== ", duration)
+    # print("duration ==== ", duration)
 
     total_samples, window_size, needed_nb_windows, n_fft, hop_length =set_variables(
         sample_f, duration, window_time, fmin, fmax, overlap)
@@ -85,8 +88,8 @@ def main():
     n_fft = int(n_fft)
     hop_length = int(hop_length)
 
-    return analyse(y, sr, n_fft, hop_length, fmin, fmax)
+    sys.exit(analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist())
 
 
 if __name__ == "__main__":
-    data = main()
+    main()

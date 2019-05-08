@@ -9,11 +9,11 @@ use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 /*
  * analysis = GCP - STT -> comparison()
- * comparison = get metaphone and minimize distance
+ * comparison = get metaphone and minimum distance
  * getMin = get min value
- * getDistance = get text distance both origin and recording 
+ * getDistance = get text from original and recorded wave
  * voiceRecord = formating recorded blob to wav
- * voiceExtraction = get origin wav to video
+ * voiceExtraction = get origin wav from video
  */
 
 class VoiceAnalysisController extends Controller
@@ -30,48 +30,80 @@ class VoiceAnalysisController extends Controller
         ));
     }
 
-    public function analysis($origin_path){
-        $datas = [];
+    public function analysis($path){
+        $text = [];
         $analy = [];
         $projectId = 'capston';
 
-        \Log::debug($origin_path);
+        \Log::debug($path);
 
-        $files = [$origin_path,public_path('audio\\hellotilt.wav')];
+        // $files = [$origin_path,public_path('audio\\hellotilt.wav')];
 
-        foreach($files as $fileName){
-            $content = file_get_contents($fileName);
+        // foreach($files as $fileName){
+        //     $content = file_get_contents($fileName);
 
-            $audio = (new RecognitionAudio())->setContent($content);
+        //     $audio = (new RecognitionAudio())->setContent($content);
             
-            $config = new RecognitionConfig([
-                'encoding'=>AudioEncoding::LINEAR16,
-                'sample_rate_hertz' => 16000,
-                'language_code' => 'en-US',
-            ]);
+        //     $config = new RecognitionConfig([
+        //         'encoding'=>AudioEncoding::LINEAR16,
+        //         'sample_rate_hertz' => 16000,
+        //         'language_code' => 'en-US',
+        //     ]);
 
-            $client = new SpeechClient();
+        //     $client = new SpeechClient();
 
-            $response = $client->recognize($config, $audio);
+        //     $response = $client->recognize($config, $audio);
 
-            foreach ($response->getResults() as $result){
-                $alternatives = $result->getAlternatives()[0];
-                $datas[] = $alternatives->getTranscript();
-            }
+        //     foreach ($response->getResults() as $result){
+        //         $alternatives = $result->getAlternatives()[0];
+        //         $datas[] = $alternatives->getTranscript();
+        //     }
 
-        }
-        $analy = $this->comparison($datas[0],$datas[1]);
+        // }
+
+        $content = file_get_contents($path);
+
+        $audio = (new RecognitionAudio())->setContent($content);
         
-        return [$analy,$datas];
+        $config = new RecognitionConfig([
+            'encoding'=>AudioEncoding::LINEAR16,
+            'sample_rate_hertz' => 16000,
+            'language_code' => 'en-US',
+        ]);
+
+        $client = new SpeechClient();
+
+        $response = $client->recognize($config, $audio);
+
+        foreach ($response->getResults() as $result){
+            $alternatives = $result->getAlternatives()[0];
+            $text[] = $alternatives->getTranscript();
+        }
+
+        return $text;
+
+        // $analy = $this->comparison($datas[0],$datas[1]);
+        
+        // return [$analy,$datas];
         // return view("check",compact('datas','analy'));
     }
 
     function comparison($a, $b){
         $datas = [];
-        $datas[] = metaphone($a);
-        $datas[] = metaphone($b);
+        $metaA = metaphone($a);
+        $metaB = metaphone($b);
+        $distance = $this->getDistance($metaA, $metaB); 
+
+        # metaphone a,b
+        $datas["metaA"] = $metaA;
+        $datas["metaB"] = $metaB;
+
+        # insult minimum distance
+        $datas["distance"] = $distance;
+
+        # similarity calculation
         
-        $datas[] = $this->getDistance($datas[0], $datas[1]);
+        $datas["similarity"] = (int)((strlen($metaA)+strlen($metaB))-$distance/(strlen($metaA)+strlen($metaB))*100);
 
         return $datas;
     }
@@ -108,7 +140,7 @@ class VoiceAnalysisController extends Controller
             }
         }
 
-        return "편집거리 = ".$M[strlen($a) - 1][strlen($b) - 1];
+        return $M[strlen($a) - 1][strlen($b) - 1];
     }
 
     public function voiceRecord(Request $request){
@@ -116,31 +148,44 @@ class VoiceAnalysisController extends Controller
         * 1. 사용자의 아이디를 받지 않았음
         * 2. 아이디를 받고, 해당하는 아이디의 폴더가 있으면 그곳에 생성 없으면 작성 후 생성
         * 3. 파일명 형식은 날짜_voice
+        * 4. 사용 되는 path 단순하게
         */
+        // $all = $request->all();
+        $file = $request->file('audio');
+        // \Log::debug($all);
+        $originText = $request->originText;
+        // \Log::debug("originnnn".$originText);
+        // $id = $all["id"];
 
-        $tmpfile = $request->all();
+        $id = 'a';
 
-        $file = $tmpfile["audio"];
+        move_uploaded_file($file, public_path('audio\\'.$id.'\\check.webm'));
+
+        // \Log::debug("type === ".gettype($this->ffmpeg));
+
+        $faudio = $GLOBALS['ffmpeg']->open(public_path('audio\\'.$id.'\\check.webm'));
         
-        move_uploaded_file($file, public_path('audio\\check.webm'));
-
-
-        \Log::debug("type === ".gettype($this->ffmpeg));
-
-        $faudio = $GLOBALS['ffmpeg']->open(public_path('audio\\check.webm'));
         $audio_format = new \FFMpeg\Format\Audio\Wav();
-
-        \Log::debug("codec ==== ".$audio_format-> getAudioCodec());
-        \Log::debug("codec ==== ".$audio_format-> getAudioKiloBitrate());
 
         $faudio->filters()->resample(16000);
         $audio_format
         ->setAudioChannels(1);
 
-        $faudio->save($audio_format, public_path('audio\\compare.wav'));
+        $faudio->save($audio_format, public_path('audio\\'.$id.'\\compare.wav'));
         
-        if(\Storage::disk("local_audio")->exists('check.webm'))
-        \Storage::disk("local_audio")->delete('check.webm');
+        if(\Storage::disk("local_audio")->exists($id.'/check.webm'))
+        \Storage::disk("local_audio")->delete($id.'/check.webm');
+        
+        $recordText =  $this->analysis(public_path('audio\\'.$id.'\\compare.wav'));
+
+        \Log::debug("record == ".count($recordText));
+        \Log::debug("typeeee".gettype($recordText));
+
+        if(count($recordText) == 0){
+            return "다시 녹음해 주세요";
+        }else{
+            return $this->comparison($originText, $recordText[0]);
+        }
         
     }
 
@@ -148,13 +193,23 @@ class VoiceAnalysisController extends Controller
         // $s_time = $request->input('s_time');
         // $duration = $request->input('duration');
         // $path = $request->input('pk');
+        // $video_path = $request->v_add;
+        // $id = $request->id;
 
+        $id = 'a';
         $s_time = 1;
         $duration = 8;
         $audio_format = new \FFMpeg\Format\Audio\Wav();
 
-        // $fvideo = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
+        // $audio = $GLOBALS['ffmpeg']->open($video_path);
+
         $audio = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
+
+        $path = public_path('audio/'.$id);
+
+        if(!is_dir($path)){
+            mkdir($path);
+        }
 
         $audio_format
         ->setAudioChannels(1)
@@ -163,7 +218,7 @@ class VoiceAnalysisController extends Controller
 
         $clip = $audio->clip(\FFMpeg\Coordinate\TimeCode::fromSeconds($s_time), \FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
         $clip->filters()->resample(16000);
-        $path = public_path('audio\\origin.wav');
+        $path = $path.'/origin.wav';
 
         $clip->save($audio_format, $path);
 
@@ -171,17 +226,25 @@ class VoiceAnalysisController extends Controller
 
         \Log::debug('size ===== '.floor($originsize*8 / 256000));
 
-        return $this->analysis($path);
-        
+        return json_encode(["originText"=>$this->analysis($path),"originDuration"=>$duration]);
     }
 
     public function test(){
         if(File_exists('./../python/test.py')){
-            $command = escapeshellcmd('python ./../python/test.py');
-            $returns;
-            exec($command);
-            \Log::debug($returns);
-            return "data ==== ".$returns;
+            $command = escapeshellcmd('./../python/test.py');
+            ob_start();
+            $output = '';
+            $ret_code = '';
+            $returns = exec($command, $output, $ret_code);
+            \Log::debug("returnssss = ".$returns);
+            
+            \Log::debug("returnssss = ".count($output));
+            \Log::debug("returnssss = ".$ret_code);
+            
+            
+            $test = \Storage::disk('local_pic')->url('a/test.png');
+            \Log::debug("testtttt ==== ".$test);
+            echo "data ==== ".$returns;
         }else {
             return "no have...";
         }

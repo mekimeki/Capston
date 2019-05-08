@@ -24,16 +24,16 @@ class VocaTestResultController extends Controller
     		'test_add'=>$request->test_add,
     		'test_dt'=>date("Y-m-d H:i:s"),
     		'test_score'=>$request->test_score,
-    	]);
+			]);
+			
     	$result->save();
 		}
 		
 		public function getResult(Request $request){
-			$result = new VTestResult;
-			$result->get([
-				"m_id"=>$result->id,
-			]);
-			\Log::debug("result == ".$result);
+			$id = $request->id;
+
+			$result = VTestResult::select('votest_result_pk as id', 'test_dt as date', 'test_score as score')->get();
+			
 			return $result;
 		}
 }

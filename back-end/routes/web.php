@@ -84,21 +84,5 @@ Route::get('do',function(){
 Route::get('/check-auth','MemberController@checkAuth');
 
 
-//음성 분석 부분
-
-Route::get('voice/analysis', [
-    'as' => 'voice.analy',
-    'uses' => 'VoiceAnalysisController@analysis'
-]);
-
-Route::post('voice/record',[
-	'as' => 'voice.record',
-	'uses' => 'VoiceAnalysisController@voiceRecord'
-]);
-
-Route::post('voice/extract', 'VoiceAnalysisController@voiceExtraction');
-
-Route::get('voice/test', 'VoiceAnalysisController@test');
-
 // Route::get('quiz', 'QuizController@index');
 // Route::get('solution', 'QuizController@show')->name('quiz');
