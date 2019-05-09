@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\LBook;
-use App\Line;
+use App\Model\LBook;
+use App\Model\Line;
 use Illuminate\Http\Request;
 
 class LineController extends Controller

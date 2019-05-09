@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Member;
-use App\Attendance;
+use App\Model\Member;
+use App\Model\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
