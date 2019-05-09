@@ -105,15 +105,13 @@ class WordController extends Controller
         $vocas = [];
 
         if ($b_id == false) {
-            $vocas = \DB::table('word_tb')
-                ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
+            $vocas = word::select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
                 ->whereIn('wbook_pk',$books)
                 ->groupBy('w_nm')
                 ->get()->toArray();
 
         } else {
-            $vocas = \DB::table('word_tb')
-                ->select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
+            $vocas = word::select('w_nm as word', 'w_pk as id', 'memo_st as memorized')
                 ->where('wbook_pk',$b_id)
                 ->groupBy('w_nm')
                 ->get()->toArray();

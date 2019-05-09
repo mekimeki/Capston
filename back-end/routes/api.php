@@ -243,4 +243,4 @@ Route::get('testResult', 'TestResult\VocaTestResultController@getResult');
 //100LS
 Route::post('voice/extraction', 'VoiceAnalysisController@voiceExtraction');
 Route::post('voice/record','VoiceAnalysisController@voiceRecord');
-Route::get('voice/test', 'VoiceAnalysisController@test');
+Route::post('voice/intonation', 'VoiceAnalysisController@intonation');
