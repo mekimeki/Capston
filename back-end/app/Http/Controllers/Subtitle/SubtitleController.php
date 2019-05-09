@@ -157,13 +157,14 @@ class SubtitleController extends Controller
         for ($i=0; $i <count($data) ; $i++) {
           
           $msf = explode('.',$data[$i]['firstTime']);
-
+          if( isset($msf[1]) ){$msf[1] = 000;}
           $msf[1] = substr($msf[1], 0, 3);
           
           $data[$i]['firstTime'] = gmdate('H:i:s,',$data[$i]['firstTime']).$msf[1];//
 
           $msl = explode('.',$data[$i]['lastTime']);
           $msl[1] = substr($msl[1], 0, 3);
+          if( isset($msl[1]) ){$msl[1] = 000;}
           $data[$i]['lastTime'] = gmdate('H:i:s,',$data[$i]['lastTime']).$msl[1];//.$msl[1]
           
           
