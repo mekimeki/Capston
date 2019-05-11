@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VWord extends Model
 {
     //
-    protected $table='cwood_tb';
+    protected $table='vword_tb'; 
     public $timestamps = false;
     protected $guarded = [];
 

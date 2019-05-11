@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Video;
 use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
@@ -126,19 +127,23 @@ class VoiceAnalysisController extends Controller
     public function voiceRecord(Request $request)
     {
         /*
-         * 1. 사용자의 아이디를 받지 않았음
-         * 2. 아이디를 받고, 해당하는 아이디의 폴더가 있으면 그곳에 생성 없으면 작성 후 생성
+         * 1. 원본과의 비교
          * 3. 파일명 형식은 날짜_voice
          * 4. 사용 되는 path 단순하게
          */
-        $file = $request->file('audio');
+
         $originText = $request->originText;
 
-        $id = 'a';
+        $id = $request->input('id');
+        $originText = $request->originText;
+        $originDuration = $request->originDuration;
 
-        move_uploaded_file($file, public_path('audio\\' . $id . '\\check.webm'));
+        $file = $request->file('audio');
 
-        $faudio = $GLOBALS['ffmpeg']->open(public_path('audio\\' . $id . '\\check.webm'));
+        $recordPath = public_path('audio\\' . $id . '\\check.webm');
+        move_uploaded_file($file, $recordPath);
+
+        $faudio = $GLOBALS['ffmpeg']->open($recordPath);
 
         $audio_format = new \FFMpeg\Format\Audio\Wav();
 
@@ -154,9 +159,6 @@ class VoiceAnalysisController extends Controller
 
         $recordText = $this->analysis(public_path('audio\\' . $id . '\\compare.wav'));
 
-        \Log::debug("record == " . count($recordText));
-        \Log::debug("typeeee" . gettype($recordText));
-
         if (count($recordText) == 0) {
             return "다시 녹음해 주세요";
         } else {
@@ -167,18 +169,23 @@ class VoiceAnalysisController extends Controller
 
     public function voiceExtraction(Request $request)
     {
-
-        // $id = 'a';
-        // $s_time = 1;
-        // $duration = 8;
         $id = $request->input('id');
-        $s_time = $request->input('s_time');
-        $e_time = $request->input('e_time');
-        $duration = s_time-e_time;
+        $s_time = (float) $request->input('s_time');
+        $e_time = (float) $request->input('duration');
+        $v_pk = $request->input('v_pk');
+        $duration = floor($e_time - $s_time);
 
         $audio_format = new \FFMpeg\Format\Audio\Wav();
 
-        $audio = $GLOBALS['ffmpeg']->open(public_path('audio\\test.mp4'));
+        $address = video::select('v_add')->where('video_pk', $v_pk)->get()->toArray();
+
+        $paths = explode('/', $address[0]['v_add']);
+
+        $fileName = array_pop($paths);
+
+        $filePath = public_path('storage\\video\\' . $id . '\\' . $fileName);
+
+        $audio = $GLOBALS['ffmpeg']->open($filePath);
 
         $path = public_path('audio\\' . $id);
 
@@ -189,17 +196,17 @@ class VoiceAnalysisController extends Controller
         $audio_format
             ->setAudioChannels(1)
             ->setAudioKiloBitrate(192);
-        \Log::debug('checkk' . gettype($audio_format));
 
         $clip = $audio->clip(\FFMpeg\Coordinate\TimeCode::fromSeconds($s_time), \FFMpeg\Coordinate\TimeCode::fromSeconds($duration));
         $clip->filters()->resample(16000);
-        $path = $path . '\\origin.wav';
+
+        $path = $path . '\\' . $fileName . '_origin.wav';
 
         $clip->save($audio_format, $path);
 
-        $path = 'audio\\'.$id.'\\origin.wav';
+        $path = 'audio\\' . $id . '\\' . $fileName . '_origin.wav';
         $analy_data = $this->intonation($path);
-        return json_encode(["originText" => $this->analysis($path), "originDuration" => $duration, "analy"=>$analy_data]);
+        return json_encode(["originText" => $this->analysis($path), "originDuration" => $duration, "analy" => $analy_data]);
     }
 
     public function intonation($path)

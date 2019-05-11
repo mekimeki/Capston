@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\WBook;
 use App\Model\Word;
+use App\Model\Member;
 use Illuminate\Http\Request;
 
 class WordController extends Controller
@@ -61,7 +62,7 @@ class WordController extends Controller
         }
 
         // insert orm
-        return "ok";
+        return $id;
     }
 
     /**
@@ -72,16 +73,26 @@ class WordController extends Controller
      */
     public function store(Request $request) // 북마크한 단어 저장
     {
-        $all = $request->all();
-        \Log::debug($all);
-        // $w_nm = $request->input('w_nm');
-        // $m_id = $request->input('m_id');
+        $email = $request->input('email');
+        \Log::debug($email);
+        $w_nm = $request->input('word');
 
-        // \DB::table('word_tb')->insert([
-        //     'wbook_pk'=>1, 'word'=>$w_nm, 'morp'=>"N", 'w_cnt'=>0, 'memo_st'=>"F"
-        // ]);
+        $id = member::where('email',$email)->select('member_pk')->get()->toArray();
 
-        return "ok";
+        $books = wbook::where('m_id', $id[0]['member_pk'])->select('wbook_pk')->first()->get()->toArray();
+
+        $inCheck = word::select('w_pk', 'w_nm', 'w_cnt')->where('wbook_pk', $books[0]['wbook_pk'])->where('w_nm',$w_nm)->get()->toArray();
+
+        \Log::debug(count($inCheck));
+
+        if(count($inCheck) >= 1){
+            word::where('w_pk', $inCheck[0]["w_pk"])
+            ->update(['w_cnt' => $inCheck[0]['w_cnt'] + 1]);
+        }else{
+            word::insert(['wbook_pk'=>$books[0]['wbook_pk'], 'w_nm'=>$w_nm, 'morp'=>'N']);
+        }
+
+        return "success";
     }
 
     /**
@@ -133,7 +144,7 @@ class WordController extends Controller
                 ->where('memo_st', $mm)
                 ->groupBy('w_nm')
                 ->get()->toArray();
-
+                
 
         $vocas = json_encode($vocas, JSON_UNESCAPED_UNICODE);
         return $vocas;
@@ -151,7 +162,6 @@ class WordController extends Controller
         $title = $request->input('title'); // 타이틀이랑 id 두개 받아내기
         $id = $request->input('id');
 
-        //$wbook = wbook::find('wbook_tt');
         if (wbook::where('wbook_pk', $id)->update(['wbook_tt' => $title])) {
             return "ok";
         }
@@ -209,4 +219,5 @@ class WordController extends Controller
         }
         return "nope";
     }
+
 }
