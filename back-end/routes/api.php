@@ -218,6 +218,8 @@ Route::group(['prefix'=>'voca'],function(){
 
 	Route::post('/insert','Voca\VocabularyController@insertVoca');
 
+	Route::get('/history', 'Voca\VocabularyController@histroy');
+
 });
 
 Route::group(['prefix'=>'vocaBook'],function(){
@@ -237,10 +239,13 @@ Route::post('/csrf-token',function(){
 	return csrf_token() ;
 });
 
-//테스트 결과
-Route::get('testResult', 'TestResult\VocaTestResultController@getResult');
-
 //100LS
 Route::post('voice/extraction', 'VoiceAnalysisController@voiceExtraction');
 Route::post('voice/record','VoiceAnalysisController@voiceRecord');
 Route::post('voice/intonation', 'VoiceAnalysisController@intonation');
+
+//시험 결과
+Route::post('testResult', 'TestResult\VocaTestResultController@getResult');
+Route::post('insertResult', 'TestResult\VocaTestResultController@insertResult');
+
+Route::post('speakResult', 'TestResult\SResultController@getResult');

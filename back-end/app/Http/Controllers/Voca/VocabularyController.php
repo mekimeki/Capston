@@ -129,35 +129,71 @@ class VocabularyController extends Controller
             return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
         }
 		*/
-
+        //VG
+        
+        $video_pk = $request->video_pk;
     	$vo_pk = $request->vo_pk;
-    	$voca = $request->voca;
+    	$voca = $request->title;
     	$explain = $request->explain;
+        $time = $request->time;
     	//$check = Vocabulary::where('voca',$voca)->where('explain',$explain)->get();
+
+
     	$check = Vocabulary::where([
     		'voca'=>$voca,
-    		'explain'=>$explain
-    	])->get();
-    	
-    	if( count($check) == 0 ){
-    		$vocabulary = Vocabulary::find($vo_pk);
-    		if($vocabulary && isset($voca) && isset($explain)){
-    			$vocabulary->voca = $voca;
-    			$vocabulary->explain = $explain;
-    			$vocabulary->save();
-    			return response()->json([
-    				'message'=>"Success update!!"
-    			]);
-    		}else{
-    			return response()->json([
-    				'message'=>"Don't have data!!"
-    			]);
-    		}
-    	}else{
-    		return response()->json([
-    			'message'=>'Already have this information!!'
-    		]);
-    	}
+    		'explain'=>$explain,
+    	])->first();
+        
+        if(!isset($check)){
+
+            $vocabulary = Vocabulary::create([
+                    'voca'=>$voca,
+                    'explain'=>$explain
+            ]);
+            
+            $videoVoca = VG::where([
+                'video_pk'=>$video_pk,
+                'gidiom_pk'=>$vo_pk,
+                'start_time'=>$time
+            ])
+            ->update( [ 'gidiom_pk'=>$vocabulary->vo_pk ] );
+            $vo_pk = $vocabulary->vo_pk;
+        }else{
+
+            $videoVoca = VG::where([
+                'video_pk'=>$video_pk,
+                'gidiom_pk'=>$vo_pk,
+                'start_time'=>$time
+            ])
+            ->update([ 'gidiom_pk'=>$check['vo_pk'] ]);
+
+           $vo_pk = $check['vo_pk'];
+           
+        }
+        
+
+        
+
+        return response()->json([
+            'message' => 'update success!!',
+            'vo_pk' => $vo_pk,
+        ]);
+
+    }
+
+    public function history(Request $request){
+        /*
+        $member_pk = $this->check->check($request);
+       
+        if(isset($member_pk[0]['messages']) ){
+            return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
+        }
+        */
+        $voca = $request->voca;
+        $result = Vocabulary::where([
+            'voca'=>$voca,
+        ])->get();
+        return $result;
     }
 
     public function insertVoca(Request $request){
@@ -171,24 +207,47 @@ class VocabularyController extends Controller
 
     	$voca = $request->voca;
     	$explain = $request->explain;
+        $time = $request->time;
+        $video_pk = $request->video_pk;
     	$vocaCheck = Vocabulary::where([
     		'voca'=>$voca,
     		'explain'=>$explain
-    	])->get();
+    	])->first();
+        
     	//return $explain;
-    	if( count($vocaCheck) == 0 && isset($voca) && isset($explain) ){
-    		Vocabulary::create([
+    	if( !isset($vocaCheck) && isset($voca) && isset($explain) && isset($time) && isset($video_pk)){
+    		$vocabulary = Vocabulary::create([
     			'voca'=>$voca,
     			'explain'=>$explain,
     		]);
+           
+            VG::create([
+                'video_pk'=>$video_pk,
+                'gidiom_pk'=>$vocabulary->vo_pk,
+                'start_time'=>$time,
+                'end_time'=>$time + 3,
+            ]);
     		return response()->json([
-    			'message'=>'successfully added'
+                'result' => 1,
+    			'message'=>'successfully added(1)'
+    		]);
+    	}else if( isset($vocaCheck) && isset($voca) && isset($explain) && isset($time) && isset($video_pk)){
+            VG::create([
+                'video_pk'=>$video_pk,
+                'gidiom_pk'=>$vocaCheck->vo_pk,
+                'start_time'=>$time,
+                'end_time'=>$time + 3,
+            ]);
+    		return response()->json([
+                'result' => 1,
+    			'message'=>'successfully added(2)'
     		]);
     	}else{
-    		return response()->json([
-    			'message'=>'Already have this information or none data!!'
-    		]);
-    	}
+            return response()->json([
+                'result' => 0,
+                'message'=>'none data'
+            ]);
+        }
     	
     }
 }
