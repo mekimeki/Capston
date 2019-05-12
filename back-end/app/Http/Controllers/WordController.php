@@ -61,6 +61,7 @@ class WordController extends Controller
             }
         }
 
+
         // insert orm
         return $id;
     }
