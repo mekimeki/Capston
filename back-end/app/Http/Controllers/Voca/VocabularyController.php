@@ -182,13 +182,7 @@ class VocabularyController extends Controller
 
     public function history(Request $request)
     {
-        /*
-        $member_pk = $this->check->check($request);
 
-        if(isset($member_pk[0]['messages']) ){
-        return response()->json([ 'messages'=>$member_pk[0]['messages'] ],200);
-        }
-         */
         $voca = $request->voca;
         $result = Vocabulary::where([
             'voca' => $voca,
