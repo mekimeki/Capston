@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   data: () => ({
     pics: [
@@ -47,7 +48,16 @@ export default {
         color: "light-blue accent-3"
       }
     ]
-  })
+  }),
+  methods:{
+    ...mapActions(['recommend_action']),
+  },
+  mounted:function(){
+    console.log("recommend");
+    this.recommend_action().then(result=>{
+      console.log('picture data and recommend',result);
+    });
+  },
 };
 </script>
 
