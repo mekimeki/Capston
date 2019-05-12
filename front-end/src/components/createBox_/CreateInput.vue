@@ -1,22 +1,27 @@
 <template lang="html">
-  <div class="">
-    <v-card color="orange" class="white--text ma-1">
-      <v-card-title>
-        <label class="pr-2">START:</label>
-        <input type="text" name="" value="" v-model="firstTime">
-        <label>EDN:</label>
-        <input type="text" name="" value="" v-model="lastTime">
-
-        <v-text-field
-          label="Create Subtitle"
-          v-on:click="time_check(true)"
-          v-model="subtitle_write"
-        >
-        </v-text-field>
-        <v-icon color="white" medium v-on:click="time_check(false)">add_circle_outline</v-icon>
-      </v-card-title>
+    <v-card color="blue" class="white--text ma-1">
+      <v-layout row wrap>
+        <v-flex xl12 sm12 md12>
+          <v-card-title>
+            <label class="pr-2">START:</label>
+            <input type="text" name="" value="" v-model="firstTime">
+            <label>EDN:</label>
+            <input type="text" name="" value="" v-model="lastTime">
+          </v-card-title>
+        </v-flex>
+        <v-flex xl12 sm12 md12 class="ma-2">
+          <v-text-field
+            label="Create Subtitle"
+            v-on:click="time_check(true)"
+            v-model="subtitle_write"
+          >
+          </v-text-field>
+          <v-layout justify-end>
+            <v-icon color="white" medium v-on:click="time_check(false)">add_circle_outline</v-icon>
+          </v-layout>
+        </v-flex>
+      </v-layout>
     </v-card>
-  </div>
 </template>
 
 <script>
