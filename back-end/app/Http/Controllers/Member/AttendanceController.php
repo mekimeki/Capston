@@ -21,7 +21,7 @@ class AttendanceController extends Controller
 
 	public function attendance(){
 		if(Auth::user()){
-			$date = date("Y-m-d 00:00:00");
+			$date = date("Y-m-d");
 			$user = Auth::user();
  			$attendance = new Attendance;
  			$check = $attendance->where('member_pk',$user->member_pk)->where('attd_dt',$date)->first();
@@ -44,5 +44,9 @@ class AttendanceController extends Controller
 	    		'status'=>'login please'
 	    	],200);
 		}
+	}
+
+	public function getAttendance(){
+		
 	}
 }

@@ -54,37 +54,43 @@
 
         <!-- modal of words crawling -->
         <div class="text-xs-center">
-            <v-dialog v-model="crawl" width="1000">
+            <v-dialog v-model="crawl" width="1020">
                 <v-card color="light-blue lighten-3">
-                    <v-container fill-heights fluid pa-2 text-xs-left>
+                    <v-container fill-heights fluid pa-3 text-xs-left>
                         <v-layout fill-height>
                             <v-flex xs12 align-end flexbox>
 
                                 <v-card flat color="white">
-                                    {{ mainWord }}
+                                    <div class="mainWord px-3 py-4 ml-3">{{ mainWord }}</div>
                                 </v-card>
 
-                                <v-card v-for="(crawlMean, a) in crawlMeans" :key="(crawlMean, a)" flat color="white">
-                                    <span v-if="a==0"><div class="py-2"></div></span>
-                                    {{ crawlMean }}
-                                    <span v-if="a==6"><div class="py-2"></div></span>
+                                <v-card flat color="white">
+                                    <span v-for="(crawlMean, a) in crawlMeans" :key="(crawlMean, a)" flat color="white" class="pl-2">
+                                    <span class="crawlMean pl-4">{{ crawlMean }}</span>
+                                    </span>
                                 </v-card>
+
+                                <div class="pt-3" style="background-color:white;"></div>
 
                                 <v-card v-for="(crawlWord, i) in crawlWords" :key="(crawlWord, i)" flat color="white">
                                     <span v-if="i%2==0"><div class="py-2"></div></span>
-                                    {{ crawlWord }}
+                                    <div class="crawlWord pl-4 ml-2">{{ crawlWord }}</div>
                                     <span v-if="i==9"><div class="py-2"></div></span>
                                 </v-card>
+
+                                <div class="pt-3" style="background-color:white;"></div>
 
                             </v-flex>
                         </v-layout>
                     </v-container>
-                    <v-card-actions>
+                    <!-- <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" flat @click="crawl = false">
-                            I accept
+                        <v-btn color="white" @click="crawl = false">
+                            click
                         </v-btn>
+                        
                     </v-card-actions>
+                     -->
                 </v-card>
             </v-dialog>
         </div>
@@ -107,7 +113,7 @@
                 <v-layout v-model="box" justify-end>
                     <v-card-text>
                         <h3>
-                            <div>・ 나의 단어장</div>
+                            <div class="title pb-3">・ 나의 단어장</div>
                         </h3>
                     </v-card-text>
 
@@ -378,5 +384,21 @@ export default {
 <style lang="css" scoped>
 #memorized {
     cursor: pointer;
+}
+
+.mainWord {
+    font-size: 1.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.crawlMean {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.crawlWord {
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 </style>

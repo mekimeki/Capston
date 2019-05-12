@@ -9,13 +9,14 @@
           <v-card-title primary-title>
             <div>
               <h3 class="headline mb-0">{{tent.voca}}</h3>
+              <h5>TIME:{{time_change(Math.ceil(tent.firstTime))}}</h5>
               <div>
                 <input type="text" name="" value="" v-model="tent.explain">
               </div>
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat color="orange">
+            <v-btn flat color="blue">
               <v-icon>check</v-icon>등록됨
             </v-btn>
           </v-card-actions>
@@ -23,7 +24,7 @@
       </v-tab-item>
     </v-tabs>
 
-    <v-btn large fab v-on:click="click_save()">SAVE</v-btn>
+    <v-btn large fab v-on:click="click_save()" color="blue">SAVE</v-btn>
     <div class="" v-show="up_getters.content">
       <v-btn large fab v-on:click="move()">다음</v-btn>
     </div>
@@ -50,6 +51,12 @@ export default {
     },
     move(){
       this.$router.push({name:'message', query:{video:this.$route.query.video}});
+    },
+    time_change(seconds){
+      let hour = parseInt(seconds/3600);
+      let min = parseInt((seconds%3600)/60);
+      let sec = seconds%60;
+      return hour+":"+min+":" + sec;
     },
   },
   mounted:function(){

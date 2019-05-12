@@ -9,11 +9,11 @@
                         <v-flex xs12 align-center flexbox>
                             <v-card flat justify-center>
                                 <span class="subName">
-                                  <div 
-                                  v-for="name in names"
-                                  :key="name" 
-                                  class="pt-1">
-                                  {{name.text}}</div>
+                                    <div 
+                                    v-for="name in names"
+                                    :key="name" 
+                                    class="pt-1">
+                                    {{name.text}}</div>
                                 </span>
                             </v-card>
                         </v-flex>

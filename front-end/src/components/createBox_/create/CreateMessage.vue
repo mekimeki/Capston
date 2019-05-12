@@ -26,7 +26,7 @@
 
 <script>
 import {mapActions} from 'vuex';
-import video_ from '@/components/video_/Video';
+import video_ from '@/components/video_/Video2';
 export default {
   components:{
     video_,
@@ -49,7 +49,8 @@ export default {
       }
       this.upload_created_action(data).then(result=>{
         if(result){
-          this.$router.push({name:'main'});
+          alert(this.$route.query.video+'success');
+          this.$router.push({name:'v-video', query:{video:this.$route.query.video}});
         }
       });
     }

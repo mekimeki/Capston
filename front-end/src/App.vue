@@ -27,7 +27,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </template>
-                    <v-list-tile v-for="(child, i) in item.children" :key="i" router :to="{ name: child.link }"  class="py-1">
+                    <v-list-tile v-for="(child, i) in item.children" :key="i" router :to="{ name: child.link }" class="py-1">
                         <v-list-tile-action v-if="child.icon">
                             <v-icon>{{ child.icon }}</v-icon>
                         </v-list-tile-action>
@@ -38,7 +38,7 @@
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list-group>
-                <v-list-tile class="py-1" v-else :key="item.text" router :to="{ name: item.link }" >
+                <v-list-tile class="py-1" v-else :key="item.text" router :to="{ name: item.link }">
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
@@ -73,15 +73,22 @@
         class="hidden-sm-and-down"
     ></v-text-field> -->
         <v-spacer></v-spacer>
-        <v-btn icon>
-            <v-icon color="grey darken-2">video_call</v-icon>
-        </v-btn>
-        <v-btn icon>
-            <v-icon color="grey darken-2">notifications</v-icon>
-        </v-btn>
-        <v-btn icon>
-            <v-icon color="grey darken-2">account_circle</v-icon>
-        </v-btn>
+        <span v-if="lg_getter.email">
+          <v-btn icon router :to="{name:'upload'}">
+              <v-icon color="grey darken-2">video_call</v-icon>
+          </v-btn>
+          <v-btn icon>
+              <v-icon color="grey darken-2">notifications</v-icon>
+          </v-btn>
+          <v-btn icon>
+              <v-icon color="grey darken-2">account_circle</v-icon>
+          </v-btn>
+        </span>
+        <span v-else>
+          <v-btn icon router :to="{name:'login'}">
+              <v-icon color="grey darken-2">account_circle</v-icon>
+          </v-btn>
+        </span>
         <v-btn icon large>
             <v-avatar size="40px" tile>
                 <img class="logo"
@@ -95,6 +102,11 @@
 
 <script>
 import router from './router'
+import {
+    mapGetters,
+    mapActions
+} from 'vuex';
+
 export default {
     data: () => ({
         drawer: false,
@@ -161,7 +173,19 @@ export default {
                 link: "qselect"
             }
         ]
-    })
+    }),
+    methods: {
+        ...mapActions(['login_check_actions']),
+    },
+    mounted: function () {
+        // console.log(localStorage.getItem('login'));
+        this.login_check_actions(localStorage.getItem('login'));
+    },
+    computed: {
+        ...mapGetters({
+            lg_getter: 'login_getters',
+        })
+    },
 };
 </script>
 
@@ -171,6 +195,6 @@ export default {
 }
 #logo {
     cursor: pointer;
-    text-decoration:none;
+    text-decoration: none;
 }
 </style>

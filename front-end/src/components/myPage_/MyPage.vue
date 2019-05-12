@@ -3,7 +3,7 @@
     <v-layout lign-start justify-start row fill-height pa-5 wrap>
         <v-flex class="pl-5 ml-5" xs12 sm12 md3>
             <v-list-tile-avatar size="180">
-                <v-img class="elevation-6 ml-5" :src="require(`@/assets/Start/service1.jpg`)"></v-img>
+                <v-img class="elevation-6 ml-5" :src="require(`@/assets/MyPage/myPage2.jpg`)"></v-img>
                 <v-card-title primary-title>
                     <div class="ml-3">
                         <div class="headline">SOMIN1234</div>

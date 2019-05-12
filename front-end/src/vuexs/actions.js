@@ -116,8 +116,12 @@ const actions = {
       }
     }
     service.video_cut_upload('api/video/streamingUpload',payload,config).then(result => {
+      console.log("cut 1",result);
       commit('video_cut_mutation',result);
     });
+  },
+  subtitle_word_action : ({commit},payload) => {
+    return service.subtitle_word("http://localhost/Capstone_practice/project_videoPlayer/api/test2.php",payload);
   },
   upload_subtitle_actions: ({commit},payload) =>{
     const config = {
@@ -127,7 +131,7 @@ const actions = {
       }
     }
     service.subtitle_upload("api/subtitle/produce",payload,config).then(result=>{
-      console.log('fff',result);
+      console.log('subtitle upload',result);
       commit('upload_subtitle_mutations',result);
     });
   },
@@ -194,9 +198,6 @@ const actions = {
   upload_created_action: ({commit},payload) =>{
     return service.upload_created('api/video/enrollment',payload);
   },
-  share_actions: ({commit},payload)=>{
-    return service.share('',payload);
-  },
   video_cut_image_action: ({commit},payload) =>{
     return service.video_cut_image('api/video/snapShot/',payload);
   },
@@ -213,11 +214,57 @@ const actions = {
   content_explain_action: ({commit},payload) =>{
     return service.content_explain('',payload);
   },
-  bookmark_save_action: ({commit},payload) =>{
-    return service.bookmark('/api/getLine',payload);
+  bookmark_save_subtitle_action: ({commit},payload) =>{
+    return service.bookmark_subtitle('/api/getLine',payload);
+  },
+  bookmark_save_word_action: ({commit},payload) =>{
+    return service.bookmark_word('/api/getWord',payload);
   },
   video_explain_action: ({commit},payload) =>{
     return service.video_explain('/api/videoInfo/explain/',payload);
+  },
+  recommend_action: ({commit},payload) => { //main page 용
+    return service.recommend('',payload);
+  },
+  share_content_action: ({commit},payload) =>{
+    service.share_content('api/voca/insert',payload).then(result=>{
+      console.log('content',result);
+      commit('share_content_mutation',payload);
+    });
+  },
+  share_content_update_action:({commit},payload)=>{
+    return service.share_cocntent_update('api/voca/update',payload).then(result=>{
+      let data = {
+        'vo_pk':result.vo_pk,
+        'num':payload.num,
+      }
+      commit('share_content_update_mutation',data);
+    });
+  },
+  share_word_action: ({commit},payload) =>{
+    //여기 controller 만들어야 함 .
+    service.share_word('',payload).then(result=>{
+      console.log('word',result);
+      commit('share_word_mutation',payload);
+    });
+  },
+  history_action: ({commit},payload) =>{
+    return service.history('api/voca/history',payload);
+  },
+  graph_origin_action: ({commit},payload) =>{
+    return service.graph_origin('api/voice/extraction',payload).then(result=>{
+      console.log('graph origin data',result);
+      commit('graph_origin_mutations',result);
+    });
+  },
+  graph_record_action: ({commit},payload) =>{
+    return service.graph_record('api/voice/record',payload).then(result=>{
+      console.log('graph record data',result);
+      commit('graph_record_mutations',result);
+    });
+  },
+  subtitle_record_action: ({commit},payload) =>{
+    commit('subtitle_record_mutation',payload);
   }
 
 }

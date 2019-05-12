@@ -185,7 +185,6 @@ class VideoController extends Controller
     }
 
     public function videoEnrollment(Request $request){
-     
       //return $request;
       $video_pk = $request->video_pk;
       $private = $request->private;
@@ -203,7 +202,8 @@ class VideoController extends Controller
       $video->explain=$explain;
       $video->v_tt=$title;
 
-      
+      \Log::debug('in roll');
+
       if($private == 1){
         $video->d_date = date('Y-m-d H:i:s',strtotime ("+7 days") );
         $video->save();
@@ -242,6 +242,8 @@ class VideoController extends Controller
         );
       }
       */
+
+
       Storage::disk('img')->delete([
             $video_pk.'_1'.'.jpg',
             $video_pk.'_2'.'.jpg',

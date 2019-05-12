@@ -4,12 +4,12 @@
     <div id="scroll_div" v-on:scroll="scroll()">
       <v-layout row wrap>
         <v-flex xs12 sm12 md12 class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
-          <v-card color="orange" class="white--text ma-1">
+          <v-card color="blue" class="white--text ma-1">
             <v-card-title>
               <label class="pr-2">START:</label>
-              <input v-bind:value="time_change(Math.ceil(tent.firstTime))" v-on:keyup="keyup_time_change($event,i,true)">
+              <input v-bind:value="time_change(Math.ceil(tent.firstTime))" v-on:keyup="keyup_time_change($evnet,i,true,tent.firstTime)">
               <label>EDN:</label>
-              <input v-bind:value="time_change(Math.ceil(tent.lastTime))" v-on:keyup="keyup_time_change($event,i,false)">
+              <input v-bind:value="time_change(Math.ceil(tent.lastTime))" v-on:keyup="keyup_time_change($event,i,false,tent.lastTime)">
               <v-icon color="white" medium v-on:click="create_btn(i)">add_circle_outline</v-icon>
               <v-icon color="white" medium v-on:click="delete_btn(i)">delete</v-icon>
               <v-text-field
@@ -25,7 +25,7 @@
       </v-layout>
     </div>
     <div class="">
-      <v-btn fab color="orange" v-on:click="save_btn()">
+      <v-btn fab color="blue" v-on:click="save_btn()">
         <v-icon color="white">get_app</v-icon>
       </v-btn>
 
@@ -78,11 +78,13 @@ export default {
       this.percent_action(0);
       this.$router.push({name:'content', query:{video:this.up_getters.subtitle_.video_pk}});
     },
-    keyup_time_change(evt,num,check){
+    keyup_time_change(evt,num,check,time){
       if (check) {
-        this.content[num].firstTime = this.time_second(evt.target.value);//초로 바꿔야함
+        // this.content[num].firstTime = this.time_second(evt.target.value);//초로 바꿔야함
+          this.content[num].firstTime = time;
       }else{
-        this.content[num].lastTime = this.time_second(evt.target.value);//초로 바꿔야함
+        // this.content[num].lastTime = this.time_second(evt.target.value);//초로 바꿔야함
+          this.content[num].lastTime = time;
       }
     },
     time_change(seconds){
@@ -122,7 +124,7 @@ export default {
       let inter = setInterval(() => {
         this.percent_data = this.percent;
         if(this.percent_data === 100){
-          console.log("clear");
+          this.open = false;
           clearInterval(inter);
         }
       }, 100);

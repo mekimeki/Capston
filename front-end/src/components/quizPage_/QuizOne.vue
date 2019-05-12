@@ -60,17 +60,17 @@
                         <v-btn v-if="n==6" color="red lighten-1" flat="flat" v-on:click="next(),checkAns()">
                             <div class="buttonClick">NEXT</div>
                         </v-btn>
-                        <v-btn class="buttonClick pt-5 mt-5" v-if="n==7" color="red" flat="flat" v-on:click.stop="dialog = false, postQuest()">
+                        <div class="buttonClick pt-5 mt-5" v-if="n==7" color="red" flat="flat" v-on:click.stop="dialog = false, postQuest()">
 
                             <v-layout class="pt-5 mt-5">
                                 <div class="pt-5 mt-5">
-                                    <div class="pt-5 mt-5">
-                                        <div class="pt-3 mt-5">{{ close }}</div>
+                                    <div class="pt-5 mt-5 pr-3">
+                                        <div class="pt-3 mt-5 pr-3">{{ close }}</div>
                                     </div>
                                 </div>
                             </v-layout>
 
-                        </v-btn>
+                        </div>
                     </v-card-actions>
                 </v-card>
             </v-tab-item>
@@ -160,6 +160,9 @@ export default {
 </script>
 
 <style>
+.buttonClick{
+    cursor: pointer;
+}
 .resultPage {
     display: inline;
     float: left;

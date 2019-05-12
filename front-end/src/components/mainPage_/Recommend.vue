@@ -28,8 +28,11 @@
 </template>
 
 <script>
+import {
+    mapActions
+} from 'vuex';
 export default {
-  
+
     data() {
         return {
             pics: [{
@@ -50,9 +53,19 @@ export default {
             ],
         }
     },
-    mounted() {
-      window.scrollTo( 0, 0 );
-    }
+
+    methods: {
+        ...mapActions(['recommend_action']),
+    },
+    mounted: function () {
+        window.scrollTo(0, 0);
+        console.log("recommend");
+        this.recommend_action().then(result => {
+            console.log('picture data and recommend', result);
+        });
+
+    },
+
 };
 </script>
 

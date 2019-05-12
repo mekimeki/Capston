@@ -3,7 +3,9 @@
 import librosa
 import numpy
 import matplotlib.pylab as plt
+import json
 import sys
+from collections import OrderedDict
 
 
 def extract_max(pitches, magnitudes, shape):
@@ -61,7 +63,7 @@ def analyse(y, sr, n_fft, hop_length, fmin, fmax):
     pitches, magnitudes = extract_max(pitches, magnitudes, shape)
 
     pitches1 = smooth(pitches, window_len=50)
-    plot(pitches1, 'originWave', 'time', 'Hz')
+    # plot(pitches1, 'originWave', 'time', 'Hz')
     return pitches1
 
 
@@ -87,9 +89,16 @@ def main():
 
     n_fft = int(n_fft)
     hop_length = int(hop_length)
+    analysis_json = OrderedDict()
+    analysis_json["analysis"] = analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist()
 
-    sys.exit(analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist())
+    with open('analysis.json','w',encoding='utf-8') as make_file:
+        json.dumps(analysis_json, make_ ensure_ascii=False, indent='\t')
 
+    # print(analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist())
+    # sys.exit(analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist())
+    # return analyse(y, sr, n_fft, hop_length, fmin, fmax).tolist()
+    
 
 if __name__ == "__main__":
     main()

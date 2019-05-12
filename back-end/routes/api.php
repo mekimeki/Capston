@@ -32,8 +32,8 @@ Route::post('/searchEn','SearchWord\SearchWordController@searchEn');
 
 Route::get('show/{b_id}', 'QuizController@show'); 
 
-Route::get('quiz', 'QuizController@english'); // 퀴즈
-Route::post('quiz', 'QuizController@result'); // 퀴즈 결과 받아오기 (점수)
+Route::post('quiz', 'QuizController@english'); // 퀴즈
+// Route::post('quiz', 'QuizController@result'); // 퀴즈 결과 받아오기 (점수)
 Route::get('japan', 'QuizController@japanese'); // 일본어 퀴즈
 
 // 단어장
@@ -218,6 +218,8 @@ Route::group(['prefix'=>'voca'],function(){
 
 	Route::post('/insert','Voca\VocabularyController@insertVoca');
 
+	Route::get('/history', 'Voca\VocabularyController@histroy');
+
 });
 
 Route::group(['prefix'=>'vocaBook'],function(){
@@ -237,10 +239,13 @@ Route::post('/csrf-token',function(){
 	return csrf_token() ;
 });
 
-//테스트 결과
-Route::get('testResult', 'TestResult\VocaTestResultController@getResult');
-
 //100LS
 Route::post('voice/extraction', 'VoiceAnalysisController@voiceExtraction');
 Route::post('voice/record','VoiceAnalysisController@voiceRecord');
-Route::get('voice/test', 'VoiceAnalysisController@test');
+Route::post('voice/intonation', 'VoiceAnalysisController@intonation');
+
+//시험 결과
+Route::post('testResult', 'TestResult\VocaTestResultController@getResult');
+Route::post('insertResult', 'TestResult\VocaTestResultController@insertResult');
+
+Route::post('speakResult', 'TestResult\SResultController@getResult');
