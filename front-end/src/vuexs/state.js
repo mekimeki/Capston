@@ -35,7 +35,9 @@ const state = {
   video_cut:false,
   graph_origin:[],
   graph_record:[],
+  graph_score:'',
   subtitle_record:'',
+  audio:'',
 }
 
 export default state;

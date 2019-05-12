@@ -192,13 +192,14 @@ export default class Service {
     this.form.append('e_time',data.lastTime);
     return this.service_post(this.domain+request,this.form);
   }
-  graph_record(reqeust,data){
+  graph_record(request,data){
+    console.log('service',data);
     this.form.append('audio',data.audio);
     this.form.append('originText',data.originText);
     this.form.append('originDuration',data.originDuration);
     this.form.append('id',data.id);
     this.form.append('title',data.title);
-    return this.service_post(this.domain+request,this.from);
+    return this.service_post(this.domain+request,this.form);
   }
 }
 

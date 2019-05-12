@@ -4,7 +4,7 @@
       style="display:none"
       v-on:timeupdate="seek_timeupdate()"
     >
-      <source src="" type="audio/mpeg">
+      <source src="" type="audio/">
     </audio>
     <div id="controller">
       <v-layout>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   data(){
     return{
@@ -78,6 +79,7 @@ export default {
     }
   },
   methods:{
+    ...mapActions(['audio_action']),
     time_change(seconds){
       let hour = parseInt(seconds/3600);
       let min = parseInt((seconds%3600)/60);
@@ -89,6 +91,9 @@ export default {
       this.time = this.time_change(Math.ceil(audio.currentTime))+"/"+this.time_change(Math.ceil(audio.duration));
     },
     seek_change(){
+      if(this.slider === 0){
+        document.getElementById('play_btn').innerHTML = 'pause_circle_outline';
+      }
       this.audio.currentTime = this.audio.duration * (this.slider / 100);
     },
     seek_speaker_change(){
@@ -141,6 +146,7 @@ export default {
   },
   mounted:function(){
     this.audio = document.getElementById('audio');
+    this.audio_action(this.audio);
     this.seek_bar = document.getElementById('seek_bar');
     this.seek_speaker = document.getElementById('seek_speaker');
     this.audio.onloadeddata = () =>{

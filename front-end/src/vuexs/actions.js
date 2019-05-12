@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Service from '../api/service'
 
-const service = new Service("http://13.209.125.223/");//axios api service class created
-
+const service = new Service("http://172.26.2.223/");//axios api service class created
+// 172.26.2.223
 const actions = {
   video_action : ({commit},payload) => {//video actions
     commit('video_mutation',payload);
@@ -15,6 +15,9 @@ const actions = {
   },
   subtitle_open_action: ({commit},payload) =>{//subtitle open action
     return service.subtitle_open('http://localhost/Capstone_practice/project_videoPlayer/videoBack/videoText_parser.php');
+  },
+  audio_action: ({commit},payload) =>{
+    commit('audio_mutation',payload);
   },
   subtitle_preview_action: ({commit},payload) =>{
     commit('subtitle_preview_mutation',payload);
