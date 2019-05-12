@@ -10,10 +10,10 @@ const state = {
     {name:'word',content:[]},
   ],//create content preview value
   bookmark:[//book mark
-    {name:'content',color:'info',mark:'bookmark_border', option:'share' ,content:[]},
-    {name:'word',color:'blue-grey',mark:'bookmark', option:'share',content:[]},
-    {name:'wordBook',color:'blue-grey',mark:'bookmark', option:'bookmark',content:[]},
-    {name:'subtitleBook',color:'info',mark:'bookmark_border', option:'bookmark',content:[]},
+    {tab:'문법' ,name:'content',color:'info',mark:'bookmark_border', option:'share' ,content:[]},
+    {tab:'단어' ,name:'word',color:'blue-grey',mark:'bookmark', option:'share',content:[]},
+    {tab:'단어북마크' ,name:'wordBook',color:'blue-grey',mark:'bookmark', option:'bookmark',content:[]},
+    {tab:'대사북마크' ,name:'subtitleBook',color:'info',mark:'bookmark_border', option:'bookmark',content:[]},
   ],
   bookmark_image:[],
   seek_bar:"",//input[range] element
@@ -24,11 +24,18 @@ const state = {
     email:"",
     PassWord:"",
   },
-  upload:{//upload
-    video:false,
-    subtitle:false,
+  upload:{//upload value
+    video:false, //video name
+    subtitle:false, //subtitle name
+    firstTime:false, //video cut firstTime
+    lastTime:false, //video cut lastTime
+    subtitle_:false, //subtitle create name
+    content:false, // content create name
   },
   video_cut:false,
+  graph_origin:[],
+  graph_record:[],
+  subtitle_record:'',
 }
 
 export default state;

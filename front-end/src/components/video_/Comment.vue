@@ -8,7 +8,7 @@
              v-if="item.header"
              :key="item.header"
            >
-           <v-icon>chat</v-icon>
+           <v-icon color="teal lighten-1">chat</v-icon>
              {{ item.header }}
            </v-subheader>
 

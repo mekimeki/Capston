@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="">
   <div id="video_box">
-    <!-- <video src="@/components/test.mp4" autoplay poster="posterimage.jpg" v-on:timeupdate="seek_timeupdate()"> -->
+    <!-- <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted="muted">
+    </video> -->
 
-    </video>
     <video id="video" :src="videoLink"
       v-on:timeupdate="seek_timeupdate()"
     >
@@ -17,7 +17,7 @@
             v-on:mouseup="mouse_up()"
             id="seek_bar"
             v-model="slider_play"
-            color="orange"
+            color="teal lighten-1"
             :label="time"
             text-color="white"
             max="100"
@@ -27,7 +27,7 @@
         <v-flex xl1 sm1 md1>
           <v-btn fab small
             v-on:click="play($event)">
-            <v-icon large color="orange" id="play_btn">play_circle_outline</v-icon>
+            <v-icon large color="teal lighten-1" id="play_btn">play_circle_outline</v-icon>
           </v-btn>
         </v-flex>
         <v-flex xl3 sm3 md3>
@@ -36,14 +36,14 @@
               <v-btn fab small
                 v-on:click="audio_on_off($event)"
               >
-                <v-icon middle color="orange" id="audio_btn">volume_up</v-icon>
+                <v-icon middle color="teal lighten-1" id="audio_btn">volume_up</v-icon>
               </v-btn>
             </v-flex>
             <v-flex xl12 sm12 sm12>
               <v-slider id="audio_seek"
                 v-on:change="audio_change($event)"
                 v-model="slider_audio"
-                color="orange"
+                color="teal lighten-1"
                 max="100"
                 min="0"
               ></v-slider>
@@ -54,14 +54,14 @@
           <v-layout>
             <v-flex xl12 sm12 md12>
               <v-btn fab small id="speed_btn">
-                <v-icon middle color="orange">replay_10</v-icon>
+                <v-icon middle color="teal lighten-1">replay_10</v-icon>
               </v-btn>
             </v-flex>
             <v-flex xl12 sm12 md12>
               <v-slider id="speed_seek"
                 v-on:change="speed_change($event)"
                 v-model="slider_speed"
-                color="orange"
+                color="teal lighten-1"
                 max="100"
                 min="0"
               ></v-slider>
@@ -109,9 +109,11 @@ export default {
       if(this.video.muted === false){
         this.video.muted = true;
         evt.target.innerHTML = 'volume_off';
+        this.slider_audio = 0;
       }else{
         this.video.muted = false;
         evt.target.innerHTML = 'volume_up';
+        this.slider_audio = 100;
       }
     },
     audio_change(evt){
@@ -164,6 +166,10 @@ export default {
     this.seek_bar_action(this.seek_bar);//vuex mapActions
     this.video.onloadeddata = () =>{
       this.time = this.time_change(Math.ceil(video.currentTime))+"/"+this.time_change(Math.ceil(video.duration));
+      if(this.$route.query.time){
+        this.video.currentTime = this.$route.query.time;
+      }
+      // this.video.play();
     }
   },
   updated:function(){

@@ -79,7 +79,7 @@ export default class Service {
     return this.service_post_up(this.domain+request,this.form,config);
   }
   subtitle_upload(request,data,config){
-    console.log("ser",data);
+    console.log('subtitle upload',data);
     this.form.append("data",JSON.stringify(data.content));
     this.form.append("video_pk",data.video);
     return this.service_post_up(this.domain+request,this.form,config);
@@ -110,9 +110,6 @@ export default class Service {
     this.form.append('explain',data.text.explain);
     return this.service_post(this.domain+request,this.form);
   }
-  share(request,data){
-    return this.service_post(this.domain+request,this.form);
-  }
   video_cut_image(request,data){
     return this.service_get(this.domain+request+data);
   }
@@ -130,19 +127,15 @@ export default class Service {
     return this.service_get(this.domain+request+data);
   }
   //bookmark
-  bookmark(request,data){
+  bookmark_subtitle(request,data){
     this.form.append('data',data);
     this.form.append('picture',data.picture);
     return this.service_post(this.domain+request,this.form);
-    // const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-    // const file = new File(data.picture,{type:"image/png;"});
-    // console.log("?",file);
-    // this.form.append('data',data);
-    // this.form.append('picture',file);
-    //
-    // return axios.post(this.doamin+request,this.form,config)
-    // .then(res=>res.data)
-    // .catch(res=>res.data);
+  }
+  bookmark_word(request,data){
+    this.form.append('word',data.title);
+    this.form.append('email',data.email);
+    return this.service_post(this.domain+request,this.form);
   }
   video_explain(request,data){
     return this.service_get(this.domain+request+data);
@@ -164,8 +157,49 @@ export default class Service {
   //   console.log("요청준비중입니다")
   //   return this.service_post(this.domain+request,this.form);
   // }
- 
-  
+  share_content(request,data){
+    console.log('service',data);
+    this.form.append('voca',data.title);
+    this.form.append('explain',data.content);
+    this.form.append('time',data.time);
+    this.form.append('video_pk',data.pk);
+    return this.service_post(this.domain+request,this.form);
+  }
+  share_cocntent_update(request,data){
+    this.form.append('title',data.voca);
+    this.form.append('video_pk',data.video_pk);
+    this.form.append('explain',data.explain);
+    this.form.append('time',data.time);
+    this.form.append('vo_pk',data.vo_pk);
+    return this.service_post(this.domain+request,this.form);
+  }
+  share_word(reqeust,data){
+    // this.form.append('email',data.email);
+    // this.form.append('title',data.title);
+    return this.service_post(this.doamin+request,this.form);
+  }
+  history(request,data){
+    return this.service_get(this.domain+request+'?voca='+data);
+  }
+  recommend(reqeust,data){
+    return this.servcie_get(this.domain+reqeust+data);
+  }
+  graph_origin(request,data){
+    console.log("servcie",data);
+    this.form.append('v_pk',data.video_pk);
+    this.form.append('id',data.id);
+    this.form.append('s_time',data.firstTime);
+    this.form.append('e_time',data.lastTime);
+    return this.service_post(this.domain+request,this.form);
+  }
+  graph_record(reqeust,data){
+    this.form.append('audio',data.audio);
+    this.form.append('originText',data.originText);
+    this.form.append('originDuration',data.originDuration);
+    this.form.append('id',data.id);
+    this.form.append('title',data.title);
+    return this.service_post(this.domain+request,this.from);
+  }
 }
 
 // login(request,data){
