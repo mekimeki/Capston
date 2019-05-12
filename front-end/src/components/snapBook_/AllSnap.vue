@@ -34,7 +34,7 @@
                         </v-flex>
                         <!-- make album button -->
                         <v-flex xs6 pl-3 mt-2 pb-2 md4>
-                            <v-icon large color="grey darken-3" @click="plus(), createAlbumQuest()">add</v-icon>
+                            <v-icon large color="grey darken-3" @click="createAlbumQuest()">add</v-icon>
                         </v-flex>
                     </v-layout>
 
@@ -53,8 +53,8 @@
 
         <!-- modal of words crawling -->
         <div class="text-xs-center">
-            <v-dialog v-model="crawl" width="600px">
-                <v-card fill-height color="orange lighten-3">
+            <v-dialog v-model="crawl" width="450px">
+                <v-card fill-height color="teal lighten-2">
                     <v-container fill-height fluid pa-2 text-xs-left>
                         <v-layout fill-height>
                             <v-flex xs12 align-end flexbox>
@@ -62,10 +62,10 @@
                                     <v-img :src="lines[selectNumber].pic_add" contain></v-img>
                                 </v-card>
                                 <v-card flat color="white">
-                                    {{ lines[selectNumber].line }}
+                                    <div style="text-align:center; height:40px;" class="title pt-3">{{ lines[selectNumber].line }}</div>
                                 </v-card>
                                 <v-card flat color="white">
-                                    {{ lines[selectNumber].explain }}
+                                    <div style="text-align:center; height:50px;" class="title pt-3">{{ lines[selectNumber].explain }}</div>
                                 </v-card>
 
                                 <v-card v-for="(crawlWord, i) in crawlWords" :key="(crawlWord, i)" flat color="white">
@@ -79,7 +79,7 @@
                     </v-container>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" flat @click="crawl = false">
+                        <v-btn color="white" flat @click="crawl = false">
                             확인
                         </v-btn>
                     </v-card-actions>
@@ -91,8 +91,8 @@
         <v-flex justify-start white xs12 sm12 md12>
             <v-toolbar-items>
                 <v-bottom-nav :active.sync="bottomNav" :value="true" color="white">
-                    <v-btn color="blue" flat v-for="(menu,m) in menus" :key="(menu,m)" v-bind:value="menu.value" @click="allWord()">{{menu.word}}</v-btn>
-                    <v-btn color="blue" flat v-for="(book,i) in books" :key="(book,i)" v-bind:value="book.id" @click="selectedWordsQuest(i)">{{book.title}}</v-btn>
+                    <v-btn color="teal" flat v-for="(menu,m) in menus" :key="(menu,m)" v-bind:value="menu.value" @click="allWord()">{{menu.word}}</v-btn>
+                    <v-btn color="teal" flat v-for="(book,i) in books" :key="(book,i)" v-bind:value="book.id" @click="selectedWordsQuest(i)">{{book.title}}</v-btn>
                     <!-- <v-btn></v-btn> -->
                 </v-bottom-nav>
             </v-toolbar-items>
@@ -116,7 +116,7 @@
                 </v-layout>
                 <v-layout justify-center row wrap>
                     <v-flex v-for="(line, i) in lines" :key="(line, i)" v-bind="{ [`xs${flex}`]: true }" md2>
-                        <v-card color="orange lighten-3">
+                        <v-card color="teal lighten-2">
                             <v-card-text style="padding: 5px 10px">
                                 <v-layout justify-end>
 
@@ -127,13 +127,13 @@
                             </v-card-text>
 
                             <!--cards of words-->
-                            <v-container fill-height fluid pa-2 text-xs-center>
+                            <v-container fill-height fluid px-3 pt-2 pb-3 text-xs-center>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
                                         <v-card>
                                             <v-img @click="crawl = true, changeNumber(i)" :src="line.pic_add"></v-img>
                                             <v-card @click="crawl = true, changeNumber(i)">
-                                                {{ line.line }}
+                                                <div style="text-align:center; height:59px;" class="title mt-1 pt-3">{{ line.line }}</div>
                                             </v-card>
                                         </v-card>
                                     </v-flex>
@@ -175,7 +175,7 @@ export default {
     data() {
         return {
             menus: [{
-                word: '전체 단어',
+                word: '전체 대사',
                 value: 'all'
             }],
             books: [],
@@ -184,6 +184,10 @@ export default {
             box: false,
             selected: [],
             selectWords: [],
+            selectExplains: [],
+            imgAdd: [],
+            startData: [],
+            videoId: [],
             toggle: false,
             bottomNav: "all",
             //albumNums: [],
@@ -203,7 +207,7 @@ export default {
     methods: {
         //  start of 단어 출력 및 분류 
         wordQuest(changeID, flag) {
-            const baseURI = "http://172.26.2.194/api/update"
+            const baseURI = "http://172.26.2.223/api/update"
             const form = new FormData();
             form.append("id", changeID)
             form.append("flag", flag)
@@ -219,9 +223,9 @@ export default {
                 })
         },
         allWord() {
-            
-                var baseURI = "http://172.26.2.194/api/line/0";
-        
+
+            var baseURI = "http://172.26.2.223/api/line/0";
+
             axios
                 .get(baseURI)
                 .then(res => {
@@ -245,7 +249,7 @@ export default {
         // },
         classifyQuest(classifyWord = '') {
             var form = new FormData();
-            const baseURI = "http://172.26.2.194/api/book/0";
+            const baseURI = "http://172.26.2.223/api/book/0";
             form.append("classifyWord", classifyWord)
             axios
                 .get(baseURI, form)
@@ -260,26 +264,30 @@ export default {
         },
 
         //  start of 단어장 목록 보기 및 단어장에 단어추가 
-        plus() {
+        plus(table) {
             this.books.push({
-                "title": this.albumNames
+                "title": this.albumNames,
+                "id": table
             });
+            this.albumNames = '';
             console.log(this.books);
         },
         createAlbumQuest() {
-            const baseURI = "http://172.26.2.194/api/create"
+            const baseURI = "http://172.26.2.223/api/createLine"
             const form = new FormData();
-            form.append("title", this.albumNames)
-            console.log(this.albumNames)
-            form.append("lang", this.lang)
-            console.log(this.lang)
-            // form.append("category", category)
-            form.append("words", this.selectWords)
+            form.append("title", this.albumNames);
+            form.append("lang", this.lang);
+            form.append("lines[]", this.selectWords);
+            form.append("explains[]", this.selectExplains);
+            form.append("pic_adds[]", this.imgAdd);
+            form.append("start_dts[]", this.startData);
+            form.append("v_ids[]", this.videoId);
             console.log("success of make albums", this.selectWords)
             axios
                 .post(baseURI, form)
                 .then(res => {
                     console.log("ok", res);
+                    this.plus(res.data);
                     return true;
                 })
                 .catch(error => {
@@ -288,12 +296,15 @@ export default {
                 })
             this.selected = [];
             this.selectWords = [];
-            this.albumNames = '';
+            this.selectExplains = [];
+            this.imgAdd = [];
+            this.startData = [];
+            this.videoId = [];
             this.lang = '';
             this.category = '';
         },
         selectedWordsQuest(i) {
-            const baseURI = "http://172.26.2.194/api/line/" + this.books[i].id;
+            const baseURI = "http://172.26.2.223/api/line/" + this.books[i].id;
             axios
                 .get(baseURI)
                 .then(res => {
@@ -315,11 +326,26 @@ export default {
             } else {
                 this.toggle = false
             }
-            let idx = this.selectWords.indexOf(this.lines[po].word);
+            let idx = this.selectWords.indexOf(this.lines[po].line);
+            let idy = this.selectExplains.indexOf(this.lines[po].explain);
+            let idz = this.imgAdd.indexOf(this.lines[po].pic_add);
+            let ida = this.startData.indexOf(this.lines[po].start_dt);
+            let idb = this.videoId.indexOf(this.lines[po].v_id);
+
             if (idx < 0) {
-                this.selectWords.push(this.lines[po].word);
+                this.selectWords.push(this.lines[po].line);
+                this.selectExplains.push(this.lines[po].explain);
+                this.imgAdd.push(this.lines[po].pic_add);
+                this.startData.push(this.lines[po].start_dt);
+                this.videoId.push(this.lines[po].v_id);
+
+                console.log("선택ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ", this.selectWords)
             } else {
-                this.selectWords.splice(idx, 1)
+                this.selectWords.splice(idx, 1);
+                this.selectExplains.splice(idy, 1);
+                this.imgAdd.splice(idz, 1);
+                this.startData.splice(ida, 1);
+                this.videoId.splice(idb, 1);
             }
 
             console.log(this.selected)
@@ -354,12 +380,12 @@ export default {
         deleteQuest() {
             var form = new FormData();
             form.append("selected", this.selected);
-            axios.get("http://172.26.2.194/get-token").then(response => {
+            axios.get("http://172.26.2.223/get-token").then(response => {
                 if (response.data) {
                     form.append("_token", response.data);
                     console.log(this.selected)
                     axios
-                        .post("http://172.26.2.194/api/deletedLine", form)
+                        .post("http://172.26.2.223/api/deletedLine", form)
                         .then(response => {
                             console.log("response ==>>>> ", response.data);
                             this.lines = response.data
@@ -376,7 +402,7 @@ export default {
             var form = new FormData();
             form.append("clickWord", cword)
             console.log(cword);
-            var baseURI = "http://172.26.2.194/api/example";
+            var baseURI = "http://172.26.2.223/api/example";
             axios
                 .post(baseURI, form)
                 .then(res => {
@@ -396,7 +422,7 @@ export default {
     },
 
     beforeCreate() {
-        var baseURI = "http://172.26.2.194/api/line/0";
+        var baseURI = "http://172.26.2.223/api/line/0";
         axios
             .get(baseURI)
             .then(res => {
@@ -406,7 +432,7 @@ export default {
             .catch(error => {
                 console.log("failed", error);
             });
-        baseURI = "http://172.26.2.194/api/lineBook";
+        baseURI = "http://172.26.2.223/api/lineBook";
         axios
             .get(baseURI)
             .then(res => {

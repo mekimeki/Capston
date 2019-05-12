@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Service from '../api/service'
 
-const service = new Service('http://172.26.2.194/');
+const service = new Service('http://172.26.2.223/');
 
 
 // import Service from '../api/service';
@@ -82,7 +82,7 @@ const actions = {
     if(check){
       commit('logout_mutation');
     }else{
-     alert("logoutX");
+    alert("logoutX");
     }
   },
   upload_actions : ({commit},payload,check) => {
@@ -146,31 +146,50 @@ const actions = {
     });
   },
 
-
+  //quiz actions
   quest_actions : ({ commit },payload) => {
     return service.quiz_quest('api/quiz',payload);
   },
-
   quest_post_actions : ({commit},payload) =>{
-    service.token_('get-token').then(result =>{
-      if(result){
-        return service.quiz_post('api/quiz',payload,result);
-      }
-    }).catch(result =>{
-      alert('_token error');
-    });
+    return service.quiz_post('api/insertResult',payload);  
   },
 
-  // word_delete_actions : ({ commit }, payload) =>{
-  //   service.token_('get-token').then(result => {
-  //     console.log(result)
-  //     if(result) {
-  //       return service.word_delete_post('api/deletedWord',payload,result);
-  //     }
-  //   }).catch(result => {
-  //     alert('word delete error')
-  //   })
-  // },
+  //word delete actions
+  word_delete_actions : ({ commit }, payload) =>{
+    return service.word_delete_post('api/deletedWord',payload);
+  },
+  //word crawl actions
+  word_crawl_actions : ({ commit }, payload) => {
+    return service.word_crawl_post('api/example', payload);
+  },
+  //call album actions
+  call_album_actions : ({ commit }, payload) => {
+    console.log(payload);
+    return service.call_album_post('api/create', payload);
+  },
+  //all word actions
+  all_word_actions : ({ commint }, payload) => {
+    if(payload == 0){
+      return service.all_word_quest('api/book/0', payload);
+    }else if(payload == 1){
+      return service.all_word_quest('api/memo/T', payload);
+    }else{
+      return service.all_word_quest('api/memo/F', payload);      
+    }
+  },
+  //classify word actions
+  classify_word_actions : ({ commit },payload) => {
+    return service.classify_word_quest('api/book/0',payload);
+  },
+  //selected word quest
+  select_word_actions : ({ commit },payload) => {
+    return service.select_word_quest('api/book/'+ payload, payload)
+  },
+   //update word actions
+  update_word_actions : ({ commit }, payload) => {
+    return service.update_word_post('api/update',payload);
+  },
+
 
   upload_created_action: ({commit},payload) =>{
     return service.upload_created('api/video/enrollment',payload);
