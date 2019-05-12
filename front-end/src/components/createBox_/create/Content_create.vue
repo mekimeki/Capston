@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import video_ from "@/components/video_/Video2";
+import video_ from "@/components/video_/Video";
 import content_ from "@/components/createBox_/CreateContent";
 import search_ from "@/components/createBox_/CreateSearch";
 export default {

@@ -11,7 +11,6 @@
 
     <v-text-field
       v-model="login.password"
-      type="password"
       label="PassWord"
       required
     ></v-text-field>
@@ -19,7 +18,7 @@
     <v-flex>
       <v-btn
         block
-        v-on:click="login_click()"
+        v-on:click="login_actions(login)"
       >
         로그인
       </v-btn>
@@ -69,6 +68,7 @@
 
 <script>
 import { mapActions,mapGetters } from 'vuex';//vuex actions import
+import axios from 'axios';
 
 export default {
   data(){
@@ -77,39 +77,17 @@ export default {
         email:"",
         password:"",
       },
-      login_check:false,
     }
   },
   methods:{
     ...mapActions(['login_actions','login_page_actions']),
-    login_click(){
-      this.login_actions(this.login);
-      this.login.email = "";
-      this.login.password = "";
-      this.login_check = true;
-    }
-  },
-  mounted:function(){
-    if(this.login_getters.email&&this.login_getters.nickname){
-      this.$router.push({name:'start'});
-      alert('이미 로그인 했습니다.');
-    }
-  },
-  updated:function(){
   },
   computed:{
     ...mapGetters({
-      login_getters:'login_getters',
+
     }),
-  },
-  watch:{
-    login_check: function(data){
-      if(data){
-        this.$router.push({name:'start'});
-        alert('로그인 완료');
-      }
-    }
-  },
+
+  }
 }
 </script>
 

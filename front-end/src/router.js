@@ -37,7 +37,6 @@ import test from './views/Test.vue';
 //
 import audio from '@/components/video_/Audio';
 import video2 from '@/components/video_/Video2';
-import graph from '@/components/video_/Graph';
 //
 const login_check = (path,query_check) => (to,from,next) => {//login and query check
   //to 에서 vuex에서 받은 정보 가지고 localStorage.getItem 부분에 박기
@@ -66,11 +65,6 @@ export default new Router({
       component:audio,
     },
     {
-      path:'/graph',
-      name:'graph',
-      component:graph,
-    },
-    {
       path:'/video2',
       name:'video2',
       component:video2,
@@ -87,7 +81,7 @@ export default new Router({
       children:[
       {
 
-      path:'main',
+      path:'/main',
       name:'register',
       component:register_video,
     },
@@ -98,7 +92,7 @@ export default new Router({
       name:'qselect',
       component:quiz_select,
     },
-
+    
     { //allWord
       path:'/allWord',
       name:'allWord',
@@ -184,7 +178,7 @@ export default new Router({
     },
     { //redirect
       path:'/*',
-      redirect:{name:'start'},
+      redirect:{name:'main'},
     },
   ]
 });

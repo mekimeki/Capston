@@ -73,22 +73,15 @@
         class="hidden-sm-and-down"
     ></v-text-field> -->
         <v-spacer></v-spacer>
-        <span v-if="lg_getter.email">
-          <v-btn icon router :to="{name:'upload'}">
-              <v-icon color="grey darken-2">video_call</v-icon>
-          </v-btn>
-          <v-btn icon>
-              <v-icon color="grey darken-2">notifications</v-icon>
-          </v-btn>
-          <v-btn icon>
-              <v-icon color="grey darken-2">account_circle</v-icon>
-          </v-btn>
-        </span>
-        <span v-else>
-          <v-btn icon router :to="{name:'login'}">
-              <v-icon color="grey darken-2">account_circle</v-icon>
-          </v-btn>
-        </span>
+        <v-btn icon>
+            <v-icon color="grey darken-2">video_call</v-icon>
+        </v-btn>
+        <v-btn icon>
+            <v-icon color="grey darken-2">notifications</v-icon>
+        </v-btn>
+        <v-btn icon>
+            <v-icon color="grey darken-2">account_circle</v-icon>
+        </v-btn>
         <v-btn icon large>
             <v-avatar size="40px" tile>
                 <img class="logo"
@@ -101,7 +94,6 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
 export default {
     data: () => ({
         drawer: false,
@@ -169,19 +161,7 @@ export default {
                 link: "qselect"
             }
         ]
-    }),
-    methods:{
-      ...mapActions(['login_check_actions']),
-    },
-    mounted:function(){
-      // console.log(localStorage.getItem('login'));
-      this.login_check_actions(localStorage.getItem('login'));
-    },
-    computed: {
-      ...mapGetters({
-        lg_getter:'login_getters',
-      })
-    },
+    })
 };
 </script>
 

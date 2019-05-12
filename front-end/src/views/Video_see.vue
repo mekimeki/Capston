@@ -1,46 +1,45 @@
 <template lang="html">
-    <v-layout row wrap class="pa-3">
-      <v-flex xl12 md12 sm12>
-        <v-layout>
-          <v-flex xl8 md8 sm8>
-            <video_></video_>
-            <subtitle_></subtitle_>
-            <capture_></capture_>
-          </v-flex>
-          <v-flex xl4 sm4 md4>
-            <content_></content_>
-          </v-flex>
-        </v-layout>
+  <v-container>
+    <v-layout>
+      <v-flex xs12>
+        <video_></video_>
+        <subtitle_></subtitle_>
       </v-flex>
-      <v-flex xl12 sm12 sm12>
-        <v-layout>
-          <v-flex xs8 sm8 md8>
-            <v-card>
-              <v-card-title>
-                <v-icon midum left color="teal lighten-1">local_offer</v-icon>
-                <span class="headline font-weight-light-bold">{{explain.title}}</span>
-              </v-card-title>
-              <v-card-title>
-                <v-icon color="teal lighten-1">person</v-icon>
-                <span>NAME</span>
-              </v-card-title>
-              <v-card-text class="title font-weight">
-                {{explain.content}}
-              </v-card-text>
-            </v-card>
-            <comment_></comment_>
-          </v-flex>
-          <v-flex xs4 sm4 md4>
-            <v-layout row wrap>
-              <div>
-                <v-flex xs12 sm12 md12 v-for="i in 5">
-                </v-flex>
-              </div>
-            </v-layout>
-          </v-flex>
-        </v-layout>
+      <v-flex xs12 sm4 md4>
+        <content_></content_>
       </v-flex>
     </v-layout>
+    <v-flex xs12 sm12 md12>
+      <!--  -->
+      <v-layout >
+        <v-flex xs8 sm8 md8>
+          <v-card>
+            <v-card-title>
+              <v-icon midum left>local_offer</v-icon>
+              <span class="headline font-weight-light-bold">{{explain.title}}</span>
+            </v-card-title>
+            <v-card-title>
+              <v-icon>person</v-icon>
+              <span>NAME</span>
+            </v-card-title>
+            <v-card-text class="title font-weight">
+              {{explain.content}}
+            </v-card-text>
+          </v-card>
+          <comment_></comment_>
+        </v-flex>
+        <v-flex xs4 sm4 md4>
+          <v-layout row wrap>
+            <div>
+              <v-flex xs12 sm12 md12 v-for="i in 5">
+              </v-flex>
+            </div>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-flex>
+    <capture_></capture_>
+  </v-container>
 </template>
 
 <script>

@@ -4,7 +4,7 @@
       style="display:none"
       v-on:timeupdate="seek_timeupdate()"
     >
-      <source src="" type="audio/mpeg">
+      <source src="@/components/audio.mp3" type="audio/mpeg">
     </audio>
     <div id="controller">
       <v-layout>
@@ -17,7 +17,7 @@
             v-on:click="video_loop(false)"
             id="seek_bar"
             v-model="slider"
-            color="teal lighten-1"
+            color="orange"
             :label="time"
             max="100"
             min="0"
@@ -27,7 +27,7 @@
           <v-btn fab small class="btn"
             v-on:click="play($event)"
           >
-            <v-icon large color="teal lighten-1" id="play_btn">play_circle_outline</v-icon>
+            <v-icon large color="orange" id="play_btn">play_circle_outline</v-icon>
           </v-btn>
         </v-flex>
         <v-flex xl2 sm2 md2>
@@ -36,7 +36,7 @@
               <v-btn fab small class="btn"
                 v-on:click="audio_on_off($event)"
               >
-                <v-icon large color="teal lighten-1" id="audio_btn">volume_up</v-icon>
+                <v-icon large color="orange" id="audio_btn">volume_up</v-icon>
               </v-btn>
             </v-flex>
             <v-flex xl12 sm12 md12>
@@ -44,7 +44,7 @@
                 id="seek_speaker"
                 v-on:change="seek_speaker_change()"
                 v-model="slider_audio"
-                color="teal lighten-1"
+                color="orange"
                 max="100"
                 min="0"
               ></v-slider>
@@ -55,7 +55,7 @@
           <v-btn fab small class="btn"
             v-on:click="audio_upload($event)"
           >
-            <v-icon large color="teal lighten-1">get_app</v-icon>
+            <v-icon large color="orange">get_app</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
@@ -173,9 +173,9 @@ export default {
   position: relative;
   display: inline-block;
   text-align: center;
-  border:5px solid #26A69A;
+  border:5px solid orange;
   border-radius: 20px;
-  width:100%;
+  width:70%;
 }
 
 

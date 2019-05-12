@@ -1,12 +1,12 @@
 <template lang="html">
-  <v-layout row wrap>
+  <div class="">
     <v-flex xs6 sm6 md6 id="center">
         <video_></video_>
     </v-flex>
     <v-flex xs12 sm12 md12>
       <createVideo_></createVideo_>
     </v-flex>
-  </v-layout>
+  </div>
 </template>
 
 <script>

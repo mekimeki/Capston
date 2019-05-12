@@ -14,17 +14,8 @@ const getters = {
   content_preview_getter: (state) =>{
     return state.content_preview;
   },
-  capture_getter: (state) =>{
-    return state.capture;
-  },
-  capture_data_getter: (state) =>{
-    return state.capture_data;
-  },
   bookmark_getter: (state) =>{
     return state.bookmark;
-  },
-  percent_getter: (state) =>{
-    return state.percent;
   },
   bookmark_image_getter: (state) =>{
     return state.bookmark_image;
@@ -40,16 +31,7 @@ const getters = {
   },
   video_cut_getters: (state) =>{
     return state.video_cut;
-  },
-  graph_orign_getter: (state) =>{
-    return state.graph_origin;
-  },
-  graph_record_getter: (state) =>{
-    return state.graph_record;
-  },
-  subtitle_record_getter: (state) =>{
-    return state.subtitle_record;
-  },
+  }
 }
 
 export default getters;

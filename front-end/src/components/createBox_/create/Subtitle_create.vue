@@ -1,21 +1,23 @@
 <template lang="html">
-  <v-layout>
-    <v-flex xs6 sm6 md6>
-    <v-layout row wrap>
-      <v-flex xs12 sm12 md12>
-        <video_></video_>
-        <createSubtitleOption_></createSubtitleOption_>
-      </v-flex>
-      <v-flex xs12 sm12 md12>
-        <createInput_></createInput_>
-      </v-flex>
-    </v-layout>
-    </v-flex>
-    <v-flex xs6 sm6 md6>
-      <createSubtitle_></createSubtitle_>
-    </v-flex>
+  <v-container>
+      <v-layout>
+        <v-flex xs6 sm6 md6>
+        <v-layout row wrap>
+          <v-flex xs12 sm12 md12>
+            <video_></video_>
+            <createSubtitleOption_></createSubtitleOption_>
+          </v-flex>
+          <v-flex xs12 sm12 md12>
+            <createInput_></createInput_>
+          </v-flex>
+        </v-layout>
+        </v-flex>
+        <v-flex xs6 sm6 md6>
+          <createSubtitle_></createSubtitle_>
+        </v-flex>
 
-  </v-layout>
+      </v-layout>
+  </v-container>
 </template>
 
 <script>
