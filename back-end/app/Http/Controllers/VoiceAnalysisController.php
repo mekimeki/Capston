@@ -171,8 +171,8 @@ class VoiceAnalysisController extends Controller
             return "다시 녹음해 주세요";
         } else {
             $textComparison = $this->comparison($originText, $recordText[0]);
-            \Log::debug("duration ===".$durationDistance);
-            \Log::debug("comparison ===".$textComparison["similarity"]);
+            \Log::debug("durationDistance ===".$durationDistance);
+            \Log::debug("textComparison ===".$textComparison["similarity"]);
 
             $score = 20 + ($durationDistance * 0.2) + ($textComparison["similarity"] * 0.4);
             return ["recordAnaly"=>$analyDate, "score"=>$score];

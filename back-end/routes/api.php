@@ -32,8 +32,8 @@ Route::post('/searchEn','SearchWord\SearchWordController@searchEn');
 
 Route::get('show/{b_id}', 'QuizController@show'); 
 
-Route::get('quiz', 'QuizController@english'); // 퀴즈
-Route::post('quiz', 'QuizController@result'); // 퀴즈 결과 받아오기 (점수)
+Route::post('quiz', 'QuizController@english'); // 퀴즈
+// Route::post('quiz', 'QuizController@result'); // 퀴즈 결과 받아오기 (점수)
 Route::get('japan', 'QuizController@japanese'); // 일본어 퀴즈
 
 // 단어장

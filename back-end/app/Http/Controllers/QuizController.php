@@ -21,14 +21,34 @@ class QuizController extends Controller
     	$this->snoopy = new Snoopy;
     }
 
-    public function english()
+    public function english(Request $request)
     {
         $id = 1;
-        $vocas = word::where('wbook_pk', $id)->select('w_nm AS word')->inRandomOrder()->take(4)->get();
+        $ran_box = $request->input('ran_box[]');
+
+        $vocas = word::where('wbook_pk', $id)->select('w_nm AS word')->groupBy('w_nm')->get()->toArray();
+        
+        if(empty($ran_box)){
+            $ran_box = [];
+        }
+
+        $random = random_int(0, count($vocas)-1);
+        
+        while(in_array($random, $ran_box)){
+            $random = random_int(0, $vocas->count()-1);
+        }
+
+        array_push($ran_box, $random);
+
         \Log::debug($vocas);
-        $random = random_int(0, $vocas->count()-1);
-        $quiz = $vocas->slice($random, 1);
-        $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$quiz[$random]->word);
+
+        $quiz = $vocas[$random]['word'];
+        $randoms = array_rand($vocas,4);
+        $choices = [$vocas[$randoms[0]],$vocas[$randoms[1]],$vocas[$randoms[2]],$vocas[$randoms[3]]];
+        
+        \Log::debug($vocas);
+        
+        $this->snoopy->fetch('https://m.dic.daum.net/search.do?q='.$quiz);
         $result = $this->snoopy->results;
 
         $matchFlag = preg_match('/<ul class="list_search">(.*?)<\/ul>/is', $result, $mean);
@@ -47,7 +67,7 @@ class QuizController extends Controller
             $array = explode('<li>', $mean[0]);
             array_shift($array);
             
-            $back = ["ques"=>$array, "choice"=>$vocas, "ans"=>$random];
+            $back = ["ques"=>$array, "choice"=>$choices, "ans"=>$random];
             $back = json_encode($back, JSON_UNESCAPED_UNICODE);
             return $back;
 		}else{
