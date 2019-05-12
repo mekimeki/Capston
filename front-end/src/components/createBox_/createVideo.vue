@@ -1,14 +1,7 @@
 <template lang="html">
-  <div>
-    <v-btn color="red" fab small v-on:click="cut()" style="color:'white';">
-      CUT
-    </v-btn>
-    <v-btn color="blue" fab small v-on:click="click_play()">
-      <v-icon color="white">
-        play_arrow
-      </v-icon>
-    </v-btn>
-
+  <v-container>
+    <v-btn fab large v-on:click="cut()">CUT</v-btn>
+    <v-btn fab large v-on:click="click_play()">Play</v-btn>
     <div class="text-xs-center">
       <v-dialog
         v-model="open"
@@ -19,34 +12,31 @@
         <v-card>
           <v-card-text>
             Please stand by
-            <v-progress-linear v-model="percent_video_cut"></v-progress-linear>
+            <v-progress-linear v-model="precent_video_cut"></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
     </div>
-
     <!-- <template v-if="open">
       <v-flex>
          <v-progress-linear v-model="precent_video_cut"></v-progress-linear>
       </v-flex>
     </template> -->
     <canvas style="display:none" id="canvasd" width="800" height="500"></canvas>
-    <br>
+    <hr>
     <span id="bar_start">{{video_firstTime}}</span>
     <div id="ranges">
       <input id="range_1" type="range" name="" value="" max="100" v-on:change="change_time_bar($event,true)">
       <input id="range_2" type="range" name="" value="" max="100" v-on:change="change_time_bar($event,false)">
     </div>
-    <br>
     <span id="bar_end">{{video_lastTime}}</span>
-    <br>
-
-    START:<input class="input" type="text" name="" value="" v-model="video_firstTime" v-on:keyup="keyup_time_change($event,true)">
-    END:<input class="input" type="text" name="" value="" v-model="video_lastTime" v-on:keyup="keyup_time_change($event,false)">
+    <hr>
+    START:<input type="text" name="" value="" v-model="video_firstTime" v-on:keyup="keyup_time_change($event,true)">
+    END:<input type="text" name="" value="" v-model="video_lastTime" v-on:keyup="keyup_time_change($event,false)">
     <div class="" v-show="up_getters.firstTime&&up_getters.lastTime">
       <v-btn v-on:click="move()">다음으로</v-btn>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -65,7 +55,7 @@ export default {
       firstTime:0,
       lastTime:0,
       open:false,
-      percent_video_cut:0,
+      precent_video_cut:0,
       check:false,
       //
       canvas:'',
@@ -148,12 +138,11 @@ export default {
       }
       this.video_cut_actions(upload_data);
       let inter = setInterval(() => {
-        this.percent_video_cut = this.percent;
+        this.precent_video_cut = this.percent;
         if(this.percent_video_cut === 100){
-          if(this.up_getters.firstTime&&this.up_getters.lastTime){
-            this.open = false;
-            clearInterval(inter);
-          }
+          console.log("clear");
+          clearInterval(inter);
+          this.open = false;
         }
       }, 100);
     },
@@ -180,6 +169,24 @@ export default {
     this.video.onloadeddata = () =>{
       this.firstTime = this.time_change(this.firstTime);
       this.lastTime = this.time_change(this.video.duration);
+
+      // let test_interval = setInterval(()=>{
+      //   let ctx = this.canvas.getContext("2d");//cnavas data start
+      //   let video_img = this.v_getter;//video store.js getter image data
+      //   ctx.drawImage(video_img, 10, 10);
+      //   this.image_view = this.canvas.toDataURL("image/jpg");
+      //
+      //   for (var i = 0; i < 10; i++) {
+      //     console.log("?");
+      //     let img = document.createElement('img');
+      //     img.style.width = '10%';
+      //     img.style.height = '100%';
+      //     img.src = this.image_view;
+      //     document.getElementById('ranges').append(img);
+      //   }
+      //
+      //   clearInterval(test_interval);
+      // },1000);
     }
   },
   updated:function(){
@@ -207,7 +214,8 @@ export default {
   height:50px;
   width:100%;
   text-align: center;
-  border: 2px solid rgb(9, 164, 251);
+
+  border: 1px solid black;
   background-size: 10% 100%;
   float:left !important;
   /* background-repeat: repeat-x !important; */
@@ -237,26 +245,22 @@ input[type=range] {
   -webkit-appearance:none;
   height: 60px;
   width: 5px;
-  background: rgb(9, 164, 251);
+  background: black;
   border-radius: 10px;
   cursor: pointer;
 }
 #bar_start{
-  border:2px solid rgb(9, 164, 251);
+  border:1px solid black;
   border-radius: 10px;
   opacity: 0.8;
   position: relative; left: 0%;
 }
 #bar_end{
   margin: auto;
-  border:2px solid rgb(9, 164, 251);
+  border:1px solid black;
   border-radius: 10px;
   opacity: 0.8;
   position: relative; left: 100%;
-}
-.input{
-  border-radius: 10px;
-  border:2px solid rgb(9, 164, 251);
 }
 
 </style>

@@ -4,13 +4,10 @@
     <div id="btn_box">
       <span>
         <v-btn fab small v-on:click="subtitle_stop($event)">
-          <v-icon color="teal lighten-1">blur_on</v-icon>
+          <v-icon>blur_on</v-icon>
         </v-btn>
-        <!-- <v-btn fab small v-on:click="record_open('')">
-          <v-icon color="blue">mic</v-icon>
-        </v-btn> -->
-        <v-btn fab small v-on:click="words_open()">
-          <v-icon color="teal lighten-1">list_alt</v-icon>
+        <v-btn fab small v-on:click="record_open()">
+          <v-icon>mic</v-icon>
         </v-btn>
       </span>
     </div>
@@ -25,7 +22,6 @@
             v-on:mouseup="select_drag($event,subtitle_open.split('#')[0])"
           >{{subtitle_open.split('#')[0]}}</span>
           <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="subtitle_bookmark(subtitle_open.split('#')[0])">bookmark</v-icon>
-          <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="record_open(subtitle_open.split('#')[1])">mic</v-icon>
         </div>
       </template>
       <span id="tooltop"></span>
@@ -35,29 +31,19 @@
 
 
     <!-- selected word_s  -->
-    <div class="text-xs-center">
-    </div>
-    <v-alert
-      :value="alert"
-      type="white"
-      transition="scale-transition"
-    >
-      <v-layout row wrap>
-        <v-flex v-for="line in subtitle_word" xl2 sm2 md2>
-          <v-btn small color="teal lighten-1" class="pa-1 ma-1" v-on:click="word_bookmark($event,true)">{{line['text']['content']}}</v-btn>
-        </v-flex>
-      </v-layout>
-    </v-alert>
-    <!-- <div class="" id="words">
-    </div> -->
+    <v-layout row wrap>
+      <v-flex v-for="line in subtitle_word">
+        <v-btn fab small color="orange" class="pa-1 ma-1" v-on:click="word_bookmark($event,true)">{{line['text']['content']}}</v-btn>
+      </v-flex>
+    </v-layout>
 
     <!-- <record_></record_> -->
 
     <v-layout row justify-center>
-      <v-dialog v-model="dialog"  transition="dialog-bottom-transition" id="record" width="700">
+      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" id="record" height="500">
         <v-card>
           <v-layout justify-end>
-            <v-btn color="teal lighten-1" icon dark @click="dialog = false">
+            <v-btn color="orange" icon dark @click="dialog = false">
               <v-icon>close</v-icon>
             </v-btn>
           </v-layout>
@@ -92,40 +78,16 @@ export default {
         _y:'',
       },
       dialog:false,
-      location:'',
-      alert:false,
     }
   },
   methods:{
-    ...mapActions(['subtitle_action','subtitle_word_action','subtitle_open_action','search_action','bookmark_action','bookmark_image_action','subtitle_view_action','subtitle_record_action']),
-    words_drag(event){
-      // this.location = document.getElementById('words').getBoundingClientRect();
-      // console.log('drag');
-      // console.log(location);
+    ...mapActions(['subtitle_action','subtitle_word_action','subtitle_open_action','search_action','bookmark_action','bookmark_image_action','subtitle_view_action']),
+    drag(evt){
+      let location = document.getElementById('subtitle_box').getBoundingClientRect();
+      //이벤트 좀더 넣어서 정확하게
+
     },
-    words_dragover(event){
-      console.log('dragover');
-      // document.getElementById('words').style.top = event.pageY+"px";
-      // document.getElementById('words').style.left = event.pageX+"px";
-      // console.log('dragover');
-    },
-    words_dragend(event){
-      console.log('x',event.pageY);
-      console.log('y',event.pageX);
-      console.log('top',event.target.style.top);
-      console.log('left',event.target.style.left);
-      event.target.style.top = event.pageY+"px";
-      event.target.style.left = event.pageX+"px";
-    },
-    words_open(){
-      if(this.alert){
-        this.alert = false;
-      }else{
-        this.alert = true;
-      }
-    },
-    record_open(value){
-      this.subtitle_record_action(value);
+    record_open(){
       this.dialog = true;
       if(!this.video.paused){
         this.video.pause();
@@ -142,7 +104,6 @@ export default {
     word_select(subtitle){//word search
       this.subtitle_word_action(subtitle).then(result=>{
         this.subtitle_word = result;
-        this.words_open();
       });
     },
     select_drag(evt,subtitle){//drag search event
@@ -255,7 +216,7 @@ export default {
   opacity: 0.6;
 }
 #subtitle_box:hover{
-  background: #26A69A;
+  background: orange;
 }
 /* #subtitle_span:hover{
   background: orange;
@@ -263,7 +224,7 @@ export default {
 #btn_box{
   /* float:right; */
   position:absolute;
-  top:20px;
+  top:90px;
 }
 .btn{
   float:left;
@@ -271,9 +232,6 @@ export default {
 
 #bookmark_check:hover{
   background: white;
-  border-radius: 20px;
-}
-#words{
-
+  border-radius: 10px;
 }
 </style>

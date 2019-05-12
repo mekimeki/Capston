@@ -15,12 +15,11 @@
         >
           <template v-slot:items="props">
             <td v-on:click="tent.kind? click_mark_content(props.item) : click_mark_word(props.item)">
-              <v-btn fab small color="blue">
+              <v-btn fab small color="orange">
                 <v-icon v-show="props.item.select">check</v-icon>
               </v-btn>
             </td>
             <td>{{ props.item.name }}</td>
-            <td class="text-xs-left">{{ time_change(Math.ceil(props.item.firstTime))}}</td>
             <td class="text-xs-left">{{ props.item.voca }}</td>
             <td class="text-xs-left">
               <input width="200" type="text" name="" value="" v-model="props.item.explain">
@@ -40,7 +39,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex xl4 sm4 md4>
-            <v-btn color="blue" small fab v-on:click="tent.kind? click_search_content(search) : click_search_word(search)">
+            <v-btn small fab v-on:click="tent.kind? click_search_content(search) : click_search_word(search)">
               Search
             </v-btn>
           </v-flex>
@@ -161,12 +160,6 @@ export default {
         }
         this.content_preview_word_action(data);
       }
-    },
-    time_change(seconds){
-      let hour = parseInt(seconds/3600);
-      let min = parseInt((seconds%3600)/60);
-      let sec = seconds%60;
-      return hour+":"+min+":" + sec;
     },
   },
   mounted:function(){

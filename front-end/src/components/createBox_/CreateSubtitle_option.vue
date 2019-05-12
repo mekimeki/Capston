@@ -18,7 +18,7 @@ export default {
     this.video = this.v_getter;
     setInterval(()=>{
       this.video_time_check = this.video.currentTime;
-    },100);
+    });
   },
   updated:function(){
   },
@@ -49,7 +49,7 @@ export default {
   position: relative;
   display: inline-block;
   left:26%;
-  top:-120px;
+  top:-90px;
   cursor:pointer;
 }
 </style>
