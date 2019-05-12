@@ -17,6 +17,9 @@ const mutations = {
   capture_mutation: (state,payload) => {
     state.capture = payload;
   },
+  audio_mutation: (state,payload) => {
+    state.audio = payload;
+  },
   capture_data_mutation: (state,payload) =>{
     state.capture_data = payload;
   },
@@ -147,7 +150,9 @@ const mutations = {
     state.graph_origin = payload.analy;
   },
   graph_record_mutations: (state,payload) =>{
+    console.log("mutations",payload);
     state.graph_record = payload.recordAnaly;
+    state.graph_score = payload.score;
   },
   subtitle_record_mutation: (state,payload) =>{
     state.subtitle_record = payload;
