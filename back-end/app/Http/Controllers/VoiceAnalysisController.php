@@ -126,7 +126,7 @@ class VoiceAnalysisController extends Controller
 
     public function voiceRecord(Request $request)
     {
-
+        \Log::debug('in record');
         $id = $request->input('id');
         $title = $request->input('title');
         $originText = $request->originText;
@@ -134,9 +134,11 @@ class VoiceAnalysisController extends Controller
 
         $file = $request->file('audio');
 
+        \Log::debug($request->all());
+
         $pubPath = public_path('audio\\' . $id . '\\');
 
-        $recordPath = $pubPath.'check.webm';
+        $recordPath = $pubPath . 'check.webm';
 
         move_uploaded_file($file, $recordPath);
 
@@ -148,7 +150,7 @@ class VoiceAnalysisController extends Controller
         $audio_format
             ->setAudioChannels(1);
 
-        $comparePath = $pubPath.$title."_compare.wav";
+        $comparePath = $pubPath . $title . "_compare.wav";
 
         $faudio->save($audio_format, $comparePath);
 
@@ -157,25 +159,29 @@ class VoiceAnalysisController extends Controller
         }
 
         $recordText = $this->analysis($comparePath);
-        
-        $pythonPath = 'audio\\'.$id.'\\'.$title.'_compare.wav';
+
+        $pythonPath = 'audio\\' . $id . '\\' . $title . '_compare.wav';
 
         $ffprobe = \FFMpeg\FFProbe::create();
         $recordDuration = $ffprobe->format($pythonPath)->get('duration');
 
-        $durationDistance = ($originDuration - abs($originDuration - $recordDuration))/$originDuration * 100;
+        $durationDistance = ($originDuration - abs($originDuration - $recordDuration)) / $originDuration * 100;
 
         $analyDate = $this->intonation($pythonPath);
+
+        for ($i = 0; $i < count($analyDate); $i++) {
+            $analyDate[$i] = (int) $analyDate[$i];
+        }
 
         if (count($recordText) == 0) {
             return "다시 녹음해 주세요";
         } else {
             $textComparison = $this->comparison($originText, $recordText[0]);
-            \Log::debug("durationDistance ===".$durationDistance);
-            \Log::debug("textComparison ===".$textComparison["similarity"]);
+            \Log::debug("durationDistance ===" . $durationDistance);
+            \Log::debug("textComparison ===" . $textComparison["similarity"]);
 
             $score = 20 + ($durationDistance * 0.2) + ($textComparison["similarity"] * 0.4);
-            return ["recordAnaly"=>$analyDate, "score"=>$score];
+            return ["recordAnaly" => $analyDate, "score" => (int) $score];
 
         }
 
@@ -192,7 +198,6 @@ class VoiceAnalysisController extends Controller
         \Log::debug($request->all());
 
         $audio_format = new \FFMpeg\Format\Audio\Wav();
-
 
         $address = video::select('v_add')->where('video_pk', $v_pk)->get()->toArray();
 
@@ -223,9 +228,9 @@ class VoiceAnalysisController extends Controller
 
         $path = 'audio\\' . $id . '\\' . $fileName . '_origin.wav';
         $analy_data = $this->intonation($path);
-        
-        for($i = 0; $i<count($analy_data); $i++){
-            $analy_data[$i] = (int)$analy_data[$i];
+
+        for ($i = 0; $i < count($analy_data); $i++) {
+            $analy_data[$i] = (int) $analy_data[$i];
         }
 
         return json_encode(["originText" => $this->analysis($path), "originDuration" => $duration, "analy" => $analy_data]);
