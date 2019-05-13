@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="">
-    <v-tabs color="white" slider-color="black">
+    <v-tabs color="white" slider-color="red">
       <v-tab v-for="tent in cp_getter" ripple>
           {{ tent.name }}
       </v-tab>
@@ -11,7 +11,7 @@
               <h3 class="headline mb-0">{{tent.voca}}</h3>
               <h5>TIME:{{time_change(Math.ceil(tent.firstTime))}}</h5>
               <div>
-                <input type="text" name="" value="" v-model="tent.explain">
+                <input type="text" placeholder="뜻 입력칸" name="" value="" v-model="tent.explain">
               </div>
             </div>
           </v-card-title>
@@ -24,9 +24,9 @@
       </v-tab-item>
     </v-tabs>
 
-    <v-btn large fab v-on:click="click_save()" color="blue">SAVE</v-btn>
+    <v-btn large class="white--text" color="teal lighten-1" v-on:click="click_save()">저장</v-btn>
     <div class="" v-show="up_getters.content">
-      <v-btn large fab v-on:click="move()">다음</v-btn>
+      <v-btn class="white--text" color="red lighten-1" large v-on:click="move()">다음</v-btn>
     </div>
   </div>
 </template>

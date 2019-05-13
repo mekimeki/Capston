@@ -18,7 +18,10 @@ import create_message from '@/components/createBox_/create/CreateMessage';
 //
 import start from './views/Start_page'; //start page
 import recommend from '@/components/mainPage_/Recommend'; //recommend video of main page
-import register_video from '@/components/mainPage_/Register'; //register video fo main page
+import register_video from '@/components/mainPage_/Register'; //register video of main page
+import click_video from '@/components/mainPage_/ClickVideo'; //clickVideo video of main page
+import channel_video from '@/components/mainPage_/ChannelVideo'; //channel video of main page
+import like_video from '@/components/mainPage_/LikeVideo'; //liked video of main page
 
 import quiz_select from '@/components/quizPage_/Qselect'; //quiz
 import word_book from '@/components/wordBook_/AllWord'; //my word book
@@ -86,12 +89,26 @@ export default new Router({
       component:recommend,
       children:[
       {
-
-      path:'main',
+      path:'/main',
       name:'register',
       component:register_video,
     },
       ]
+    },
+    { 
+      path:'/click',
+      name:'click',
+      component:click_video,
+    },
+    { 
+      path:'/channel',
+      name:'channel',
+      component:channel_video,
+    },
+    { 
+      path:'/likeVideo',
+      name:'likeVideo',
+      component:like_video,
     },
     { //quizSelect
       path:'/qselect',

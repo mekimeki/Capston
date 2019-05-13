@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\LBook;
-use App\Line;
+use App\Model\LBook;
+use App\Model\Line;
 use Illuminate\Http\Request;
 
 class LineController extends Controller
@@ -45,50 +45,48 @@ class LineController extends Controller
     public function create(Request $request) // 대사장 만들기
 
     {
+        
         $all = $request->all();
-        \Log::debug($all);
-        // $title = $request->input('title');
-        // $lang = $request->input('lang');
+        $id = $request->input('book_id');
+        $title = $request->input('title');
+        $lang = $request->input('lang');
+        $lines = $request->input('lines');
+        $explains = $request->input('explains');
+        $start_dts = $request->input('start_dts');
+        $v_ids = $request->input('v_ids');
+        $pic_adds = $request->input('pic_adds');
 
-        // $id = $request->input('id');
-        // $lines = $request->input('lines');
-        // $explains = $request->input('explain');
-        // $pictures = $request->input('pic_add');
-        // $starts = $request->input('start_dt');
-        // $v_ids = $request->input('v_id');
+        if ($lang == '일본어') {
+            $lang = 'JP';
+        } else if ($lang == '한국어') {
+            $lang = 'KR';
+        } else if ($lang == '영어') {
+            $lang = 'EN';
+        } else if ($lang == '중국어') {
+            $lang = 'CN';
+        } else {
+            $lang = 'ND';
+        }
 
-        // if ($lang == '일본어') {
-        //     $lang = 'JP';
-        // } else if ($lang == '한국어') {
-        //     $lang = 'KR';
-        // } else if ($lang == '영어') {
-        //     $lang = 'EN';
-        // } else if ($lang == '중국어') {
-        //     $lang = 'CN';
-        // } else {
-        //     $lang = 'ND';
-        // }
+        if (!$id) {
+            \DB::insert('insert into lbook_tb (m_id, lbook_tt, lbook_lan) values (?, ?, ?)', [1, $title, $lang]);
+            $id = \DB::getPdo()->lastInsertId();
+        }
 
-        // if (!$id) {
-        //     \DB::insert('insert into lbook_tb (m_id, lbook_tt, lbook_lan) values (?, ?, ?)', [1, $title, $lang]);
-        //     $id = \DB::getPdo()->lastInsertId();
-        // }
+        if ($lines) {
 
-        // if ($lines) {
-        //     $line = explode(',', $lines);
-        //     $explain = explode(',', $explains);
-        //     $picture = explode(',', $pictures);
-        //     $v_id = explode(',', $v_ids);
-        //     $start = explode(',', $starts);
+            for ($i = 0; $i < count($lines); $i++) {
+                line::insert([
+                    'lbook_pk' => $id,
+                    'line' => $lines[$i],
+                    'explain' => $explains[$i],
+                    'pic_add' => $pic_adds[$i],
+                    'v_id' => $v_ids[$i],
+                    'start_dt' => $start_dts[$i]]);
+            }
+        }
 
-        //     for ($i = 0; $i < count($line); $i++) {                
-        //         \DB::table('line_tb')->insert([
-        //             'lbook_pk'=>$id, 'line'=>$line[$i],'explain'=>$expain[$i], 'pic_add'=>$picture[$i], 'v_id'=>$v_id[$i],'start_dt'=>$start[$i]
-        //         ]);
-        //     }
-        // }
-
-        return "ok";
+        return $id;
     }
 
     /**
@@ -113,38 +111,38 @@ class LineController extends Controller
         $start = $request->input("title");
         $v_id = $request->input("video_pk");
         $id = 2;
-        
+
         $pictures = explode(',', $picture);
 
         // \Log::debug($pictures);
 
-        if(isset($pictures[1])) {
-            $path = public_path("picture/".$id);
+        if (isset($pictures[1])) {
+            $path = public_path("picture/" . $id);
 
-            if(!is_dir($path)) {
+            if (!is_dir($path)) {
                 mkdir($path);
             }
-            
+
             // \Log::debug($pictures[0]);
 
             $date = date("Y-m-d_H-i-s");
-            $name = $date."_picture.png";
-            
+            $name = $date . "_picture.png";
+
             $data = base64_decode($pictures[1]);
-            $path = $id.'/'.$name;
+            $path = $id . '/' . $name;
 
             \Storage::disk('local_pic')->put($path, $data);
             // $url = \Storage::disk('local_pic')->url($path);
-            $url = 'http://'.$ip.'/picture/'.$id.'/'.$name;
-            
+            $url = 'http://' . $ip . '/picture/' . $id . '/' . $name;
+
             \DB::table('line_tb')->insert([
-                'lbook_pk'=>$id, 'line'=>$line,'explain'=>'설명', 'pic_add'=>$url, 'v_id'=>$v_id,'start_dt'=>$start
+                'lbook_pk' => $id, 'line' => $line, 'explain' => '설명', 'pic_add' => $url, 'v_id' => $v_id, 'start_dt' => $start,
             ]);
-            
+
             return "ok";
-            
+
         } else {
-            
+
         }
         // return "ok";
 

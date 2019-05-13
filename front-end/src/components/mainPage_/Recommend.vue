@@ -1,6 +1,6 @@
 <template lang="html">
 <v-container fluid fill-height>
-    <v-layout pl-2 pt-3 justify-start row wrap>
+    <v-layout pl-2 pt-4 justify-start row wrap>
 
         <v-flex xs12 sm6 md4 v-for="(pic,i) in pics" :key="(pic, i)">
             <v-card flat>
@@ -10,11 +10,11 @@
                     <v-layout row wrap>
                         <v-flex v-for="n in 9" :key="n" xs4>
                             <v-card flat>
-                                <v-card flat height="100px" v-if="n==1" v-bind:color="pic.color">
+                                <v-card flat height="100px" v-if="n==1" v-bind:color="pic.color" router :to="{name:'click'}">
                                     <span class="mainName"><div class="pt-3 pl-3">{{pic.category1}}</div></span>
                                     <span class="subName"><div class="pt-2 pl-3">{{pic.category2}}</div ></span>
                                 </v-card>
-                                <v-img v-if="n!=1" :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`" height="100px"></v-img>
+                                <v-img v-if="n!=1" :src="`http://172.26.2.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -28,48 +28,56 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {
+    mapActions
+} from 'vuex';
 export default {
-  data: () => ({
-    pics: [
-      {
-        category1: "일본어",
-        category2: "비지니스/회화",
-        color: "red accent-3"
-      },
-      {
-        category1: "일본어",
-        category2: "의학/건강관련",
-        color: "green accent-3"
-      },
-      {
-        category1: "일본어",
-        category2: "여행/관광/서비스",
-        color: "light-blue accent-3"
-      }
-    ]
-  }),
-  methods:{
-    ...mapActions(['recommend_action']),
-  },
-  mounted:function(){
-    console.log("recommend");
-    this.recommend_action().then(result=>{
-      console.log('picture data and recommend',result);
-    });
-  },
+
+    data() {
+        return {
+            pics: [{
+                    category1: "영어",
+                    category2: "비지니스/회화",
+                    color: "red accent-3",
+                },
+                {
+                    category1: "영어",
+                    category2: "전쟁/SF",
+                    color: "deep-purple accent-3"
+                },
+                {
+                    category1: "영어",
+                    category2: "여행/관광/서비스",
+                    color: "blue accent-3"
+                }
+            ],
+        }
+    },
+
+    methods: {
+        ...mapActions(['recommend_action']),
+    },
+    mounted: function () {
+        window.scrollTo(0, 0);
+        console.log("recommend");
+        this.recommend_action().then(result => {
+            console.log('picture data and recommend', result);
+        });
+
+    },
+
 };
 </script>
 
 <style lang="css" scoped>
 .mainName {
-  color: white;
-  font-size: 1.6rem;
-  font-weight: 600;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 600;
 }
 
 .subName {
-  color: white;
-  font-size: 1rem;
+    color: white;
+    font-size: 1rem;
 }
 </style>

@@ -49,9 +49,8 @@ export default {
       }
       this.upload_created_action(data).then(result=>{
         if(result){
-          alert(this.title+'작성 완료');
+          alert(this.$route.query.video+'success');
           this.$router.push({name:'v-video', query:{video:this.$route.query.video}});
-          // this.$router.push({name:'video',query:'video'});
         }
       });
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\WBook;
-use App\Word;
+use App\Model\WBook;
+use App\Model\Word;
 use Illuminate\Http\Request;
 
 class BookController extends Controller

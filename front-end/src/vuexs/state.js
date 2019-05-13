@@ -6,8 +6,8 @@ const state = {
   subtitle_buffer:[],//create input subtitle buffer
   subtitle_preview:[],//
   content_preview:[
-    {name:'content', content:[]},
-    {name:'word',content:[]},
+    {name:'문법', content:[]},
+    {name:'어휘',content:[]},
   ],//create content preview value
   bookmark:[//book mark
     {tab:'문법' ,name:'content',color:'info',mark:'bookmark_border', option:'share' ,content:[]},

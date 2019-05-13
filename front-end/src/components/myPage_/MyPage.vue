@@ -3,7 +3,7 @@
     <v-layout lign-start justify-start row fill-height pa-5 wrap>
         <v-flex class="pl-5 ml-5" xs12 sm12 md3>
             <v-list-tile-avatar size="180">
-                <v-img class="elevation-6" :src="require(`@/assets/Start/service1.jpg`)"></v-img>
+                <v-img class="elevation-6 ml-5" :src="require(`@/assets/MyPage/myPage2.jpg`)"></v-img>
                 <v-card-title primary-title>
                     <div class="ml-3">
                         <div class="headline">SOMIN1234</div>
@@ -36,14 +36,15 @@
                                 <myVideo_></myVideo_>
                             </v-card-text>
                             <v-card-text v-else-if="i==2">
-                                <myScore_></myScore_>
+                                <myQuizScore_></myQuizScore_>
+                                <mySpeakScore_></mySpeakScore_>
                             </v-card-text>
                             <v-card-text v-else-if="i==3">
                                 <myCalendar_></myCalendar_>
                             </v-card-text>
-                            <!-- <v-card-text v-else>
+                            <v-card-text v-else>
                                 <myData_></myData_>
-                            </v-card-text> -->
+                            </v-card-text>
                         </v-card>
                     </v-tab-item>
                 </v-tabs>
@@ -56,7 +57,8 @@
 
 <script>
 import myVideo_ from "@/components/myPage_/MyVideo";
-import myScore_ from "@/components/myPage_/MyScore";
+import myQuizScore_ from "@/components/myPage_/MyQuizScore";
+import mySpeakScore_ from "@/components/myPage_/MySpeakScore";
 import myCalendar_ from "@/components/myPage_/MyCalendar";
 import myData_ from "@/components/myPage_/MyData";
 
@@ -65,7 +67,8 @@ import myData_ from "@/components/myPage_/MyData";
 export default {
     components: {
         myVideo_,
-        myScore_,
+        myQuizScore_,
+        mySpeakScore_,
         myCalendar_,
         myData_,
         

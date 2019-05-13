@@ -27,7 +27,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </template>
-                    <v-list-tile v-for="(child, i) in item.children" :key="i" :to="`${ child.link }`" class="py-1">
+                    <v-list-tile v-for="(child, i) in item.children" :key="i" router :to="{ name: child.link }" class="py-1">
                         <v-list-tile-action v-if="child.icon">
                             <v-icon>{{ child.icon }}</v-icon>
                         </v-list-tile-action>
@@ -38,7 +38,7 @@
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list-group>
-                <v-list-tile class="py-1" v-else :key="item.text" :to="`${ item.link }`">
+                <v-list-tile class="py-1" v-else :key="item.text" router :to="{ name: item.link }">
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
@@ -101,30 +101,34 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import router from './router'
+import {
+    mapGetters,
+    mapActions
+} from 'vuex';
+
 export default {
     data: () => ({
         drawer: false,
-        link:"main",
         items: [{
                 icon: "home",
                 text: "홈페이지",
-                link: "main"
+                link: "register"
             },
             {
                 icon: "video_library",
-                text: "영상 관리",
-                link: "video"
+                text: "등록 채널",
+                link: "channel"
             },
             {
                 icon: "video_call",
                 text: "영상 제작",
-                link: "create/upload"
+                link: "upload"
             },
             {
                 icon: "favorite",
                 text: "좋아하는 영상",
-                link: "video"
+                link: "likeVideo"
             },
             {
                 icon: "border_color",
@@ -170,17 +174,17 @@ export default {
             }
         ]
     }),
-    methods:{
-      ...mapActions(['login_check_actions']),
+    methods: {
+        ...mapActions(['login_check_actions']),
     },
-    mounted:function(){
-      // console.log(localStorage.getItem('login'));
-      this.login_check_actions(localStorage.getItem('login'));
+    mounted: function () {
+        // console.log(localStorage.getItem('login'));
+        this.login_check_actions(localStorage.getItem('login'));
     },
     computed: {
-      ...mapGetters({
-        lg_getter:'login_getters',
-      })
+        ...mapGetters({
+            lg_getter: 'login_getters',
+        })
     },
 };
 </script>
@@ -191,6 +195,6 @@ export default {
 }
 #logo {
     cursor: pointer;
-    text-decoration:none;
+    text-decoration: none;
 }
 </style>
