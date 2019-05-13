@@ -102,6 +102,7 @@ export default {
         }
         this.graph_origin_action(data_s);
         //
+        
         this.record.start();
         alert('녹음 시작');
         this.check = false;

@@ -1,17 +1,17 @@
 <template lang="html">
-    <v-card color="blue" class="white--text ma-1">
+    <v-card color="red accent-1" class="dark--text ma-1">
       <v-layout row wrap>
         <v-flex xl12 sm12 md12>
           <v-card-title>
-            <label class="pr-2">START:</label>
-            <input type="text" name="" value="" v-model="firstTime">
-            <label>EDN:</label>
-            <input type="text" name="" value="" v-model="lastTime">
+            <span class="textSize pr-2" >START  </span> 
+            <input style="width:60px; font-size:18px;" type="text" name="" value="" v-model="firstTime">
+            <span class="textSize pr-2" >END  </span> 
+            <input style="width:60px; font-size:18px;" type="text" name="" value="" v-model="lastTime">
           </v-card-title>
         </v-flex>
         <v-flex xl12 sm12 md12 class="ma-2">
           <v-text-field
-            label="Create Subtitle"
+            label="자막 추가하기"
             v-on:click="time_check(true)"
             v-model="subtitle_write"
           >
@@ -106,4 +106,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.textSize{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
 </style>

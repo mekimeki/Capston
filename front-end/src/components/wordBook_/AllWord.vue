@@ -35,7 +35,7 @@
                         </v-flex>
                         <!-- make album button -->
                         <v-flex xs6 pl-3 mt-2 pb-2 md4>
-                            <v-icon large color="grey darken-3" @click="plus(), createAlbumQuest()">add</v-icon>
+                            <v-icon large color="grey darken-3" @click="createAlbumQuest()">add</v-icon>
                         </v-flex>
                     </v-layout>
 
@@ -54,37 +54,43 @@
 
         <!-- modal of words crawling -->
         <div class="text-xs-center">
-            <v-dialog v-model="crawl" width="1000">
+            <v-dialog v-model="crawl" width="1020">
                 <v-card color="light-blue lighten-3">
-                    <v-container fill-heights fluid pa-2 text-xs-left>
+                    <v-container fill-heights fluid pa-3 text-xs-left>
                         <v-layout fill-height>
                             <v-flex xs12 align-end flexbox>
-                                
+
                                 <v-card flat color="white">
-                                    {{ mainWord }}
+                                    <div class="mainWord px-3 py-4 ml-3">{{ mainWord }}</div>
                                 </v-card>
 
-                                <v-card v-for="(crawlMean, a) in crawlMeans" :key="(crawlMean, a)" flat color="white">
-                                    <span v-if="a==0"><div class="py-2"></div></span>
-                                    {{ crawlMean }}
-                                    <span v-if="a==6"><div class="py-2"></div></span>
+                                <v-card flat color="white">
+                                    <span v-for="(crawlMean, a) in crawlMeans" :key="(crawlMean, a)" flat color="white" class="pl-2">
+                                    <span class="crawlMean pl-4">{{ crawlMean }}</span>
+                                    </span>
                                 </v-card>
+
+                                <div class="pt-3" style="background-color:white;"></div>
 
                                 <v-card v-for="(crawlWord, i) in crawlWords" :key="(crawlWord, i)" flat color="white">
                                     <span v-if="i%2==0"><div class="py-2"></div></span>
-                                    {{ crawlWord }}
+                                    <div class="crawlWord pl-4 ml-2">{{ crawlWord }}</div>
                                     <span v-if="i==9"><div class="py-2"></div></span>
                                 </v-card>
-                                
+
+                                <div class="pt-3" style="background-color:white;"></div>
+
                             </v-flex>
                         </v-layout>
                     </v-container>
-                    <v-card-actions>
+                    <!-- <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" flat @click="crawl = false">
-                            I accept
+                        <v-btn color="white" @click="crawl = false">
+                            click
                         </v-btn>
+                        
                     </v-card-actions>
+                     -->
                 </v-card>
             </v-dialog>
         </div>
@@ -93,6 +99,7 @@
         <v-flex justify-start white xs12 sm12 md12>
             <v-toolbar-items>
                 <v-bottom-nav :active.sync="bottomNav" :value="true" color="white">
+                    <v-btn></v-btn>
                     <v-btn color="blue" flat v-for="(menu,m) in menus" :key="(menu,m)" v-bind:value="menu.value" @click="allWord(m)">{{menu.word}}</v-btn>
                     <v-btn color="blue" flat v-for="(book,i) in books" :key="(book,i)" v-bind:value="book.id" @click="selectedWordsQuest(i)">{{book.title}}</v-btn>
                     <v-btn></v-btn>
@@ -106,7 +113,7 @@
                 <v-layout v-model="box" justify-end>
                     <v-card-text>
                         <h3>
-                            <div>・ 나의 단어장</div>
+                            <div class="title pb-3">・ 나의 단어장</div>
                         </h3>
                     </v-card-text>
 
@@ -139,8 +146,8 @@
                             <v-container fill-heights fluid pa-2 text-xs-center>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                        <v-card @click="crawlingQuest(word.word), crawl = true" color="whtie">
-                                            {{ word.word }}
+                                        <v-card @click="crawlingQuest(word.word), crawl = true" class="dark--text" color="whtie">
+                                            <div style="text-align:center; height:59px;" class="title pt-3">{{ word.word }}</div>
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
@@ -156,8 +163,12 @@
 
 <script>
 import axios from "axios";
-import { constants } from "crypto";
-// import { mapActions } from 'vuex';
+import {
+    constants
+} from "crypto";
+import {
+    mapActions
+} from 'vuex';
 
 //  wordQuest => 단어 미암기 변환
 //  allWord => 전체단어, 미암기단어, 암기단어 호출
@@ -204,52 +215,31 @@ export default {
             albumNames: '',
             dialog: false,
             items: ['일본어', '영어', '한국어', '중국어'],
-            categories: ['판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
+            categories: ['액션','판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
             lang: '',
             category: '',
             crawl: false,
             crawlWords: [],
             crawlMeans: [],
-            mainWord: ''
+            mainWord: '',
+            tableId: 0,
         };
     },
     methods: {
-        // ...mapActions(['word_delete_actions']),
+        ...mapActions(['select_word_actions', 'classify_word_actions', 'update_word_actions', 'all_word_actions', 'word_delete_actions', 'word_crawl_actions', 'call_album_actions']),
         //  start of 단어 출력 및 분류 
         wordQuest(changeID, flag) {
-            const baseURI = "http://172.26.2.194/api/update"
-            const form = new FormData();
-            form.append("id", changeID)
-            form.append("flag", flag)
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("ok", res);
-                    return true;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
+            this.update_word_actions([changeID, flag]).then(result => {
+                return true;
+            }).catch(error => {
+                return false;
+            })
         },
         allWord(m) {
-            if (m == 0) {
-                var baseURI = "http://172.26.2.194/api/book/0";
-            } else if (m == 1) {
-                var baseURI = "http://172.26.2.194/api/memo/T";
-            } else {
-                var baseURI = "http://172.26.2.194/api/memo/F";
-            }
-            axios
-                .get(baseURI)
-                .then(res => {
-                    this.words = res.data;
-                    console.log("ok", res);
-                    this.selected = []
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                })
+            this.all_word_actions(m).then(result => {
+                this.words = result;
+                this.selected = [];
+            })
         },
         changeHeart(i) {
             console.log(this.words[i].memorized);
@@ -262,66 +252,43 @@ export default {
             }
         },
         classifyQuest(classifyWord = '') {
-            var form = new FormData();
-            const baseURI = "http://172.26.2.194/api/book/0";
-            form.append("classifyWord", classifyWord)
-            axios
-                .get(baseURI, form)
-                .then(res => {
-                    this.words = res.data;
-                    console.log("ok", this.words);
-                    this.selected = []
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                });
+            this.classify_word_actions(classifyWord).then(result => {
+                this.words = result;
+                this.selected = [];
+            }).catch(error => {
+                console.log("classify failed", error)
+            })
         },
-
         //  start of 단어장 목록 보기 및 단어장에 단어추가 
-        plus() {
+        plus(table) {
             this.books.push({
-                "title": this.albumNames
+                "title": this.albumNames,
+                "id": table
             });
-            console.log(this.books);
+            this.albumNames = '';
+            console.log("bookssss ", this.books);
         },
         createAlbumQuest() {
-            const baseURI = "http://172.26.2.194/api/create"
-            const form = new FormData();
-            form.append("title", this.albumNames)
-            console.log(this.albumNames)
-            form.append("lang", this.lang)
-            console.log(this.lang)
-            // form.append("category", category)
-            form.append("words", this.selectWords)
-            console.log("success of make albums", this.selectWords)
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("ok", res);
-                    return true;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
+            this.call_album_actions([this.albumNames, this.lang, this.selectWords]).then(result => {
+                console.log('result.data', result);
+                this.plus(result);
+                return true;
+            }).catch(error => {
+                return false;
+            })
             this.selected = [];
             this.selectWords = [];
-            this.albumNames = '';
             this.lang = '';
             this.category = '';
         },
+
         selectedWordsQuest(i) {
-            const baseURI = "http://172.26.2.194/api/book/" + this.books[i].id;
-            axios
-                .get(baseURI)
-                .then(res => {
-                    console.log("ok", res);
-                    this.words = res.data;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
+            var add = this.books[i].id;
+            this.select_word_actions(add).then(result => {
+                this.words = result;
+            }).catch(error => {
+                return false;
+            })
             this.selected = [];
             this.selectWords = [];
         },
@@ -339,7 +306,6 @@ export default {
             } else {
                 this.selectWords.splice(idx, 1)
             }
-
             console.log(this.selected)
         },
         click(flag) {
@@ -370,48 +336,27 @@ export default {
             }
         },
         deleteQuest() {
-            var form = new FormData();
-            form.append("selected", this.selected);
-            axios.get("http://172.26.2.194/get-token").then(response => {
-                if (response.data) {
-                    form.append("_token", response.data);
-                    console.log(this.selected)
-                    axios
-                        .post("http://172.26.2.194/api/deletedWord", form)
-                        .then(response => {
-                            console.log("response ==>>>> ", response.data);
-                            this.words = response.data
-                            this.selected = []
-                        })
-                        .catch(error => {
-                            console.log("failed", error);
-                        });
-                }
-            });
+            this.word_delete_actions(this.selected).then(result => {
+                console.log("delete success", result);
+                this.words = result;
+                this.selected = [];
+            }).catch(error => {
+                console.log("delete failed", error);
+            })
         },
-
         crawlingQuest(cword) {
-            var form = new FormData();
-            form.append("clickWord", cword)
-            console.log(cword);
-            var baseURI = "http://172.26.2.194/api/example";
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("crawling ok", res);
-                    this.crawlWords = res.data.example;
-                    this.crawlMeans = res.data.means;
-                    this.mainWord = cword;
-                    console.log("crawling word ok", this.crawlMeans[0]);
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                });
+            this.word_crawl_actions(cword).then(result => {
+                this.crawlWords = result.example;
+                this.crawlMeans = result.means;
+                this.mainWord = cword;
+            }).catch(error => {
+                console.log("crawling failed");
+            })
         },
     },
 
     beforeCreate() {
-        var baseURI = "http://172.26.2.194/api/book/0";
+        var baseURI = "http://172.26.2.223/api/book/0";
         axios
             .get(baseURI)
             .then(res => {
@@ -421,7 +366,7 @@ export default {
             .catch(error => {
                 console.log("failed", error);
             });
-        baseURI = "http://172.26.2.194/api/books";
+        baseURI = "http://172.26.2.223/api/books";
         axios
             .get(baseURI)
             .then(res => {
@@ -433,11 +378,27 @@ export default {
             });
     },
 
-};
+}
 </script>
 
 <style lang="css" scoped>
 #memorized {
     cursor: pointer;
+}
+
+.mainWord {
+    font-size: 1.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.crawlMean {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.crawlWord {
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 </style>

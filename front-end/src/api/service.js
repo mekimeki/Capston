@@ -1,6 +1,7 @@
 import axios from 'axios';//axios
 import router from '../router';//router
 
+
 export default class Service {
   constructor(domain){
     this.domain = domain;//back-end URL address
@@ -22,7 +23,7 @@ export default class Service {
       // alert("service err");
     });
   }
-  service_get(url){
+  service_get(url, form){
     return axios.get(url)
     .then(res=>res.data)
     .catch(res=>{
@@ -141,22 +142,56 @@ export default class Service {
     return this.service_get(this.domain+request+data);
   }
   quiz_quest(request,data){
-    return this.service_get(this.domain+request);
+    this.form.append('ran_box[]',data);
+    console.log("aaaaaaaaaaaaaaaaaaa",this.form);
+    return this.service_post(this.domain+request,this.form);
   }
   token_(request){
     return this.service_get(this.domain+request);
   }
-  quiz_post(request,data,token){
-    this.form.append('results',data);
-    this.form.append('_token',token);
+  quiz_post(request,data){
+    this.form.append('score',data[0]);
+    this.form.append('id', data[1]);
+    console.log(this.form);
     return this.service_post(this.domain+request,this.form);
   }
+  word_delete_post(request,data){
+    this.form.append('selected', data);
+    console.log("delete post ok");
+    return this.service_post(this.domain+request,this.form);
+  }
+  word_crawl_post(request,data){
+    this.form.append("clickWord", data);
+    console.log("crwaling post ok");
+    return this.service_post(this.domain+request,this.form);
+  }
+  call_album_post(request,data){
+    this.form.append("title",data[0]);
+    this.form.append("lang", data[1]);
+    this.form.append("words", data[2]);
+    console.log("album post ok");
+    return this.service_post(this.domain+request,this.form);
+  }
+  all_word_quest(request,data){
+    return this.service_get(this.domain+request);
+  }
+  update_word_post(request,data){
+    this.form.append("id",data[0]);
+    this.form.append("flag",data[1]);
+    return this.service_post(this.domain+request,this.form);
+  }
+  classify_word_quest(request,data){
+    this.form.append("classifyWord",data);
+    return this.service_get(this.domain+request,this.form)
+  }
+  select_word_quest(request,data){
+    return this.service_get(this.domain+request)
   // word_delete_post(request,data,token){
   //   this.form.append('results', data);
   //   this.form.append('_token',token);
   //   console.log("요청준비중입니다")
   //   return this.service_post(this.domain+request,this.form);
-  // }
+  }
   share_content(request,data){
     console.log('service',data);
     this.form.append('voca',data.title);

@@ -50,7 +50,7 @@ export default {
       this.upload_created_action(data).then(result=>{
         if(result){
           alert(this.$route.query.video+'success');
-          this.$router.push({name:'state'});
+          this.$router.push({name:'v-video', query:{video:this.$route.query.video}});
         }
       });
     }
