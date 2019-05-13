@@ -75,14 +75,14 @@
                 <v-flex xl12 sm12 md12>
                   <v-text-field
                     height="20"
-                    label="타이틀"
+                    label="문법"
                     v-model="share.title"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xl12 sm12 md12>
                   <v-text-field
                     height="20"
-                    label="내용"
+                    label="문법설명"
                     v-model="share.content"
                   ></v-text-field>
                 </v-flex>
@@ -102,7 +102,7 @@
         <template v-slot:activator="{ on }">
         </template>
         <v-card>
-          <v-card-title>Select Country</v-card-title>
+          <v-card-title>HISTORY</v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 300px;">
             <v-card v-for="(content,i) in history_content" :key="i">
@@ -117,7 +117,13 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="teal lighten-1" flat @click="dialog = false">Close</v-btn>
+            <v-layout justify-end>
+              <v-btn color="teal lighten-1" flat @click="dialog = false">
+                <v-icon>
+                  close
+                </v-icon>
+              </v-btn>
+            </v-layout>
           </v-card-actions>
         </v-card>
       </v-dialog>

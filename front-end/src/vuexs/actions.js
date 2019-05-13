@@ -153,7 +153,7 @@ const actions = {
     return service.quiz_quest('api/quiz',payload);
   },
   quest_post_actions : ({commit},payload) =>{
-    return service.quiz_post('api/insertResult',payload);  
+    return service.quiz_post('api/insertResult',payload);
   },
 
   //word delete actions
@@ -176,7 +176,7 @@ const actions = {
     }else if(payload == 1){
       return service.all_word_quest('api/memo/T', payload);
     }else{
-      return service.all_word_quest('api/memo/F', payload);      
+      return service.all_word_quest('api/memo/F', payload);
     }
   },
   //classify word actions
@@ -263,6 +263,9 @@ const actions = {
   },
   subtitle_record_action: ({commit},payload) =>{
     commit('subtitle_record_mutation',payload);
+  },
+  graph_reset_action: ({commit},payload) =>{
+    commit('graph_reset_mutation',payload);
   }
 
 }

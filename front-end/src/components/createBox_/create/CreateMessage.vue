@@ -5,20 +5,23 @@
         <video_></video_>
       </v-flex>
       <v-flex sm8>
-        <v-card class="pa-4">
+        <v-card class="pa-4" style="border:5px solid #4DB6AC;">
           <v-text-field
-            label="TITLE"
+            label="제목"
             v-model="create_text.title"
           ></v-text-field>
           <v-textarea
-            label="EXPLANATION"
+            label="설명"
             v-model="create_text.explain"
           ></v-textarea>
-          <v-text-field
-            label="CATEGORY"
-          ></v-text-field>
+          <v-overflow-btn
+            :items="category_list"
+            label="카테고리"
+            target="#dropdown-example"
+            v-model="category"
+          ></v-overflow-btn>
         </v-card>
-        <v-btn v-on:click="click_upload_created()">CREATE</v-btn>
+        <v-btn v-on:click="click_upload_created()" color="teal lighten-2">작성하기</v-btn>
       </v-flex>
     </v-layout>
   </div>
@@ -37,7 +40,8 @@ export default {
         title:'',
         explain:'',
         category:'',
-      }
+      },
+      category_list:['판타지', 'SF', '공포', '스릴러','코미디','멜로','액션'],
     }
   },
   methods:{

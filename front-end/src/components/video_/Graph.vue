@@ -7,7 +7,7 @@
         width="60"
       >
         <sheet-footer>
-          orange
+          <br />
         </sheet-footer>
       </v-sheet>
       <span>원본그래프</span>
@@ -17,12 +17,13 @@
         width="60"
       >
         <sheet-footer>
-          #42b3f4
+          <br />
         </sheet-footer>
       </v-sheet>
       <span>내그래프</span>
-      <hr>
-      점수:<input type="text" name="" value="" v-model="score">
+      <span style="color:red;"  v-if="score!=0">
+        {{score}}점
+      </span>
     </v-layout>
     <div class="graph_box_1" row wrap>
       <v-sparkline
@@ -97,9 +98,13 @@
         console.log("g_getter",this.g_getter);
       },
       r_getter:function(data){
-        this.record_value = this.r_getter;
-        this.score = this.s_getter;
-        console.log("r_getter",this.r_getter);
+        if(!this.r_getter){
+          alert('다시 녹음해 주세요');
+        }else{
+          this.record_value = this.r_getter;
+          this.score = this.s_getter;
+          console.log("r_getter",this.r_getter);
+        }
       }
     }
   }
