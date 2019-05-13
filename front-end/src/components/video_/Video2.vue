@@ -3,19 +3,17 @@
     <div id="video_box">
         <!-- <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted="muted">
     </video> -->
-
-
-        <video id="video" :src="videoLink"
-      v-on:timeupdate="seek_timeupdate()"
-      :src="videoLink"
-    >
-    </video>
+        <video id="video"
+          v-on:timeupdate="seek_timeupdate()"
+          :src="videoLink"
+        >
+        </video>
         <div id="controller">
             <v-layout row fill-height>
 
                 <v-flex xl1 sm1 md1>
                     <div class="pt-3 mt-1"></div>
-                    <span class="pl-3 pr-2" style="font-size:1.2em; color:white;">{{ time }}</span>
+                    <span class="pl-3 pr-2" style="font-size:1.0em; color:white;">{{ time }}</span>
                 </v-flex>
                 <v-flex xl2 sm2 md2>
                     <div class="pt-3 pl-4 ml-2">
@@ -25,8 +23,8 @@
                 <v-flex xl10 sm10 md10>
                     <v-slider v-on:change="seek_change()" v-on:mousedown="mouse_down()" v-on:mouseup="mouse_up()" id="seek_bar" v-model="slider_play" color="red" max="100" min="0"></v-slider>
                 </v-flex>
-            
-            
+
+
 
                 <v-layout px-3 row fill-height>
                     <v-flex xl4 sm4 md4>
@@ -39,7 +37,7 @@
                     </v-flex>
                 </v-layout>
 
-            
+
                 <v-layout px-3 row fill-height>
                     <v-flex xl4 sm4 md4>
                         <div class="pt-3" id="speed_btn">
@@ -184,6 +182,7 @@ export default {
 <style lang="css" scoped>
 video {
     width: 100%;
+    height:100%;
 }
 
 .v-label {

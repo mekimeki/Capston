@@ -156,6 +156,11 @@ const mutations = {
   },
   subtitle_record_mutation: (state,payload) =>{
     state.subtitle_record = payload;
+  },
+  graph_reset_mutation: (state,payload) =>{
+    state.graph_score = 0;
+    state.graph_origin = [];
+    state.graph_record = [];
   }
 }
 

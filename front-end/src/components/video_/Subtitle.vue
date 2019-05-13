@@ -16,7 +16,7 @@
     </div>
     <!-- subtite -->
 
-    <v-tooltip v-model="show" top>
+    <v-tooltip v-model="show" top color="white">
       <template v-slot:activator="{ on }">
         <div top id="subtitle_box"
         >
@@ -28,9 +28,9 @@
           <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="record_open(subtitle_open.split('#')[1])">mic</v-icon>
         </div>
       </template>
-      <span id="tooltop"></span>
-      <v-icon small color="white" v-on:click="word_bookmark($event,false)">add</v-icon>
-      <v-icon small color="white" v-on:click="show=false">clear</v-icon>
+      <span id="tooltop" style="color:black"></span>
+      <v-icon small  v-on:click="word_bookmark($event,false)">add</v-icon>
+      <v-icon small  v-on:click="show=false">clear</v-icon>
     </v-tooltip>
 
 
@@ -182,6 +182,7 @@ export default {
       this.bookmark_action(value);
     },
     subtitle_stop(evt){//subtitle stop
+      console.log("??");
       if(evt.target.innerHTML === "blur_on"){
         evt.target.innerHTML = "blur_off";
         this.subtitle_open = "";
@@ -211,7 +212,7 @@ export default {
       this.subtitle = this.s_getter;
       this.interval = setInterval(()=>{
         this.video_time_check = this.video.currentTime;
-      },150);
+      },100);
     });
   },
   computed:{
@@ -226,10 +227,10 @@ export default {
   watch:{
     video_time_check: function(data){//subtitle view methods
       for (let i = 0; i < this.subtitle.length; i++) {
-        if(this.video.currentTime.toFixed(1) === parseInt(this.subtitle[i][1][0]).toFixed(1)){
+        if(this.video.currentTime.toFixed(1) == parseInt(this.subtitle[i][1][0]).toFixed(1)){
           this.subtitle_open = this.subtitle[i][2]+"#"+i;
         }
-        else if(this.video.currentTime.toFixed(1) === parseInt(this.subtitle[i][1][1]).toFixed(1)){
+        else if(this.video.currentTime.toFixed(1) == parseInt(this.subtitle[i][1][1]).toFixed(1)){
           this.subtitle_open = "";
         }
       }
@@ -245,14 +246,15 @@ export default {
 }
 #subtitle_box{
   color:white;
-  background: black;
+  font-size: 140%;
+  background: blue;
   position: relative;
   display: inline-block;
   height:100%;
-  left:30%;
+  left:27%;
   top:-155px;
   cursor:pointer;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 #subtitle_box:hover{
   background: #26A69A;

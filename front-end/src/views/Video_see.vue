@@ -22,7 +22,7 @@
               </v-card-title>
               <v-card-title>
                 <v-icon color="teal lighten-1">person</v-icon>
-                <span>NAME</span>
+                <span>123@gmail.com</span>
               </v-card-title>
               <v-card-text class="title font-weight">
                 {{explain.content}}
