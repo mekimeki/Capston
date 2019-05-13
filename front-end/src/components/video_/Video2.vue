@@ -4,8 +4,10 @@
         <!-- <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted="muted">
     </video> -->
 
+
         <video id="video" :src="videoLink"
       v-on:timeupdate="seek_timeupdate()"
+      :src="videoLink"
     >
     </video>
         <div id="controller">

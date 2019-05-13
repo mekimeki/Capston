@@ -1,14 +1,9 @@
 import axios from 'axios';
 import Service from '../api/service'
 
-const service = new Service('http://172.26.2.223/');
-
-
-// import Service from '../api/service';
-// // 172.26.4.110
-// const service = new Service("http://172.26.4.110/");//axios api service class created
-// // 172.26.3.143
-
+// 172.26.2.223
+const service = new Service("http://172.26.2.223/");//axios api service class created
+// 13.209.125.223
 const actions = {
   video_action : ({commit},payload) => {//video actions
     commit('video_mutation',payload);
