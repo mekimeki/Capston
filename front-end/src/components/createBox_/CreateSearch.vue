@@ -9,6 +9,7 @@
                 <template v-slot:items="props">
                     <td v-on:click="tent.kind? click_mark_content(props.item) : click_mark_word(props.item)">
                         <v-btn small>
+                            추가
                             <v-icon v-show="props.item.select">check</v-icon>
                         </v-btn>
                     </td>

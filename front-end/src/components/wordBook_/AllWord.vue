@@ -215,7 +215,7 @@ export default {
             albumNames: '',
             dialog: false,
             items: ['일본어', '영어', '한국어', '중국어'],
-            categories: ['판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
+            categories: ['액션','판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
             lang: '',
             category: '',
             crawl: false,

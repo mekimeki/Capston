@@ -3,22 +3,23 @@
     <span v-show="sb_getter.length === 1">+</span>
     <div id="scroll_div" v-on:scroll="scroll()">
         <v-layout row wrap>
+            <div class="subtitlePlus pl-2">업로드한 자막</div>
             <v-flex xs12 sm12 md12 class="textarea" v-for="(tent, i) in content" v-if="i >= scroll_num.first && i<= scroll_num.last">
-                <v-card color="teal lighten-1" class="white--text ma-1">
+                <v-card color="teal lighten-2" class="white--text ma-1">
                     <v-card-title>
-                        <label class="pr-2">START:</label>
-                        <input v-bind:value="time_change(Math.ceil(tent.firstTime))" v-on:keyup="keyup_time_change($evnet,i,true,tent.firstTime)">
-                        <label>EDN:</label>
-                        <input v-bind:value="time_change(Math.ceil(tent.lastTime))" v-on:keyup="keyup_time_change($event,i,false,tent.lastTime)">
-                        <v-icon color="white" medium v-on:click="create_btn(i)">add_circle_outline</v-icon>
-                        <v-icon color="white" medium v-on:click="delete_btn(i)">delete</v-icon>
+                        <span class="textSize pr-2" style="color:black;" >START  </span> 
+                        <input style="width:60px; font-size:18px; color:black;" v-bind:value="time_change(Math.ceil(tent.firstTime))" v-on:keyup="keyup_time_change($evnet,i,true,tent.firstTime)">
+                        <span class="textSize pr-2" style="color:black;">END  </span>
+                        <input style="width:60px; font-size:18px; color:black;" v-bind:value="time_change(Math.ceil(tent.lastTime))" v-on:keyup="keyup_time_change($event,i,false,tent.lastTime)">
+                        <v-icon color="teal darken-3" medium v-on:click="create_btn(i)">add_circle_outline</v-icon>
+                        <v-icon color="teal darken-4" medium v-on:click="delete_btn(i)">delete</v-icon>
                         <v-text-field v-model="tent.textArea">
                         </v-text-field>
                     </v-card-title>
                 </v-card>
                 <!-- <span class="" v-if="!up_getters.subtitle_">
             <v-btn><v-icon v-on:click="record(i,$event)">mic_off</v-icon></v-btn>
-          </span> -->
+        </span> -->
             </v-flex>
         </v-layout>
     </div>
@@ -246,7 +247,14 @@ export default {
     overflow-x: scroll;
     white-space: nowrap;
 }
-
+.textSize{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.subtitlePlus{
+  font-size: 1.3rem;
+  font-weight: 600;
+}
 /* .btn{
   position: absolute;
   visibility: hidden;

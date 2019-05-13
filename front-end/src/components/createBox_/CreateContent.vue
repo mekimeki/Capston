@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="">
-    <v-tabs color="white" slider-color="black">
+    <v-tabs color="white" slider-color="red">
       <v-tab v-for="tent in cp_getter" ripple>
           {{ tent.name }}
       </v-tab>
