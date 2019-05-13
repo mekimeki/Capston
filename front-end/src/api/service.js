@@ -1,6 +1,7 @@
 import axios from 'axios';//axios
 import router from '../router';//router
 
+
 export default class Service {
   constructor(domain){
     this.domain = domain;//back-end URL address

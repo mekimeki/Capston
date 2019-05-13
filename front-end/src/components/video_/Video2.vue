@@ -4,8 +4,9 @@
     <!-- <video id="video" src="@/components/test.mp4" v-on:timeupdate="seek_timeupdate()" muted="muted">
     </video> -->
 
-    <video id="video" :src="videoLink"
+    <video id="video"
       v-on:timeupdate="seek_timeupdate()"
+      :src="videoLink"
     >
     </video>
     <div id="controller">
@@ -161,6 +162,7 @@ export default {
       });
     }
     this.video = document.getElementById("video");//video
+    // this.video.crossOrigin = "Anonymous";
     this.video_action(this.video);//vuex actions
     this.seek_bar = document.getElementById('seek_bar');
     this.seek_bar_action(this.seek_bar);//vuex mapActions
