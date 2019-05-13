@@ -98,7 +98,7 @@ Route::post('/subscribeCancel/{m_id}', 'Member\FolowerController@subscribeCancel
 
 Route::post('/submitUpload', 'Video\VideoController@submitUpload');
 
-Route::group(['prefix' => 'video'], function () {
+Route::group(['middleware' => 'cors', 'prefix' => 'video'], function () {
     //영상 조회
     Route::get('/view/{video_pk}', 'Video\VideoController@view');
 
@@ -141,7 +141,7 @@ Route::group(['prefix' => 'video'], function () {
 
 });
 
-Route::group(['prefix' => 'videoInfo'], function () {
+Route::group(['middleware' => 'cors', 'prefix' => 'videoInfo'], function () {
 
     Route::get('/subtitle/{video_pk}', 'Subtitle\SubtitleController@subtitleView');
 

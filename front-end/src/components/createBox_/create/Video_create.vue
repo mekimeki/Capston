@@ -13,24 +13,21 @@
 import video_ from "@/components/video_/Video2";
 import createVideo_ from "@/components/createBox_/CreateVideo";
 export default {
-  components:{
+  components: {
     video_,
-    createVideo_,
+    createVideo_
   },
-  data(){
-    return{
-
-    }
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="css" scoped>
-#center{
-  left:0;
-  right:0;
-  margin-left:auto;
-  margin-right:auto;
-
+#center {
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

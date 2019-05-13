@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Member;
 use App\Model\Attendance;
+use App\Model\Member;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class AttendController extends Controller
 {
@@ -17,11 +16,10 @@ class AttendController extends Controller
     public function attendance($id)
     {
         $attend = member::where('member_pk', $id)->select('attendance_st AS attend')->get();
-        if($attend[0]->attend == "F") {
+        if ($attend[0]->attend == "F") {
             member::where('member_pk', $id)->update(['attendance_st' => "T"])->daily();
             \DB::insert('insert into attendance_tb (member_pk) values (?)', [$id]);
         }
-
     }
 
     /**
