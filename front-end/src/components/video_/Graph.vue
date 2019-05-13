@@ -21,6 +21,8 @@
         </sheet-footer>
       </v-sheet>
       <span>내그래프</span>
+      <hr>
+      점수:<input type="text" name="" value="" v-model="score">
     </v-layout>
     <div class="graph_box_1" row wrap>
       <v-sparkline
@@ -73,6 +75,7 @@
         gradient: gradients,
         origin_value:[],
         record_value:[],
+        score:0,
       }
     },
     methods:{
@@ -84,6 +87,7 @@
       ...mapGetters({
         g_getter:'graph_orign_getter',
         r_getter:'graph_record_getter',
+        s_getter: 'graph_score_getter',
       }),
     },
     watch:{
@@ -94,6 +98,7 @@
       },
       r_getter:function(data){
         this.record_value = this.r_getter;
+        this.score = this.s_getter;
         console.log("r_getter",this.r_getter);
       }
     }

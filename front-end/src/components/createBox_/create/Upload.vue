@@ -78,7 +78,7 @@
                                 <v-flex xl5 sm5 md5>
                                     <v-layout row wrap>
                                         <v-flex xl12 sm12 md12>
-                                            <v-btn flat class="subtitlebtn" type="button" name="button"v-on:click="remove_file($event)">
+                                            <v-btn flat class="subtitlebtn" type="button" name="button" v-on:click="remove_file($event)">
                                                 <v-icon large color="red">delete</v-icon>
                                                 <span class="pl-2 mt-1">REMOVE</span>
                                             </v-btn>
@@ -112,9 +112,9 @@
                 </v-card>
             </v-container>
         </v-flex>
-        <div class="" v-if="up_getters.video">
-            <v-btn v-on:click="move()">다음으로</v-btn>
-        </div>
+        <v-layout align-end justify-end row fill-height class="" v-if="up_getters.video">
+            <v-btn large color="teal lighten-1" class="white--text" v-on:click="move()">다음으로</v-btn>
+        </v-layout>
     </v-layout>
 </v-container>
 </template>

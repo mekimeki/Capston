@@ -17,6 +17,9 @@ const getters = {
   capture_getter: (state) =>{
     return state.capture;
   },
+  audio_getter: (state) =>{
+    return state.audio;
+  },
   capture_data_getter: (state) =>{
     return state.capture_data;
   },
@@ -46,6 +49,9 @@ const getters = {
   },
   graph_record_getter: (state) =>{
     return state.graph_record;
+  },
+  graph_score_getter: (state) =>{
+    return state.graph_score;
   },
   subtitle_record_getter: (state) =>{
     return state.subtitle_record;

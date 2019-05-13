@@ -1,5 +1,5 @@
 <template lang="html">
-    <v-card color="blue" class="white--text ma-1">
+    <v-card color="red" class="dark--text ma-1">
       <v-layout row wrap>
         <v-flex xl12 sm12 md12>
           <v-card-title>

@@ -45,6 +45,7 @@ class LineController extends Controller
     public function create(Request $request) // 대사장 만들기
 
     {
+        
         $all = $request->all();
         $id = $request->input('book_id');
         $title = $request->input('title');

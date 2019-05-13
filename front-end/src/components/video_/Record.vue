@@ -3,10 +3,10 @@
     <!-- audio record -->
     <div>
       <v-card class="ma-2" color="teal lighten-1">
-        <v-btn fab small v-on:click="preview_play($event,i)">
+        <v-btn fab small v-on:click="preview_play($event,number)">
           <v-icon color="teal lighten-1">play_arrow</v-icon>
         </v-btn>
-        <v-btn fab small v-on:click="recording($event,sub)">
+        <v-btn fab small v-on:click="recording($event,s_getter[number])">
           <v-icon color="teal lighten-1">mic_off</v-icon>
         </v-btn>
         <span>{{s_getter[number][1][0]}}</span>
@@ -70,7 +70,7 @@ export default {
       recording_icon:"",
       video_end_check:"",
       dialog:false,
-      number:'',
+      number:0,
     }
   },
   methods:{
@@ -102,6 +102,7 @@ export default {
         }
         this.graph_origin_action(data_s);
         //
+        
         this.record.start();
         alert('녹음 시작');
         this.check = false;
@@ -133,15 +134,15 @@ export default {
       let file =  new File([this.blob], "audio.webm", {
         type: "audio/webm; codecs=opus"
       });
+      console.log('login data',this.l_getter.email);
       let data_s = {
         "audio" : file,
         "originText": "Freud said love and work work and love", //data 에 있는 정보로 바꿔야함
         "originDuration": parseInt(data[1][1]) - parseInt(data[1][0]),
-        "id": this.lg_getter.email,
+        "id": this.l_getter.email,
         "title": this.$route.query.video+".mp4",
       }
       this.graph_record_action(data_s);
-      console.log('record_graph check in record.vue',data);
       // let form = new FormData(); //form create
       // form.append("audio", file); // file data to form append
       // form.append("originText","Freud said love and work work and love");
@@ -159,7 +160,8 @@ export default {
   },
   mounted:function(){
     this.video = this.v_getter;
-    this.audio = document.getElementById('audio');//audio
+    this.audio = this.a_getter;//audio
+    console.log("audio",this.audio);
     // this.video = document.getElementById('video');//video test
     this.recording_icon = document.getElementById("recording_icon");
     navigator.mediaDevices.getUserMedia({audio:true,video:false}).then((stream)=>{//
@@ -184,12 +186,16 @@ export default {
       s_getter:'subtitle_getter',
       l_getter:'login_getters',
       sr_getter:'subtitle_record_getter',
+      a_getter:'audio_getter',
     }),
   },
   watch:{
     sr_getter: function(data){
       this.number = this.sr_getter;
       console.log('?',this.sr_getter);
+    },
+    a_getter: function(data){
+      this.audio = this.a_getter;
     }
   }
 }
