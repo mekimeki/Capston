@@ -58,27 +58,27 @@ export default {
     data: () => ({
         cards: [{
                 title: "1. 알맞은 단어 고르기",
-                src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
+                src: require(`@/assets/Quiz/select1.png`),
                 flex: 2
             },
             {
                 title: "2. 알맞은 뜻 고르기",
-                src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+                src: require(`@/assets/Quiz/select2.png`),
                 flex: 2
             },
             {
                 title: "3. 대사 맞추기",
-                src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+                src: require(`@/assets/Quiz/select3.png`),
                 flex: 2
             },
             {
                 title: "4. 카드 뒤집기 게임",
-                src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
+                src: require(`@/assets/Quiz/select4.png`),
                 flex: 2
             },
             {
                 title: "5. 대사 빈칸 채우기",
-                src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+                src: require(`@/assets/Quiz/select5.png`),
                 flex: 2
             }
         ],
@@ -110,7 +110,7 @@ export default {
 }
 
 .example {
-    color: white;
+    color: black;
     font-size: 1.65rem;
     font-weight: 550;
 }

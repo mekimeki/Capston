@@ -5,7 +5,7 @@
     <v-layout wrap row fill-height>
         <v-flex class="px-1 py-4 pt-5" v-for="(name,i) in names" :key="(name,i)" xs12 sm4 md2 flexbox>
             <v-card router :to="{name:'v-video'}" color="white" flat>
-                <v-img :src="`http://172.26.2.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" aspect-ratio="1.5"></v-img>
+                <v-img :src="`http://172.26.3.30/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" aspect-ratio="1.5"></v-img>
                 <div>
                     <p class="videoTitle mt-2 mb-1">{{ name.title }}</p>
                     <span class="mr-3">345회</span>

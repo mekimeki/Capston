@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Service from '../api/service'
 
-const service = new Service('http://172.26.2.223/');
+const service = new Service('http://172.26.3.30/');
 
 
 // import Service from '../api/service';

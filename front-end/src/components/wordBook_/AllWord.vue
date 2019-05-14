@@ -356,7 +356,7 @@ export default {
     },
 
     beforeCreate() {
-        var baseURI = "http://172.26.2.223/api/book/0";
+        var baseURI = "http://172.26.3.30/api/book/0";
         axios
             .get(baseURI)
             .then(res => {
@@ -366,7 +366,7 @@ export default {
             .catch(error => {
                 console.log("failed", error);
             });
-        baseURI = "http://172.26.2.223/api/books";
+        baseURI = "http://172.26.3.30/api/books";
         axios
             .get(baseURI)
             .then(res => {

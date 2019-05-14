@@ -135,9 +135,10 @@ export default {
         type: "audio/webm; codecs=opus"
       });
       console.log('login data',this.l_getter.email);
+      console.log("datassss", data);
       let data_s = {
         "audio" : file,
-        "originText": "Freud said love and work work and love", //data 에 있는 정보로 바꿔야함
+        "originText": data[2], //data 에 있는 정보로 바꿔야함
         "originDuration": parseInt(data[1][1]) - parseInt(data[1][0]),
         "id": this.l_getter.email,
         "title": this.$route.query.video+".mp4",

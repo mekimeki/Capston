@@ -65,25 +65,18 @@
         </v-flex>
 
         <v-flex xs12 sm6 md3 class="pb-4">
-            <v-carousel hide-delimiters>
-                <v-carousel-item v-for="(movie,i) in movies" :key="i" :src="movie.src"></v-carousel-item>
-            </v-carousel>
+            <v-img :src="require(`@/assets/Start/post1.png`)"></v-img>
         </v-flex>
-        <v-flex xs12 sm6 md3 class="pb-4">
-            <v-carousel hide-delimiters>
-                <v-carousel-item v-for="(movie,i) in movies" :key="i" :src="movie.src"></v-carousel-item>
-            </v-carousel>
+         <v-flex xs12 sm6 md3 class="pb-4">
+            <v-img :src="require(`@/assets/Start/post2.png`)"></v-img>
         </v-flex>
-        <v-flex xs12 sm6 md3 class="pb-4">
-            <v-carousel hide-delimiters>
-                <v-carousel-item v-for="(movie,i) in movies" :key="i" :src="movie.src"></v-carousel-item>
-            </v-carousel>
+         <v-flex xs12 sm6 md3 class="pb-4">
+            <v-img :src="require(`@/assets/Start/post3.png`)"></v-img>
         </v-flex>
-        <v-flex xs12 sm6 md3 class="pb-4">
-            <v-carousel hide-delimiters>
-                <v-carousel-item v-for="(movie,i) in movies" :key="i" :src="movie.src"></v-carousel-item>
-            </v-carousel>
+         <v-flex xs12 sm6 md3 class="pb-4">
+            <v-img :src="require(`@/assets/Start/post4.png`)"></v-img>
         </v-flex>
+        
 
         <v-flex xs12 sm12 class="py-4">
             <v-card flat color="white">
@@ -134,19 +127,6 @@ export default {
                 icon: "switch_video"
             }
         ],
-        movies: [{
-                src: require(`@/assets/Start/movie1.jpg`)
-            },
-            {
-                src: require(`@/assets/Start/movie3.jpg`)
-            },
-            {
-                src: require(`@/assets/Start/movie4.jpg`)
-            },
-            {
-                src: require(`@/assets/Start/movie5.jpg`)
-            }
-        ]
     }),
     methods: {
         changeComment(a) {

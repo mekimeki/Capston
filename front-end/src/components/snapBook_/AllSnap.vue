@@ -207,7 +207,7 @@ export default {
     methods: {
         //  start of 단어 출력 및 분류 
         wordQuest(changeID, flag) {
-            const baseURI = "http://172.26.2.223/api/update"
+            const baseURI = "http://172.26.3.30/api/update"
             const form = new FormData();
             form.append("id", changeID)
             form.append("flag", flag)
@@ -224,7 +224,7 @@ export default {
         },
         allWord() {
 
-            var baseURI = "http://172.26.2.223/api/line/0";
+            var baseURI = "http://172.26.3.30/api/line/0";
 
             axios
                 .get(baseURI)
@@ -249,7 +249,7 @@ export default {
         // },
         classifyQuest(classifyWord = '') {
             var form = new FormData();
-            const baseURI = "http://172.26.2.223/api/book/0";
+            const baseURI = "http://172.26.3.30/api/book/0";
             form.append("classifyWord", classifyWord)
             axios
                 .get(baseURI, form)
@@ -273,7 +273,7 @@ export default {
             console.log(this.books);
         },
         createAlbumQuest() {
-            const baseURI = "http://172.26.2.223/api/createLine"
+            const baseURI = "http://172.26.3.30/api/createLine"
             const form = new FormData();
             form.append("title", this.albumNames);
             form.append("lang", this.lang);
@@ -304,7 +304,7 @@ export default {
             this.category = '';
         },
         selectedWordsQuest(i) {
-            const baseURI = "http://172.26.2.223/api/line/" + this.books[i].id;
+            const baseURI = "http://172.26.3.30/api/line/" + this.books[i].id;
             axios
                 .get(baseURI)
                 .then(res => {
@@ -380,12 +380,12 @@ export default {
         deleteQuest() {
             var form = new FormData();
             form.append("selected", this.selected);
-            axios.get("http://172.26.2.223/get-token").then(response => {
+            axios.get("http://172.26.3.30/get-token").then(response => {
                 if (response.data) {
                     form.append("_token", response.data);
                     console.log(this.selected)
                     axios
-                        .post("http://172.26.2.223/api/deletedLine", form)
+                        .post("http://172.26.3.30/api/deletedLine", form)
                         .then(response => {
                             console.log("response ==>>>> ", response.data);
                             this.lines = response.data
@@ -402,7 +402,7 @@ export default {
             var form = new FormData();
             form.append("clickWord", cword)
             console.log(cword);
-            var baseURI = "http://172.26.2.223/api/example";
+            var baseURI = "http://172.26.3.30/api/example";
             axios
                 .post(baseURI, form)
                 .then(res => {
@@ -422,7 +422,7 @@ export default {
     },
 
     beforeCreate() {
-        var baseURI = "http://172.26.2.223/api/line/0";
+        var baseURI = "http://172.26.3.30/api/line/0";
         axios
             .get(baseURI)
             .then(res => {
@@ -432,7 +432,7 @@ export default {
             .catch(error => {
                 console.log("failed", error);
             });
-        baseURI = "http://172.26.2.223/api/lineBook";
+        baseURI = "http://172.26.3.30/api/lineBook";
         axios
             .get(baseURI)
             .then(res => {

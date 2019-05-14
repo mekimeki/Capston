@@ -211,7 +211,7 @@ export default {
       this.subtitle = this.s_getter;
       this.interval = setInterval(()=>{
         this.video_time_check = this.video.currentTime;
-      },150);
+      },100);
     });
   },
   computed:{

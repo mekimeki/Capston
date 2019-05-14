@@ -12,7 +12,7 @@ export default {
     mounted() {
         var form = new FormData();
         form.append("id", '123@gmail.com')
-        var baseURI = "http://172.26.2.223/api/testResult"
+        var baseURI = "http://172.26.3.30/api/testResult"
         axios.post(baseURI, form).then(result => {
             this.times = result.data.dates;
             this.scores = result.data.scores;

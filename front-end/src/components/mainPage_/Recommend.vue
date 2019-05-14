@@ -14,7 +14,7 @@
                                     <span class="mainName"><div class="pt-3 pl-3">{{pic.category1}}</div></span>
                                     <span class="subName"><div class="pt-2 pl-3">{{pic.category2}}</div ></span>
                                 </v-card>
-                                <v-img v-if="n!=1" :src="`http://172.26.2.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                                <v-img v-if="n!=1" :src="`http://172.26.3.30/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -37,7 +37,7 @@ export default {
         return {
             pics: [{
                     category1: "영어",
-                    category2: "비지니스/회화",
+                    category2: "액션/스릴러",
                     color: "red accent-3",
                 },
                 {
@@ -47,7 +47,7 @@ export default {
                 },
                 {
                     category1: "영어",
-                    category2: "여행/관광/서비스",
+                    category2: "로맨스",
                     color: "blue accent-3"
                 }
             ],

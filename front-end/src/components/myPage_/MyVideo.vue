@@ -2,13 +2,13 @@
 <v-container pa-0>
     <v-layout wrap row fill-height>
         <v-flex class="px-1 py-4 pt-5" v-for="(name,i) in names" :key="(name,i)" xs12 sm4 md2 flexbox>
-            <v-card color="white" flat>
-               <v-img :src="`http://172.26.2.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" aspect-ratio="1.5"></v-img>
+            <v-card color="white" flat router :to="{name:'v-video',query:{video:name.video_pk}}">
+                <v-img :src="name.pic_add" aspect-ratio="1.5"></v-img>
                 <div>
-                    <p class="videoTitle mt-2 mb-1">{{ name.title }}</p>
-                    <span class="mr-3">345회</span>
-                    <span>좋아요1256</span>
-                    <p class="mb-0">2019.05.03</p>
+                    <p class="videoTitle mt-2 mb-1">{{ name.v_tt }}</p>
+                    <span class="mr-3">10회</span>
+                    <span>좋아요10</span>
+                    <p class="mb-0">{{ name.upload_dt }}</p>
                 </div>
             </v-card>
         </v-flex>
@@ -17,25 +17,28 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     data() {
         return {
-            names : [
-                { title:'멜로 영화 명장면'},
-                { title:'쇼생크 탈출 하기'},
-                { title:'전쟁의 처량함'},
-                { title:'E.T 다시 보기'},
-                { title:'우리들의 행복한 시간'},
-                { title:'미드에서만 볼 수 있는 것'},
-                { title:'귀신 나오는 명장면'},
-                { title:'충격  총격신'},
-                { title:'남자 주인공의 고백'},
-                { title:'여자들의 파티'},
-                { title:'결혼식 명장면'},
-                { title:'비지니스 영어 회화'},
-            ]
+            names : [],
         }
-    }
+    },
+    mounted() {
+        var baseURI = "http://172.26.3.30/api/myVideo";
+        var form = new FormData();
+        form.append("id","123@gmail.com");
+        axios
+            .post(baseURI, form)
+            .then(res => {
+                this.names = res.data.video.video;
+                console.log("beforeCreate OK",this.names);
+            })
+            .catch(error => {
+                console.log("failed", error);
+            });
+    
+}
 }
 </script>
 <style>
