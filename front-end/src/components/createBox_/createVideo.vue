@@ -140,12 +140,14 @@ export default {
             }
         },
         cut() {
-            if (confirm("정말 자르겠습니까?")) {
-                this.open = true;
-                this.upload();
-            } else {
-                this.open = false;
-            }
+          this.open = true;
+          this.upload();
+            // if (confirm("정말 자르겠습니까?")) {
+            //     this.open = true;
+            //     this.upload();
+            // } else {
+            //     this.open = false;
+            // }
         },
         upload() {
             let upload_data = { //setTime

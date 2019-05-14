@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="">
     <!-- button_s -->
-    <div id="btn_box">
+    <div id="btn_box" v-show="$route.name != 'content'">
       <span>
         <v-btn fab small v-on:click="subtitle_stop($event)">
           <v-icon color="teal lighten-1">blur_on</v-icon>
@@ -24,8 +24,8 @@
             id="subtitle_span"
             v-on:mouseup="select_drag($event,subtitle_open.split('#')[0])"
           >{{subtitle_open.split('#')[0]}}</span>
-          <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="subtitle_bookmark(subtitle_open.split('#')[0])">bookmark</v-icon>
-          <v-icon id="bookmark_check" v-show="subtitle_open" color="white" v-on:click="record_open(subtitle_open.split('#')[1])">mic</v-icon>
+          <v-icon  id="bookmark_check" v-show="subtitle_open&&($route.name != 'content')" color="white" v-on:click="subtitle_bookmark(subtitle_open.split('#')[0])">bookmark</v-icon>
+          <v-icon  id="bookmark_check" v-show="subtitle_open&&($route.name != 'content')" color="white" v-on:click="record_open(subtitle_open.split('#')[1])">mic</v-icon>
         </div>
       </template>
       <span id="tooltop" style="color:black"></span>
@@ -246,12 +246,12 @@ export default {
 }
 #subtitle_box{
   color:white;
-  font-size: 140%;
+  font-size: 120%;
   background: blue;
   position: relative;
   display: inline-block;
   height:100%;
-  left:27%;
+  left:15%;
   top:-155px;
   cursor:pointer;
   opacity: 0.8;

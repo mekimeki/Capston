@@ -3,10 +3,10 @@
     <!-- audio record -->
     <div>
       <v-card class="ma-2" color="teal lighten-1">
-        <v-btn fab small v-on:click="preview_play($event,number)">
+        <v-btn class="play_btn" fab small v-on:click="preview_play($event,number)">
           <v-icon color="teal lighten-1">play_arrow</v-icon>
         </v-btn>
-        <v-btn fab small v-on:click="recording($event,s_getter[number])">
+        <v-btn id="recording_btn" fab small v-on:click="recording($event,s_getter[number])">
           <v-icon color="teal lighten-1">mic_off</v-icon>
         </v-btn>
         <span>{{s_getter[number][1][0]}}</span>
@@ -78,7 +78,9 @@ export default {
   methods:{
     ...mapActions(['graph_origin_action','graph_record_action','graph_reset_action']),
     preview_play(evt,num){
-      evt.target.innerHTML = 'pause';
+      if(evt){
+        evt.target.innerHTML = 'pause';
+      }
       this.video.currentTime = this.s_getter[num][1][0];
       if(!this.video.paused){
         this.video.pause();
@@ -86,7 +88,9 @@ export default {
       this.video.play();
       let inter = setInterval(()=>{
         if(this.video.currentTime.toFixed(1) === this.s_getter[num][1][1].toFixed(1)){
-          evt.target.innerHTML = 'play_arrow';
+          if(evt){
+            evt.target.innerHTML = 'play_arrow';
+          }
           clearInterval(inter);
           this.video.pause();
         }
@@ -108,10 +112,11 @@ export default {
         if(!this.video.paused){
           this.video.pause();
         }
-        // this.dialog = true;
+
+        this.preview_play(false,this.number);
         this.recording_check = true;
         evt.target.innerHTML = 'mic';
-        // evt.target.style.background = 'red';
+
       }else{
         this.record.stop();//recording stop
         // this.chunks = [];//chunks reset
@@ -127,10 +132,8 @@ export default {
           this.save(data,this.blob);
         });
         this.check = true;
-        evt.target.innerHTML = 'mic_off';
-        // evt.target.style.background = 'white';
-        // this.dialog = false;
         this.recording_check = false;
+        evt.target.innerHTML = 'mic_off';
       }
     },
     save(data,data_blob){//audio blob to file data
