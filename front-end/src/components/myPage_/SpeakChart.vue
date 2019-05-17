@@ -12,7 +12,7 @@ export default {
     mounted() {
         var form = new FormData();
         form.append("id", '123@gmail.com')
-        var baseURI = "http://172.26.3.30/api/speakResult"
+        var baseURI = "http://192.168.0.19/api/speakResult"
         axios.post(baseURI, form).then(result => {
             this.times = result.data.dates;
             this.scores = result.data.scores;

@@ -25,7 +25,7 @@ export default {
         }
     },
     mounted() {
-        var baseURI = "http://172.26.3.30/api/myVideo";
+        var baseURI = "http://192.168.0.19/api/myVideo";
         var form = new FormData();
         form.append("id","123@gmail.com");
         axios

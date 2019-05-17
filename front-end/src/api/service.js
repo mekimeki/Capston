@@ -1,6 +1,7 @@
 import axios from 'axios';//axios
 import router from '../router';//router
 
+
 export default class Service {
   constructor(domain){
     this.domain = domain;//back-end URL address
@@ -104,11 +105,11 @@ export default class Service {
     this.form.append('word',data);
     return this.service_post(this.domain+request,this.form);
   }
-  upload_created(request,data){
+  upload_created(request,data,config){
     this.form.append('video_pk',data.video_pk)
     this.form.append('title',data.text.title);
     this.form.append('explain',data.text.explain);
-    return this.service_post(this.domain+request,this.form);
+    return this.service_post_up(this.domain+request,this.form,config);
   }
   video_cut_image(request,data){
     return this.service_get(this.domain+request+data);
@@ -128,7 +129,9 @@ export default class Service {
   }
   //bookmark
   bookmark_subtitle(request,data){
-    this.form.append('data',data);
+    this.form.append('explain',data.explain);
+    this.form.append('title',data.title);
+    this.form.append('video_pk',data.video_pk);
     this.form.append('picture',data.picture);
     return this.service_post(this.domain+request,this.form);
   }

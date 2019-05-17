@@ -1,6 +1,8 @@
 <template lang="html">
+<div id="out">
   <div id="subtitle_box">
     {{subtitle_open}}
+  </div>
   </div>
 </template>
 
@@ -44,12 +46,18 @@ export default {
 </script>
 
 <style lang="css" scoped>
+#out{
+  width: 100%;
+  text-align: center;
+  font-size: 1.9rem;
+}
 #subtitle_box{
-  background: white;
+  color:white;
+  font-size: 1.9rem;
+  background-color: rgba(255, 255, 255, 0.4);
   position: relative;
   display: inline-block;
-  left:26%;
-  top:-120px;
+  top:-140px;
   cursor:pointer;
 }
 </style>

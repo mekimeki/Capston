@@ -5,6 +5,7 @@
         <v-layout row wrap>
           <v-flex>
             <video_></video_>
+            <subtitle_></subtitle_>
           </v-flex>
           <v-flex>
             <search_></search_>
@@ -22,11 +23,13 @@
 import video_ from "@/components/video_/Video2";
 import content_ from "@/components/createBox_/CreateContent";
 import search_ from "@/components/createBox_/CreateSearch";
+import subtitle_ from "@/components/video_/Subtitle"
 export default {
   components:{
     video_,
     content_,
     search_,
+    subtitle_,
   },
   data(){
     return{

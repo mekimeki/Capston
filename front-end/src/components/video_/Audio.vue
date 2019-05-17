@@ -1,5 +1,5 @@
 <template lang="html">
-  <div id="audio_box">
+  <div id="audio_box" class="py-4">
     <audio id="audio" controls
       style="display:none"
       v-on:timeupdate="seek_timeupdate()"
@@ -7,7 +7,14 @@
       <source src="" type="audio/">
     </audio>
     <div id="controller">
-      <v-layout>
+      <v-layout pl-2>
+         <v-flex xl1 sm1 md1>
+          <v-btn fab flat small class="pt-2 btn"
+            v-on:click="play($event)"
+          >
+            <v-icon large color="teal lighten-1" id="play_btn">play_circle_outline</v-icon>
+          </v-btn>
+        </v-flex>
         <v-flex xl8 sm8 md8>
           <v-slider
             v-on:change="seek_change()"
@@ -23,17 +30,11 @@
             min="0"
           ></v-slider>
         </v-flex>
-        <v-flex xl1 sm1 md1>
-          <v-btn fab small class="btn"
-            v-on:click="play($event)"
-          >
-            <v-icon large color="teal lighten-1" id="play_btn">play_circle_outline</v-icon>
-          </v-btn>
-        </v-flex>
+       
         <v-flex xl2 sm2 md2>
           <v-layout>
             <v-flex xl12 sm12 md12>
-              <v-btn fab small class="btn"
+              <v-btn fab flat small class="pt-2 btn"
                 v-on:click="audio_on_off($event)"
               >
                 <v-icon large color="teal lighten-1" id="audio_btn">volume_up</v-icon>
@@ -44,7 +45,7 @@
                 id="seek_speaker"
                 v-on:change="seek_speaker_change()"
                 v-model="slider_audio"
-                color="teal lighten-1"
+                color="teal darken-1"
                 max="100"
                 min="0"
               ></v-slider>
@@ -52,7 +53,7 @@
           </v-layout>
         </v-flex>
         <v-flex xl1 sm1 md1>
-          <v-btn fab small class="btn"
+          <v-btn fab flat small class="pt-2 btn"
             v-on:click="audio_upload($event)"
           >
             <v-icon large color="teal lighten-1">get_app</v-icon>
@@ -179,8 +180,8 @@ export default {
   position: relative;
   display: inline-block;
   text-align: center;
-  border:5px solid #26A69A;
-  border-radius: 20px;
+  border: 3px solid #26A69A;
+  border-radius: 10px;
   width:100%;
 }
 

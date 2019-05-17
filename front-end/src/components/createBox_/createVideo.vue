@@ -21,9 +21,9 @@
     </div>
 
     <!-- <template v-if="open">
-      <v-flex>
+    <v-flex>
         <v-progress-linear v-model="precent_video_cut"></v-progress-linear>
-      </v-flex>
+    </v-flex>
     </template> -->
     <canvas style="display:none" id="canvasd" width="800" height="500"></canvas>
 
@@ -40,7 +40,7 @@
         <span class="textCheck pr-2 pl-3">END : </span><input class="input pl-2" type="text" name="" value="" v-model="video_lastTime" v-on:keyup="keyup_time_change($event,false)">
         <div class="" v-show="up_getters.firstTime&&up_getters.lastTime">
             <v-layout align-end justify-end row fill-height>
-            <v-btn large color="teal lighten-1" class="white--text" v-on:click="move()">다음으로</v-btn>
+                <v-btn large color="teal lighten-1" class="white--text" v-on:click="move()">다음으로</v-btn>
             </v-layout>
         </div>
     </div>
@@ -140,12 +140,14 @@ export default {
             }
         },
         cut() {
-            if (confirm("정말 자르겠습니까?")) {
-                this.open = true;
-                this.upload();
-            } else {
-                this.open = false;
-            }
+            this.open = true;
+            this.upload();
+            // if (confirm("정말 자르겠습니까?")) {
+            //     this.open = true;
+            //     this.upload();
+            // } else {
+            //     this.open = false;
+            // }
         },
         upload() {
             let upload_data = { //setTime
@@ -171,7 +173,7 @@ export default {
 
             for (var i = 0; i < result.img.length; i++) {
                 let img = document.createElement('img');
-                img.style.width = '10%';
+                img.style.width = '11.111%';
                 img.style.height = '100%';
                 img.src = result.img[i];
                 document.getElementById('ranges').append(img);
@@ -283,7 +285,7 @@ input[type=range] {
     font-size: 1.2rem;
 }
 
-.cut{
+.cut {
     font-size: 1.2rem;
     font-weight: 600;
 }

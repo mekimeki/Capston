@@ -12,7 +12,7 @@
                                 <span class="mainName"><div class="pt-3 pl-3">{{pic.category1}}</div></span>
                                 <span class="subName"><div class="pt-2 pl-3">{{pic.category2}}</div ></span>
                             </v-card>
-                            <v-img v-if="n!=1" :src="`http://172.26.3.30/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                            <v-img v-if="n!=1" :src="`http://192.168.0.19/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                         </v-card>
                     </v-flex>
                 </v-layout>
@@ -33,7 +33,7 @@
                                     <span class="mainName"><div class="pt-3 pl-3">{{picture.category1}}</div></span>
                                     <span class="subName"><div class="pt-2 pl-3">{{picture.category2}}</div ></span>
                                 </v-card>
-                                <v-img v-if="n!=1" :src="`http://172.26.3.30/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                                <v-img v-if="n!=1" :src="`http://192.168.0.19/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                             </v-card>
                         </v-flex>
                     </v-layout>

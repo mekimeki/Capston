@@ -20,15 +20,15 @@
                             <div class="pb-3 pt-4"></div>
                             <div class="exampleUp mx-3 py-5 mb-4">
                                 <div class="pt-4 mt-5"></div>
-                                <span class="example px-4 pb-2 pt-5 mt-3" v-for="question in questions" :key="question">{{ question }}</span>
+                                <span class="example px-4 pb-2 pt-5 mt-3" v-for="question in questions[n-2]" :key="question" >{{ question }}</span>
                             </div>
                         </v-card-text>
 
                         <v-layout pb-3>
                             <v-flex v-if="n>=2" xs3 sm12>
                                 <v-layout justify-space-around row wrap>
-                                    <v-flex v-for="n in 4" :key="n" md5>
-                                        <v-btn large block color="teal lighten-3 title font-weight-bold" v-on:click="select=(n-1)" value="check">{{ n + ". " + example[n-1].word}}</v-btn>
+                                    <v-flex v-for="i in 4" :key="i" md5>
+                                        <v-btn large block color="teal lighten-3 title font-weight-bold" v-on:click="select=(n-1)" value="check">{{ i + ". " + example[n-2][i-1]}}</v-btn>
                                     </v-flex>
                                 </v-layout>
                             </v-flex>
@@ -37,12 +37,12 @@
 
                     <v-card v-if="n==7" flat>
                         <div class="result py-5">{{ end }}</div>
-                        <div v-for="(a,b) in result" :key="(a,b)">
+                        <div v-for="(i,t) in result" :key="(i,t)">
                             <div class="pt-5 pl-4 resultPage">
-                                <div class="resultPro pl-5 ml-5 pb-2">문제. {{b+1}}</div>
-                                <div class="resultSee pl-5 ml-5">선택 : {{ a[0] }}</div>
-                                <div class="resultSee pl-5 ml-5">정답 : {{ a[1] }}</div>
-                                <div class="resultScore pl-5 pb-4 ml-5">결과 : {{ a[2] }}</div>
+                                <div class="resultPro pl-5 ml-5 pb-2">문제. {{ t+1 }}</div>
+                                <div class="resultSee pl-5 ml-5">선택 : {{ i[0] }}</div>
+                                <div class="resultSee pl-5 ml-5">정답 : {{ i[0] }}</div>
+                                <div class="resultScore pl-5 pb-4 ml-5">결과 : O</div>
                             </div>
                         </div>
 
@@ -97,64 +97,70 @@ export default {
             text: ". 알맞은 단어를 고르시오.",
             close: "닫기",
             end: "결과입니다",
-            example: [{
-                    word: ""
-                },
-                {
-                    word: ""
-                },
-                {
-                    word: ""
-                },
-                {
-                    word: ""
-                }
+            example: [
+                ["star","entertainment","lady","explain"],
+                ["experience","playground","cloth","stupid"],
+                ["us","play","complex","hard"],
+                ["class","board","active","table"],
+                ["soccer","nervous","mouse","gentle"]
             ],
-            questions: [],
+            questions: [
+                ['엔터테인먼트', '연예', '오락' ,'즐거움', '여흥' ],
+                ['천', '옷감', '직물', '걸레', '식탁보' ],
+                ['우리', '미국', '말한 바와 같이' ],
+                ['테이블' ,'식타용의', '식탁' ,'탁자', '표' ],
+                ['마우스', '쥐', '생쥐' ]
+                ],
             answer: 0,
             select: 99,
-            result: [],
+            result: [
+                ['2'],
+                ['3'],
+                ['1'],
+                ['4'],
+                ['3']
+            ],
             score: 0,
             ran_box: []
         };
     },
     methods: {
-        ...mapActions(['quest_actions', 'quest_post_actions']),
+        // ...mapActions(['quest_actions', 'quest_post_actions']),
         next() {
             const active = parseInt(this.active);
             this.active = active < 6 ? active + 1 : 0;
         },
-        getQuest() {
-            console.log("check box ", this.ran_box);
-            this.quest_actions(this.ran_box).then(result => {
-                const back = result;
-                this.example = back.choice;
-                this.questions = back.ques;
-                this.answer = back.ans;
-                this.ran_box = back.ran_box;
-                console.log('quiz quest sucesdddddddddddddddddds', result);
-                console.log('quiz quest error', this.ran_box);
-            }).catch(error => {
-                console.log('quiz quest error', error);
-            });
-        },
-        postQuest() {
-            this.quest_post_actions([this.score, "123@gmail.com"]).then(result => {
-                console.log("response", result);
-            }).catch(error => {
-                console.log('failed', error);
-            });
-        },
-        checkAns() {
-            if (this.select == this.answer) {
-                this.result.push([this.select + 1, this.answer + 1, "O"]);
-                this.score = this.score + 20;
-            } else this.result.push([this.select + 1, this.answer + 1, "X"]);
+        // getQuest() {
+        //     console.log("check box ", this.ran_box);
+        //     this.quest_actions(this.ran_box).then(result => {
+        //         const back = result;
+        //         this.example = back.choice;
+        //         this.questions = back.ques;
+        //         this.answer = back.ans;
+        //         this.ran_box = back.ran_box;
+        //         console.log('quiz quest sucesdddddddddddddddddds', result);
+        //         console.log('quiz quest error', this.ran_box);
+        //     }).catch(error => {
+        //         console.log('quiz quest error', error);
+        //     });
+        // },
+        // postQuest() {
+        //     this.quest_post_actions([this.score, "123@gmail.com"]).then(result => {
+        //         console.log("response", result);
+        //     }).catch(error => {
+        //         console.log('failed', error);
+        //     });
+        // },
+        // checkAns() {
+        //     if (this.select == this.answer) {
+        //         this.result.push([this.select + 1, this.answer + 1, "O"]);
+        //         this.score = this.score + 20;
+        //     } else this.result.push([this.select + 1, this.answer + 1, "X"]);
 
-            console.log(this.select);
-            console.log(this.result);
-            console.log(this.answer);
-        }
+        //     console.log(this.select);
+        //     console.log(this.result);
+        //     console.log(this.answer);
+        // }
     }
 };
 </script>

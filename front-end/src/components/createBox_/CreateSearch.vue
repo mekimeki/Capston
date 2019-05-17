@@ -12,6 +12,9 @@
                             추가
                             <v-icon v-show="props.item.select">check</v-icon>
                         </v-btn>
+                        <!-- <v-btn small v-on:click="delete_item(props.item)">
+                            삭제
+                        </v-btn> -->
                     </td>
                     <td>{{ props.item.name }}</td>
                     <td class="text-xs-left">{{ time_change(Math.ceil(props.item.firstTime))}}</td>
@@ -72,6 +75,9 @@ export default {
     },
     methods: {
         ...mapActions(['search_content_action', 'search_word_action', 'upload_content_action', 'content_preview_content_action', 'content_preview_word_action']),
+        delete_item(key){
+
+        },
         click_search_content(search) {
             this.search_content_action(search).then(result => {
                 if (result.indata) {
