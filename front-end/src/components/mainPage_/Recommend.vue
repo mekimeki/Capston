@@ -14,7 +14,7 @@
                                     <span class="mainName"><div class="pt-3 pl-3">{{pic.category1}}</div></span>
                                     <span class="subName"><div class="pt-2 pl-3">{{pic.category2}}</div ></span>
                                 </v-card>
-                                <v-img v-if="n!=1" :src="`http://192.168.0.19/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                                <v-img v-if="n!=1" :src="`http://13.209.125.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -28,56 +28,52 @@
 </template>
 
 <script>
-import {
-    mapActions
-} from 'vuex';
+import { mapActions } from "vuex";
 export default {
-
-    data() {
-        return {
-            pics: [{
-                    category1: "영어",
-                    category2: "액션/멜로",
-                    color: "red accent-3",
-                },
-                {
-                    category1: "영어",
-                    category2: "전쟁/SF",
-                    color: "deep-purple accent-3"
-                },
-                {
-                    category1: "영어",
-                    category2: "로맨스",
-                    color: "blue accent-3"
-                }
-            ],
+  data() {
+    return {
+      pics: [
+        {
+          category1: "영어",
+          category2: "액션/멜로",
+          color: "red accent-3"
+        },
+        {
+          category1: "영어",
+          category2: "전쟁/SF",
+          color: "deep-purple accent-3"
+        },
+        {
+          category1: "영어",
+          category2: "로맨스",
+          color: "blue accent-3"
         }
-    },
+      ]
+    };
+  },
 
-    methods: {
-        ...mapActions(['recommend_action']),
-    },
-    mounted: function () {
-        window.scrollTo(0, 0);
-        console.log("recommend");
-        this.recommend_action().then(result => {
-            console.log('picture data and recommend', result);
-        });
-
-    },
-
+  methods: {
+    ...mapActions(["recommend_action"])
+  },
+  mounted: function() {
+    window.scrollTo(0, 0);
+    console.log("recommend");
+    this.recommend_action().then(result => {
+      console.log("picture data and recommend", result);
+    });
+  }
 };
 </script>
 
 <style lang="css" scoped>
 .mainName {
-    color: white;
-    font-size: 1.6rem;
-    font-weight: 600;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
 .subName {
-    color: white;
-    font-size: 1rem;
+  color: white;
+  font-size: 1rem;
 }
 </style>

@@ -163,12 +163,8 @@
 
 <script>
 import axios from "axios";
-import {
-    constants
-} from "crypto";
-import {
-    mapActions
-} from 'vuex';
+import { constants } from "crypto";
+import { mapActions } from "vuex";
 
 //  wordQuest => 단어 미암기 변환
 //  allWord => 전체단어, 미암기단어, 암기단어 호출
@@ -188,219 +184,239 @@ import {
 //  crawlingPage => 자세히보기 페이지
 
 export default {
-    data() {
-        return {
-            menus: [{
-                    word: '전체 단어',
-                    value: 'all'
-                },
-                {
-                    word: '암기 단어',
-                    value: 'memory'
-                },
-                {
-                    word: '미암기 단어',
-                    value: 'unmemory'
-                }
-            ],
-            books: [],
-            words: [],
-            flex: 6,
-            box: false,
-            selected: [],
-            selectWords: [],
-            toggle: false,
-            bottomNav: "all",
-            //albumNums: [],
-            albumNames: '',
-            dialog: false,
-            items: ['일본어', '영어', '한국어', '중국어'],
-            categories: ['액션','판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
-            lang: '',
-            category: '',
-            crawl: false,
-            crawlWords: [],
-            crawlMeans: [],
-            mainWord: '',
-            tableId: 0,
-        };
+  data() {
+    return {
+      menus: [
+        {
+          word: "전체 단어",
+          value: "all"
+        },
+        {
+          word: "암기 단어",
+          value: "memory"
+        },
+        {
+          word: "미암기 단어",
+          value: "unmemory"
+        }
+      ],
+      books: [],
+      words: [],
+      flex: 6,
+      box: false,
+      selected: [],
+      selectWords: [],
+      toggle: false,
+      bottomNav: "all",
+      //albumNums: [],
+      albumNames: "",
+      dialog: false,
+      items: ["일본어", "영어", "한국어", "중국어"],
+      categories: ["액션", "판타지", "SF", "공포", "스릴러", "코미디", "멜로"],
+      lang: "",
+      category: "",
+      crawl: false,
+      crawlWords: [],
+      crawlMeans: [],
+      mainWord: "",
+      tableId: 0
+    };
+  },
+  methods: {
+    ...mapActions([
+      "select_word_actions",
+      "classify_word_actions",
+      "update_word_actions",
+      "all_word_actions",
+      "word_delete_actions",
+      "word_crawl_actions",
+      "call_album_actions"
+    ]),
+    //  start of 단어 출력 및 분류
+    wordQuest(changeID, flag) {
+      this.update_word_actions([changeID, flag])
+        .then(result => {
+          return true;
+        })
+        .catch(error => {
+          return false;
+        });
     },
-    methods: {
-        ...mapActions(['select_word_actions', 'classify_word_actions', 'update_word_actions', 'all_word_actions', 'word_delete_actions', 'word_crawl_actions', 'call_album_actions']),
-        //  start of 단어 출력 및 분류 
-        wordQuest(changeID, flag) {
-            this.update_word_actions([changeID, flag]).then(result => {
-                return true;
-            }).catch(error => {
-                return false;
-            })
-        },
-        allWord(m) {
-            this.all_word_actions(m).then(result => {
-                this.words = result;
-                this.selected = [];
-            })
-        },
-        changeHeart(i) {
-            console.log(this.words[i].memorized);
-            if (this.words[i].memorized == "T") {
-                this.wordQuest(this.words[i].id, "F")
-                this.words[i].memorized = "F";
-            } else {
-                this.wordQuest(this.words[i].id, "T")
-                this.words[i].memorized = "T";
-            }
-        },
-        classifyQuest(classifyWord = '') {
-            this.classify_word_actions(classifyWord).then(result => {
-                this.words = result;
-                this.selected = [];
-            }).catch(error => {
-                console.log("classify failed", error)
-            })
-        },
-        //  start of 단어장 목록 보기 및 단어장에 단어추가 
-        plus(table) {
-            this.books.push({
-                "title": this.albumNames,
-                "id": table
-            });
-            this.albumNames = '';
-            console.log("bookssss ", this.books);
-        },
-        createAlbumQuest() {
-            this.call_album_actions([this.albumNames, this.lang, this.selectWords]).then(result => {
-                console.log('result.data', result);
-                this.plus(result);
-                return true;
-            }).catch(error => {
-                return false;
-            })
-            this.selected = [];
-            this.selectWords = [];
-            this.lang = '';
-            this.category = '';
-        },
-
-        selectedWordsQuest(i) {
-            var add = this.books[i].id;
-            this.select_word_actions(add).then(result => {
-                this.words = result;
-            }).catch(error => {
-                return false;
-            })
-            this.selected = [];
-            this.selectWords = [];
-        },
-
-        //  start of 체크박스 선택 및 삭제 요청
-        checked(po) {
-            if (this.selected.length == this.words.length) {
-                this.toggle = true
-            } else {
-                this.toggle = false
-            }
-            let idx = this.selectWords.indexOf(this.words[po].word);
-            if (idx < 0) {
-                this.selectWords.push(this.words[po].word);
-            } else {
-                this.selectWords.splice(idx, 1)
-            }
-            console.log(this.selected)
-        },
-        click(flag) {
-            if (this.box == false) {
-                this.box = true;
-            } else {
-                if (flag == 'c') {
-                    this.dialog = true;
-                } else {
-                    this.deleteQuest();
-                    alert("삭제되었습니다");
-                    this.box = false;
-                    this.selected = [];
-                }
-            }
-        },
-        toggleAll() {
-            if (this.selected.length == this.words.length) {
-                this.selected = []
-                this.selectWords = []
-            } else {
-                this.selected = this.words.slice().map(x => {
-                    return x.id
-                })
-                this.selectWords = this.words.slice().map(x => {
-                    return x.word
-                })
-            }
-        },
-        deleteQuest() {
-            this.word_delete_actions(this.selected).then(result => {
-                console.log("delete success", result);
-                this.words = result;
-                this.selected = [];
-            }).catch(error => {
-                console.log("delete failed", error);
-            })
-        },
-        crawlingQuest(cword) {
-            this.word_crawl_actions(cword).then(result => {
-                this.crawlWords = result.example;
-                this.crawlMeans = result.means;
-                this.mainWord = cword;
-            }).catch(error => {
-                console.log("crawling failed");
-            })
-        },
+    allWord(m) {
+      this.all_word_actions(m).then(result => {
+        this.words = result;
+        this.selected = [];
+      });
+    },
+    changeHeart(i) {
+      console.log(this.words[i].memorized);
+      if (this.words[i].memorized == "T") {
+        this.wordQuest(this.words[i].id, "F");
+        this.words[i].memorized = "F";
+      } else {
+        this.wordQuest(this.words[i].id, "T");
+        this.words[i].memorized = "T";
+      }
+    },
+    classifyQuest(classifyWord = "") {
+      this.classify_word_actions(classifyWord)
+        .then(result => {
+          this.words = result;
+          this.selected = [];
+        })
+        .catch(error => {
+          console.log("classify failed", error);
+        });
+    },
+    //  start of 단어장 목록 보기 및 단어장에 단어추가
+    plus(table) {
+      this.books.push({
+        title: this.albumNames,
+        id: table
+      });
+      this.albumNames = "";
+      console.log("bookssss ", this.books);
+    },
+    createAlbumQuest() {
+      this.call_album_actions([this.albumNames, this.lang, this.selectWords])
+        .then(result => {
+          console.log("result.data", result);
+          this.plus(result);
+          return true;
+        })
+        .catch(error => {
+          return false;
+        });
+      this.selected = [];
+      this.selectWords = [];
+      this.lang = "";
+      this.category = "";
     },
 
-    beforeCreate() {
-        var baseURI = "http://192.168.0.19/api/book/0";
-        // 172.26.3.30
-        // 192.168.43.142
-        axios
-            .get(baseURI)
-            .then(res => {
-                this.words = res.data;
-                console.log("ok", this.words);
-            })
-            .catch(error => {
-                console.log("failed", error);
-            });
-        baseURI = "http://192.168.0.19/api/books";
-        axios
-            .get(baseURI)
-            .then(res => {
-                this.books = res.data;
-                console.log("okk", this.books);
-            })
-            .catch(error => {
-                console.log("failed", error);
-            });
+    selectedWordsQuest(i) {
+      var add = this.books[i].id;
+      this.select_word_actions(add)
+        .then(result => {
+          this.words = result;
+        })
+        .catch(error => {
+          return false;
+        });
+      this.selected = [];
+      this.selectWords = [];
     },
 
-}
+    //  start of 체크박스 선택 및 삭제 요청
+    checked(po) {
+      if (this.selected.length == this.words.length) {
+        this.toggle = true;
+      } else {
+        this.toggle = false;
+      }
+      let idx = this.selectWords.indexOf(this.words[po].word);
+      if (idx < 0) {
+        this.selectWords.push(this.words[po].word);
+      } else {
+        this.selectWords.splice(idx, 1);
+      }
+      console.log(this.selected);
+    },
+    click(flag) {
+      if (this.box == false) {
+        this.box = true;
+      } else {
+        if (flag == "c") {
+          this.dialog = true;
+        } else {
+          this.deleteQuest();
+          alert("삭제되었습니다");
+          this.box = false;
+          this.selected = [];
+        }
+      }
+    },
+    toggleAll() {
+      if (this.selected.length == this.words.length) {
+        this.selected = [];
+        this.selectWords = [];
+      } else {
+        this.selected = this.words.slice().map(x => {
+          return x.id;
+        });
+        this.selectWords = this.words.slice().map(x => {
+          return x.word;
+        });
+      }
+    },
+    deleteQuest() {
+      this.word_delete_actions(this.selected)
+        .then(result => {
+          console.log("delete success", result);
+          this.words = result;
+          this.selected = [];
+        })
+        .catch(error => {
+          console.log("delete failed", error);
+        });
+    },
+    crawlingQuest(cword) {
+      this.word_crawl_actions(cword)
+        .then(result => {
+          this.crawlWords = result.example;
+          this.crawlMeans = result.means;
+          this.mainWord = cword;
+        })
+        .catch(error => {
+          console.log("crawling failed");
+        });
+    }
+  },
+
+  beforeCreate() {
+    var baseURI = "http://13.209.125.223/api/book/0";
+    // 172.26.3.30
+    // 192.168.43.142
+    axios
+      .get(baseURI)
+      .then(res => {
+        this.words = res.data;
+        console.log("ok", this.words);
+      })
+      .catch(error => {
+        console.log("failed", error);
+      });
+    baseURI = "http://13.209.125.223/api/books";
+    axios
+      .get(baseURI)
+      .then(res => {
+        this.books = res.data;
+        console.log("okk", this.books);
+      })
+      .catch(error => {
+        console.log("failed", error);
+      });
+  }
+};
 </script>
 
 <style lang="css" scoped>
 #memorized {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .mainWord {
-    font-size: 1.8rem;
-    font-weight: 600;
-    cursor: pointer;
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .crawlMean {
-    font-size: 1.3rem;
-    font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .crawlWord {
-    font-size: 1.2rem;
-    font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 </style>

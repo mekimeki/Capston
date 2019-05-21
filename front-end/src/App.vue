@@ -101,100 +101,99 @@
 </template>
 
 <script>
-import router from './router'
-import {
-    mapGetters,
-    mapActions
-} from 'vuex';
+import router from "./router";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-    data: () => ({
-        drawer: false,
-        items: [{
-                icon: "home",
-                text: "홈페이지",
-                link: "register"
-            },
-            {
-                icon: "video_library",
-                text: "등록 채널",
-                link: "channel"
-            },
-            {
-                icon: "video_call",
-                text: "영상 제작",
-                link: "upload"
-            },
-            {
-                icon: "favorite",
-                text: "좋아하는 영상",
-                link: "likeVideo"
-            },
-            {
-                icon: "border_color",
-                text: "퀴즈",
-                link: "qselect"
-            },
-            {
-                icon: "keyboard_arrow_up",
-                "icon-alt": "keyboard_arrow_down",
-                text: "Go集집",
-                model: false,
-                children: [{
-                        icon: "import_contacts",
-                        text: "나의 어휘집",
-                        link: "allWord"
-                    },
-                    {
-                        icon: "import_contacts",
-                        text: "나의 대사집",
-                        link: "snapWord"
-                    },
-                    {
-                        icon: "import_contacts",
-                        text: "추천 Go語집",
-                        link: "gogoBoard"
-                    }
-                ]
-            },
-            {
-                icon: "face",
-                text: "마이페이지",
-                link: "myPage"
-            },
-            {
-                icon: "help",
-                text: "도움말",
-                link: "qselect"
-            },
-            {
-                icon: "settings",
-                text: "설정",
-                link: "qselect"
-            }
+  data: () => ({
+    drawer: false,
+    items: [
+      {
+        icon: "home",
+        text: "홈페이지",
+        link: "register"
+      },
+      {
+        icon: "video_library",
+        text: "등록 채널",
+        link: "channel"
+      },
+      {
+        icon: "video_call",
+        text: "영상 제작",
+        link: "upload"
+      },
+      {
+        icon: "favorite",
+        text: "좋아하는 영상",
+        link: "likeVideo"
+      },
+      {
+        icon: "border_color",
+        text: "퀴즈",
+        link: "qselect"
+      },
+      {
+        icon: "keyboard_arrow_up",
+        "icon-alt": "keyboard_arrow_down",
+        text: "Go集집",
+        model: false,
+        children: [
+          {
+            icon: "import_contacts",
+            text: "나의 어휘집",
+            link: "allWord"
+          },
+          {
+            icon: "import_contacts",
+            text: "나의 대사집",
+            link: "snapWord"
+          },
+          {
+            icon: "import_contacts",
+            text: "추천 Go語집",
+            link: "gogoBoard"
+          }
         ]
-    }),
-    methods: {
-        ...mapActions(['login_check_actions']),
-    },
-    mounted: function () {
-        // console.log(localStorage.getItem('login'));
-        this.login_check_actions(localStorage.getItem('login'));
-    },
-    computed: {
-        ...mapGetters({
-            lg_getter: 'login_getters',
-        })
-    },
+      },
+      {
+        icon: "face",
+        text: "마이페이지",
+        link: "myPage"
+      },
+      {
+        icon: "help",
+        text: "도움말",
+        link: "qselect"
+      },
+      {
+        icon: "settings",
+        text: "설정",
+        link: "qselect"
+      }
+    ]
+  }),
+  methods: {
+    ...mapActions(["login_check_actions"])
+  },
+  mounted: function() {
+    // console.log(localStorage.getItem('login'));
+    // this.login_check_actions(localStorage.getItem('login'));
+  },
+  computed: {
+    ...mapGetters({
+      lg_getter: "login_getters"
+    })
+  }
 };
 </script>
 
 <style>
 .icon {
-    font-size: 50px;
+  font-size: 50px;
 }
 #logo {
-    cursor: pointer;
-    text-decoration: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 </style>

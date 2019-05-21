@@ -47,246 +47,276 @@
 </template>
 
 <script>
-import {
-    mapGetters,
-    mapActions
-} from 'vuex'; //vuex actions import
-import axios from 'axios';
+import { mapGetters, mapActions } from "vuex"; //vuex actions import
+import axios from "axios";
 export default {
-    data() {
-        return {
-            video: "", //video element
-            seek_bar: "", //seek bar element
-            time: [0, 10],
-            //video time
-            video_firstTime: "",
-            video_lastTime: "",
-            //
-            firstTime: 0,
-            lastTime: 0,
-            open: false,
-            percent_video_cut: 0,
-            check: false,
-            //
-            canvas: '',
-            image: '',
-            image_view: '',
-            //
-            background_image: [],
-            dialog: false,
+  data() {
+    return {
+      video: "", //video element
+      seek_bar: "", //seek bar element
+      time: [0, 10],
+      //video time
+      video_firstTime: "",
+      video_lastTime: "",
+      //
+      firstTime: 0,
+      lastTime: 0,
+      open: false,
+      percent_video_cut: 0,
+      check: false,
+      //
+      canvas: "",
+      image: "",
+      image_view: "",
+      //
+      background_image: [],
+      dialog: false
+    };
+  },
+  methods: {
+    ...mapActions([
+      "video_cut_actions",
+      "percent_action",
+      "video_cut_image_action"
+    ]),
+    move() {
+      this.percent_action(0);
+      this.$router.push({
+        name: "subtitle",
+        query: {
+          video: this.$route.query.video,
+          firstTime: this.up_getters.firstTime,
+          lastTime: this.up_getters.lastTime
         }
+      });
     },
-    methods: {
-        ...mapActions(['video_cut_actions', 'percent_action', 'video_cut_image_action']),
-        move() {
-            this.percent_action(0);
-            this.$router.push({
-                name: 'subtitle',
-                query: {
-                    video: this.$route.query.video,
-                    firstTime: this.up_getters.firstTime,
-                    lastTime: this.up_getters.lastTime
-                }
-            });
-        },
-        change_time_bar(evt, check) {
-            if (check) {
-                this.firstTime = (this.video.duration * (evt.target.value / 100));
-                this.video_firstTime = this.time_change(Math.ceil(this.video.duration * (evt.target.value / 100)));
-                document.getElementById('bar_start').style.left = document.getElementById('bar_start').style.left = parseInt(document.getElementById('range_1').value) + "%";
-            } else {
-                this.lastTime = (this.video.duration * ((evt.target.value) / 100));
-                this.video_lastTime = this.time_change(Math.ceil(this.video.duration * (parseInt(evt.target.value) / 100)));
-                document.getElementById('bar_end').style.left = document.getElementById('bar_end').style.left = (parseInt(document.getElementById('range_2').value)) + "%";
-            }
-        },
-        click_play() {
-            this.video.currentTime = Math.ceil(parseInt(this.firstTime));
-            this.video.play();
-            let interval = setInterval(() => {
-                if (parseInt(this.video.currentTime).toFixed(1) === parseInt(this.lastTime).toFixed(1)) {
-                    this.video.pause();
-                    clearInterval(interval);
-                }
-            }, 150);
-        },
-        time_change(seconds) {
-            let hour = parseInt(seconds / 3600);
-            let min = parseInt((seconds % 3600) / 60);
-            let sec = seconds % 60;
-            return hour + ":" + min + ":" + sec
-        },
-        time_second(time) {
-            let time_s = time.split(":");
-            let hour = parseInt((time_s[0] * 60) * 60);
-            let min = parseInt(time_s[1] * 60);
-            let sec = parseInt(time_s[2]);
-            return hour + min + sec;
-        },
-        change_time() {
-            this.video_firstTime = this.time[0];
-            this.video_lastTime = this.time[1];
-            this.firstTime = this.time_change(this.video.duration * (this.time[0] / 100));
-            this.lastTime = this.time_change(this.video.duration * (this.time[1] / 100));
-        },
-        keyup_time_change(evt, check) {
-            console.log("check", check);
-            if (check) {
-                document.getElementById('range_1').value = Math.ceil(parseInt((this.time_second(evt.target.value) * 100) / this.video.duration));
-                document.getElementById('bar_start').style.left = document.getElementById('bar_start').style.left = parseInt(document.getElementById('range_1').value) + "%";
-            } else {
-                document.getElementById('range_2').value = Math.ceil(parseInt((this.time_second(evt.target.value) * 100) / this.video.duration));
-                document.getElementById('bar_end').style.left = document.getElementById('bar_end').style.left = parseInt(document.getElementById('range_2').value) + "%";
-            }
-        },
-        cut() {
-            this.open = true;
-            this.upload();
-            // if (confirm("정말 자르겠습니까?")) {
-            //     this.open = true;
-            //     this.upload();
-            // } else {
-            //     this.open = false;
-            // }
-        },
-        upload() {
-            let upload_data = { //setTime
-                video_pk: this.$route.query.video, //up_getters.video,
-                firstTime: this.firstTime,
-                lastTime: this.lastTime,
-            }
-            this.video_cut_actions(upload_data);
-            let inter = setInterval(() => {
-                this.percent_video_cut = this.percent;
-                if (this.percent_video_cut === 100) {
-                    if (this.up_getters.firstTime && this.up_getters.lastTime) {
-                        this.open = false;
-                        clearInterval(inter);
-                    }
-                }
-            }, 100);
-        },
+    change_time_bar(evt, check) {
+      if (check) {
+        this.firstTime = this.video.duration * (evt.target.value / 100);
+        this.video_firstTime = this.time_change(
+          Math.ceil(this.video.duration * (evt.target.value / 100))
+        );
+        document.getElementById(
+          "bar_start"
+        ).style.left = document.getElementById("bar_start").style.left =
+          parseInt(document.getElementById("range_1").value) + "%";
+      } else {
+        this.lastTime = this.video.duration * (evt.target.value / 100);
+        this.video_lastTime = this.time_change(
+          Math.ceil(this.video.duration * (parseInt(evt.target.value) / 100))
+        );
+        document.getElementById("bar_end").style.left = document.getElementById(
+          "bar_end"
+        ).style.left = parseInt(document.getElementById("range_2").value) + "%";
+      }
     },
-    mounted: function () {
-        this.video_cut_image_action(this.$route.query.video).then(result => {
-            console.log("cut", result);
-
-            for (var i = 0; i < result.img.length; i++) {
-                let img = document.createElement('img');
-                img.style.width = '11.111%';
-                img.style.height = '100%';
-                img.src = result.img[i];
-                document.getElementById('ranges').append(img);
-            }
-
-        });
-        this.canvas = document.getElementById("canvasd"); //canvas element
-        this.image = document.getElementById("image"); //image element
-
-        this.video = this.v_getter; //video element
-        this.seek_bar = this.seb_getter; //seek_bar element
-        this.video.onloadeddata = () => {
-            this.firstTime = this.time_change(this.firstTime);
-            this.lastTime = this.time_change(this.video.duration);
+    click_play() {
+      this.video.currentTime = Math.ceil(parseInt(this.firstTime));
+      this.video.play();
+      let interval = setInterval(() => {
+        if (
+          parseInt(this.video.currentTime).toFixed(1) ===
+          parseInt(this.lastTime).toFixed(1)
+        ) {
+          this.video.pause();
+          clearInterval(interval);
         }
+      }, 150);
     },
-    updated: function () {},
-    computed: {
-        ...mapGetters({
-            v_getter: 'video_getter',
-            s_getter: 'subtitle_getter',
-            sb_getter: 'subtitle_buffer_getter',
-            seb_getter: 'seek_bar_getter',
-            up_getters: 'upload_getters',
-            percent: 'percent_getter'
-        }),
+    time_change(seconds) {
+      let hour = parseInt(seconds / 3600);
+      let min = parseInt((seconds % 3600) / 60);
+      let sec = seconds % 60;
+      return hour + ":" + min + ":" + sec;
     },
-    watch: {},
-}
+    time_second(time) {
+      let time_s = time.split(":");
+      let hour = parseInt(time_s[0] * 60 * 60);
+      let min = parseInt(time_s[1] * 60);
+      let sec = parseInt(time_s[2]);
+      return hour + min + sec;
+    },
+    change_time() {
+      this.video_firstTime = this.time[0];
+      this.video_lastTime = this.time[1];
+      this.firstTime = this.time_change(
+        this.video.duration * (this.time[0] / 100)
+      );
+      this.lastTime = this.time_change(
+        this.video.duration * (this.time[1] / 100)
+      );
+    },
+    keyup_time_change(evt, check) {
+      console.log("check", check);
+      if (check) {
+        document.getElementById("range_1").value = Math.ceil(
+          parseInt(
+            (this.time_second(evt.target.value) * 100) / this.video.duration
+          )
+        );
+        document.getElementById(
+          "bar_start"
+        ).style.left = document.getElementById("bar_start").style.left =
+          parseInt(document.getElementById("range_1").value) + "%";
+      } else {
+        document.getElementById("range_2").value = Math.ceil(
+          parseInt(
+            (this.time_second(evt.target.value) * 100) / this.video.duration
+          )
+        );
+        document.getElementById("bar_end").style.left = document.getElementById(
+          "bar_end"
+        ).style.left = parseInt(document.getElementById("range_2").value) + "%";
+      }
+    },
+    cut() {
+      this.open = true;
+      this.upload();
+      // if (confirm("정말 자르겠습니까?")) {
+      //     this.open = true;
+      //     this.upload();
+      // } else {
+      //     this.open = false;
+      // }
+    },
+    upload() {
+      let upload_data = {
+        //setTime
+        video_pk: this.$route.query.video, //up_getters.video,
+        firstTime: this.firstTime,
+        lastTime: this.lastTime
+      };
+      this.video_cut_actions(upload_data);
+      let inter = setInterval(() => {
+        this.percent_video_cut = this.percent;
+        if (this.percent_video_cut === 100) {
+          if (this.up_getters.firstTime && this.up_getters.lastTime) {
+            this.open = false;
+            clearInterval(inter);
+          }
+        }
+      }, 100);
+    }
+  },
+  mounted: function() {
+    this.video_cut_image_action(this.$route.query.video).then(result => {
+      console.log("cut", result);
+
+      for (var i = 0; i < result.img.length; i++) {
+        let img = document.createElement("img");
+        img.style.width = "10%";
+        img.style.height = "100%";
+        img.src = result.img[i];
+        document.getElementById("ranges").append(img);
+      }
+    });
+    this.canvas = document.getElementById("canvasd"); //canvas element
+    this.image = document.getElementById("image"); //image element
+
+    this.video = this.v_getter; //video element
+    this.seek_bar = this.seb_getter; //seek_bar element
+    this.video.onloadeddata = () => {
+      this.firstTime = this.time_change(this.firstTime);
+      this.lastTime = this.time_change(this.video.duration);
+    };
+  },
+  updated: function() {},
+  computed: {
+    ...mapGetters({
+      v_getter: "video_getter",
+      s_getter: "subtitle_getter",
+      sb_getter: "subtitle_buffer_getter",
+      seb_getter: "seek_bar_getter",
+      up_getters: "upload_getters",
+      percent: "percent_getter"
+    })
+  },
+  watch: {}
+};
 </script>
 
 <style lang="css" scoped>
 #ranges {
-    position: relative;
-    margin: auto;
-    /* margin: 0 auto 20px; */
-    height: 100px;
-    width: 100%;
-    text-align: center;
-    border: 4px solid rgb(255, 63, 63);
-    background-size: 10% 100%;
-    float: left !important;
-    /* background-repeat: repeat-x !important; */
+  position: relative;
+  margin: auto;
+  /* margin: 0 auto 20px; */
+  height: 100px;
+  width: 100%;
+  text-align: center;
+  border: 4px solid rgb(255, 63, 63);
+  background-size: 10% 100%;
+  float: left !important;
+  /* background-repeat: repeat-x !important; */
 }
 
-input[type=range] {
-    -webkit-appearance: none;
-    width: 50%;
-    cursor: pointer;
-    animate: 0.2s;
-    background-size: 20% 20%;
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 50%;
+  cursor: pointer;
+  animate: 0.2s;
+  background-size: 20% 20%;
 }
 
 #ranges input {
-    pointer-events: none;
-    position: absolute;
-    left: 0;
-    top: 15px;
-    width: 100%;
-    outline: none;
-    height: 60px;
-    margin: 0;
-    padding: 0;
-    border-radius: 8px;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 100%;
+  outline: none;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
 }
 
 #ranges input::-webkit-slider-thumb {
-    pointer-events: all;
-    position: relative;
-    z-index: 1;
-    -webkit-appearance: none;
-    height: 110px;
-    width: 5px;
-    background: #EF5350;
-    /* border-radius: 7px; */
-    cursor: pointer;
+  pointer-events: all;
+  position: relative;
+  z-index: 1;
+  -webkit-appearance: none;
+  height: 110px;
+  width: 5px;
+  background: #ef5350;
+  /* border-radius: 7px; */
+  cursor: pointer;
 }
 
 #bar_start {
-    margin: auto;
-    /* border:2px solid rgb(255, 63, 63); */
-    border-radius: 10px;
-    /* opacity: 0.8; */
-    position: relative;
-    left: 0%;
-    font-size: 1.4rem;
-    font-weight: 600;
+  margin: auto;
+  /* border:2px solid rgb(255, 63, 63); */
+  border-radius: 10px;
+  /* opacity: 0.8; */
+  position: relative;
+  left: 0%;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 #bar_end {
-    margin: auto;
-    /* border:2px solid rgb(255, 63, 63); */
-    padding: 5px 5px;
-    border-radius: 10px;
-    /* opacity: 0.8; */
-    position: relative;
-    left: 100%;
-    font-size: 1.4rem;
-    font-weight: 600;
+  margin: auto;
+  /* border:2px solid rgb(255, 63, 63); */
+  padding: 5px 5px;
+  border-radius: 10px;
+  /* opacity: 0.8; */
+  position: relative;
+  left: 100%;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .input {
-    border-radius: 5px;
-    border: 2px solid black;
-    font-size: 1.2rem;
+  border-radius: 5px;
+  border: 2px solid black;
+  font-size: 1.2rem;
 }
 
 .textCheck {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 .cut {
-    font-size: 1.2rem;
-    font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 </style>
