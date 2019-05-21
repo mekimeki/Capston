@@ -12,7 +12,7 @@
                                 <span class="mainName"><div class="pt-3 pl-3">{{pic.category1}}</div></span>
                                 <span class="subName"><div class="pt-2 pl-3">{{pic.category2}}</div ></span>
                             </v-card>
-                            <v-img v-if="n!=1" :src="`http://192.168.0.19/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                            <v-img v-if="n!=1" :src="`http://13.209.125.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                         </v-card>
                     </v-flex>
                 </v-layout>
@@ -33,7 +33,7 @@
                                     <span class="mainName"><div class="pt-3 pl-3">{{picture.category1}}</div></span>
                                     <span class="subName"><div class="pt-2 pl-3">{{picture.category2}}</div ></span>
                                 </v-card>
-                                <v-img v-if="n!=1" :src="`http://192.168.0.19/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
+                                <v-img v-if="n!=1" :src="`http://13.209.125.223/movie/`+`${Math.floor(Math.random() * 47)}.jpg`" height="100px"></v-img>
                             </v-card>
                         </v-flex>
                     </v-layout>
@@ -47,52 +47,54 @@
 
 <script>
 export default {
-    data: () => ({
-        pics: [{
-                category1: "영어",
-                category2: "비지니스/회화",
-                color: "red accent-3",
-            },
-            {
-                category1: "영어",
-                category2: "전쟁/SF",
-                color: "deep-purple accent-3"
-            },
-            {
-                category1: "영어",
-                category2: "여행/관광/서비스",
-                color: "blue accent-3"
-            },
-        ],
-        pictures: [{
-                category1: "영어",
-                category2: "비지니스/회화",
-                color: "deep-orange accent-3",
-            },
-            {
-                category1: "영어",
-                category2: "전쟁/SF",
-                color: "indigo accent-3"
-            },
-            {
-                category1: "영어",
-                category2: "여행/관광/서비스",
-                color: "teal darken-1"
-            },
-        ],
-    })
+  data: () => ({
+    pics: [
+      {
+        category1: "영어",
+        category2: "비지니스/회화",
+        color: "red accent-3"
+      },
+      {
+        category1: "영어",
+        category2: "전쟁/SF",
+        color: "deep-purple accent-3"
+      },
+      {
+        category1: "영어",
+        category2: "여행/관광/서비스",
+        color: "blue accent-3"
+      }
+    ],
+    pictures: [
+      {
+        category1: "영어",
+        category2: "비지니스/회화",
+        color: "deep-orange accent-3"
+      },
+      {
+        category1: "영어",
+        category2: "전쟁/SF",
+        color: "indigo accent-3"
+      },
+      {
+        category1: "영어",
+        category2: "여행/관광/서비스",
+        color: "teal darken-1"
+      }
+    ]
+  })
 };
 </script>
 
 <style lang="css" scoped>
 .mainName {
-    color: white;
-    font-size: 1.6rem;
-    font-weight: 600;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
 .subName {
-    color: white;
-    font-size: 1rem;
+  color: white;
+  font-size: 1rem;
 }
 </style>

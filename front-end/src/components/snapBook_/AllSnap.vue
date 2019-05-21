@@ -150,9 +150,7 @@
 
 <script>
 import axios from "axios";
-import {
-    constants
-} from "crypto";
+import { constants } from "crypto";
 
 //  wordQuest => 단어 미암기 변환
 //  allWord => 전체단어, 미암기단어, 암기단어 호출
@@ -172,283 +170,283 @@ import {
 //  crawlingPage => 자세히보기 페이지
 
 export default {
-    data() {
-        return {
-            menus: [{
-                word: '전체 대사',
-                value: 'all'
-            }],
-            books: [],
-            lines: [],
-            flex: 6,
-            box: false,
-            selected: [],
-            selectWords: [],
-            selectExplains: [],
-            imgAdd: [],
-            startData: [],
-            videoId: [],
-            toggle: false,
-            bottomNav: "all",
-            //albumNums: [],
-            albumNames: '',
-            dialog: false,
-            items: ['일본어', '영어', '한국어', '중국어'],
-            categories: ['판타지', 'SF', '공포', '스릴러', '코미디', '멜로'],
-            lang: '',
-            category: '',
-            crawl: false,
-            crawlWords: [],
-            crawlMeans: [],
-            mainWord: '',
-            selectNumber: 0
-        };
-    },
-    methods: {
-        //  start of 단어 출력 및 분류 
-        wordQuest(changeID, flag) {
-            const baseURI = "http://192.168.0.19/api/update"
-            const form = new FormData();
-            form.append("id", changeID)
-            form.append("flag", flag)
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("ok", res);
-                    return true;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
-        },
-        allWord() {
-
-            var baseURI = "http://192.168.0.19/api/line/0";
-
-            axios
-                .get(baseURI)
-                .then(res => {
-                    this.lines = res.data;
-                    console.log("ok", res);
-                    this.selected = []
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                })
-        },
-        // changeHeart(i) {
-        //     console.log(this.lines[i].memorized);
-        //     if (this.lines[i].memorized == "T") {
-        //         this.wordQuest(this.lines[i].id, "F")
-        //         this.lines[i].memorized = "F";
-        //     } else {
-        //         this.wordQuest(this.lines[i].id, "T")
-        //         this.lines[i].memorized = "T";
-        //     }
-        // },
-        classifyQuest(classifyWord = '') {
-            var form = new FormData();
-            const baseURI = "http://192.168.0.19/api/book/0";
-            form.append("classifyWord", classifyWord)
-            axios
-                .get(baseURI, form)
-                .then(res => {
-                    this.lines = res.data;
-                    console.log("ok", this.lines);
-                    this.selected = []
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                });
-        },
-
-        //  start of 단어장 목록 보기 및 단어장에 단어추가 
-        plus(table) {
-            this.books.push({
-                "title": this.albumNames,
-                "id": table
-            });
-            this.albumNames = '';
-            console.log(this.books);
-        },
-        createAlbumQuest() {
-            const baseURI = "http://192.168.0.19/api/createLine"
-            const form = new FormData();
-            form.append("title", this.albumNames);
-            form.append("lang", this.lang);
-            form.append("lines[]", this.selectWords);
-            form.append("explains[]", this.selectExplains);
-            form.append("pic_adds[]", this.imgAdd);
-            form.append("start_dts[]", this.startData);
-            form.append("v_ids[]", this.videoId);
-            console.log("success of make albums", this.selectWords)
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("ok", res);
-                    this.plus(res.data);
-                    return true;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
-            this.selected = [];
-            this.selectWords = [];
-            this.selectExplains = [];
-            this.imgAdd = [];
-            this.startData = [];
-            this.videoId = [];
-            this.lang = '';
-            this.category = '';
-        },
-        selectedWordsQuest(i) {
-            const baseURI = "http://192.168.0.19/api/line/" + this.books[i].id;
-            axios
-                .get(baseURI)
-                .then(res => {
-                    console.log("select ok", res);
-                    this.lines = res.data;
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                    return false;
-                })
-            this.selected = [];
-            this.selectWords = [];
-        },
-
-        //  start of 체크박스 선택 및 삭제 요청
-        checked(po) {
-            if (this.selected.length == this.lines.length) {
-                this.toggle = true
-            } else {
-                this.toggle = false
-            }
-            let idx = this.selectWords.indexOf(this.lines[po].line);
-            let idy = this.selectExplains.indexOf(this.lines[po].explain);
-            let idz = this.imgAdd.indexOf(this.lines[po].pic_add);
-            let ida = this.startData.indexOf(this.lines[po].start_dt);
-            let idb = this.videoId.indexOf(this.lines[po].v_id);
-
-            if (idx < 0) {
-                this.selectWords.push(this.lines[po].line);
-                this.selectExplains.push(this.lines[po].explain);
-                this.imgAdd.push(this.lines[po].pic_add);
-                this.startData.push(this.lines[po].start_dt);
-                this.videoId.push(this.lines[po].v_id);
-
-                console.log("선택ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ", this.selectWords)
-            } else {
-                this.selectWords.splice(idx, 1);
-                this.selectExplains.splice(idy, 1);
-                this.imgAdd.splice(idz, 1);
-                this.startData.splice(ida, 1);
-                this.videoId.splice(idb, 1);
-            }
-
-            console.log(this.selected)
-        },
-        click(flag) {
-            if (this.box == false) {
-                this.box = true;
-            } else {
-                if (flag == 'c') {
-                    this.dialog = true;
-                } else {
-                    this.deleteQuest();
-                    alert("삭제되었습니다");
-                    this.box = false;
-                    this.selected = [];
-                }
-            }
-        },
-        toggleAll() {
-            if (this.selected.length == this.lines.length) {
-                this.selected = []
-                this.selectWords = []
-            } else {
-                this.selected = this.lines.slice().map(x => {
-                    return x.id
-                })
-                this.selectWords = this.lines.slice().map(x => {
-                    return x.word
-                })
-            }
-        },
-        deleteQuest() {
-            var form = new FormData();
-            form.append("selected", this.selected);
-            axios.get("http://192.168.0.19/get-token").then(response => {
-                if (response.data) {
-                    form.append("_token", response.data);
-                    console.log(this.selected)
-                    axios
-                        .post("http://192.168.0.19/api/deletedLine", form)
-                        .then(response => {
-                            console.log("response ==>>>> ", response.data);
-                            this.lines = response.data
-                            this.selected = []
-                        })
-                        .catch(error => {
-                            console.log("failed", error);
-                        });
-                }
-            });
-        },
-
-        crawlingQuest(cword) {
-            var form = new FormData();
-            form.append("clickWord", cword)
-            console.log(cword);
-            var baseURI = "http://192.168.0.19/api/example";
-            axios
-                .post(baseURI, form)
-                .then(res => {
-                    console.log("crawling ok", res);
-                    this.crawlWords = res.data.example;
-                    this.crawlMeans = res.data.means;
-                    this.mainWord = cword;
-                    console.log("crawling word ok", this.crawlMeans[0]);
-                })
-                .catch(error => {
-                    console.log("failed", error);
-                });
-        },
-        changeNumber(i) {
-            this.selectNumber = i;
+  data() {
+    return {
+      menus: [
+        {
+          word: "전체 대사",
+          value: "all"
         }
+      ],
+      books: [],
+      lines: [],
+      flex: 6,
+      box: false,
+      selected: [],
+      selectWords: [],
+      selectExplains: [],
+      imgAdd: [],
+      startData: [],
+      videoId: [],
+      toggle: false,
+      bottomNav: "all",
+      //albumNums: [],
+      albumNames: "",
+      dialog: false,
+      items: ["일본어", "영어", "한국어", "중국어"],
+      categories: ["판타지", "SF", "공포", "스릴러", "코미디", "멜로"],
+      lang: "",
+      category: "",
+      crawl: false,
+      crawlWords: [],
+      crawlMeans: [],
+      mainWord: "",
+      selectNumber: 0
+    };
+  },
+  methods: {
+    //  start of 단어 출력 및 분류
+    wordQuest(changeID, flag) {
+      const baseURI = "http://13.209.125.223/api/update";
+      const form = new FormData();
+      form.append("id", changeID);
+      form.append("flag", flag);
+      axios
+        .post(baseURI, form)
+        .then(res => {
+          console.log("ok", res);
+          return true;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          return false;
+        });
+    },
+    allWord() {
+      var baseURI = "http://13.209.125.223/api/line/0";
+
+      axios
+        .get(baseURI)
+        .then(res => {
+          this.lines = res.data;
+          console.log("ok", res);
+          this.selected = [];
+        })
+        .catch(error => {
+          console.log("failed", error);
+        });
+    },
+    // changeHeart(i) {
+    //     console.log(this.lines[i].memorized);
+    //     if (this.lines[i].memorized == "T") {
+    //         this.wordQuest(this.lines[i].id, "F")
+    //         this.lines[i].memorized = "F";
+    //     } else {
+    //         this.wordQuest(this.lines[i].id, "T")
+    //         this.lines[i].memorized = "T";
+    //     }
+    // },
+    classifyQuest(classifyWord = "") {
+      var form = new FormData();
+      const baseURI = "http://13.209.125.223/api/book/0";
+      form.append("classifyWord", classifyWord);
+      axios
+        .get(baseURI, form)
+        .then(res => {
+          this.lines = res.data;
+          console.log("ok", this.lines);
+          this.selected = [];
+        })
+        .catch(error => {
+          console.log("failed", error);
+        });
     },
 
-    beforeCreate() {
-        var baseURI = "http://192.168.0.19/api/line/0";
-        axios
-            .get(baseURI)
-            .then(res => {
-                this.lines = res.data;
-                console.log("beforeCreate OK", this.lines);
-            })
-            .catch(error => {
-                console.log("failed", error);
-            });
-        baseURI = "http://192.168.0.19/api/lineBook";
-        axios
-            .get(baseURI)
-            .then(res => {
-                this.books = res.data;
-                console.log("okkkkkkkkkkkkk", this.books);
-            })
-            .catch(error => {
-                console.log("failed", error);
-            });
+    //  start of 단어장 목록 보기 및 단어장에 단어추가
+    plus(table) {
+      this.books.push({
+        title: this.albumNames,
+        id: table
+      });
+      this.albumNames = "";
+      console.log(this.books);
+    },
+    createAlbumQuest() {
+      const baseURI = "http://13.209.125.223/api/createLine";
+      const form = new FormData();
+      form.append("title", this.albumNames);
+      form.append("lang", this.lang);
+      form.append("lines[]", this.selectWords);
+      form.append("explains[]", this.selectExplains);
+      form.append("pic_adds[]", this.imgAdd);
+      form.append("start_dts[]", this.startData);
+      form.append("v_ids[]", this.videoId);
+      console.log("success of make albums", this.selectWords);
+      axios
+        .post(baseURI, form)
+        .then(res => {
+          console.log("ok", res);
+          this.plus(res.data);
+          return true;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          return false;
+        });
+      this.selected = [];
+      this.selectWords = [];
+      this.selectExplains = [];
+      this.imgAdd = [];
+      this.startData = [];
+      this.videoId = [];
+      this.lang = "";
+      this.category = "";
+    },
+    selectedWordsQuest(i) {
+      const baseURI = "http://13.209.125.223/api/line/" + this.books[i].id;
+      axios
+        .get(baseURI)
+        .then(res => {
+          console.log("select ok", res);
+          this.lines = res.data;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          return false;
+        });
+      this.selected = [];
+      this.selectWords = [];
     },
 
+    //  start of 체크박스 선택 및 삭제 요청
+    checked(po) {
+      if (this.selected.length == this.lines.length) {
+        this.toggle = true;
+      } else {
+        this.toggle = false;
+      }
+      let idx = this.selectWords.indexOf(this.lines[po].line);
+      let idy = this.selectExplains.indexOf(this.lines[po].explain);
+      let idz = this.imgAdd.indexOf(this.lines[po].pic_add);
+      let ida = this.startData.indexOf(this.lines[po].start_dt);
+      let idb = this.videoId.indexOf(this.lines[po].v_id);
+
+      if (idx < 0) {
+        this.selectWords.push(this.lines[po].line);
+        this.selectExplains.push(this.lines[po].explain);
+        this.imgAdd.push(this.lines[po].pic_add);
+        this.startData.push(this.lines[po].start_dt);
+        this.videoId.push(this.lines[po].v_id);
+
+        console.log("선택ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ", this.selectWords);
+      } else {
+        this.selectWords.splice(idx, 1);
+        this.selectExplains.splice(idy, 1);
+        this.imgAdd.splice(idz, 1);
+        this.startData.splice(ida, 1);
+        this.videoId.splice(idb, 1);
+      }
+
+      console.log(this.selected);
+    },
+    click(flag) {
+      if (this.box == false) {
+        this.box = true;
+      } else {
+        if (flag == "c") {
+          this.dialog = true;
+        } else {
+          this.deleteQuest();
+          alert("삭제되었습니다");
+          this.box = false;
+          this.selected = [];
+        }
+      }
+    },
+    toggleAll() {
+      if (this.selected.length == this.lines.length) {
+        this.selected = [];
+        this.selectWords = [];
+      } else {
+        this.selected = this.lines.slice().map(x => {
+          return x.id;
+        });
+        this.selectWords = this.lines.slice().map(x => {
+          return x.word;
+        });
+      }
+    },
+    deleteQuest() {
+      var form = new FormData();
+      form.append("selected", this.selected);
+      axios.get("http://13.209.125.223/get-token").then(response => {
+        if (response.data) {
+          form.append("_token", response.data);
+          console.log(this.selected);
+          axios
+            .post("http://13.209.125.223/api/deletedLine", form)
+            .then(response => {
+              console.log("response ==>>>> ", response.data);
+              this.lines = response.data;
+              this.selected = [];
+            })
+            .catch(error => {
+              console.log("failed", error);
+            });
+        }
+      });
+    },
+
+    crawlingQuest(cword) {
+      var form = new FormData();
+      form.append("clickWord", cword);
+      console.log(cword);
+      var baseURI = "http://13.209.125.223/api/example";
+      axios
+        .post(baseURI, form)
+        .then(res => {
+          console.log("crawling ok", res);
+          this.crawlWords = res.data.example;
+          this.crawlMeans = res.data.means;
+          this.mainWord = cword;
+          console.log("crawling word ok", this.crawlMeans[0]);
+        })
+        .catch(error => {
+          console.log("failed", error);
+        });
+    },
+    changeNumber(i) {
+      this.selectNumber = i;
+    }
+  },
+
+  beforeCreate() {
+    var baseURI = "http://13.209.125.223/api/line/0";
+    axios
+      .get(baseURI)
+      .then(res => {
+        this.lines = res.data;
+        console.log("beforeCreate OK", this.lines);
+      })
+      .catch(error => {
+        console.log("failed", error);
+      });
+    baseURI = "http://13.209.125.223/api/lineBook";
+    axios
+      .get(baseURI)
+      .then(res => {
+        this.books = res.data;
+        console.log("okkkkkkkkkkkkk", this.books);
+      })
+      .catch(error => {
+        console.log("failed", error);
+      });
+  }
 };
 </script>
 
 <style lang="css" scoped>
 #memorized {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

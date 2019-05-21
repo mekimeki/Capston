@@ -5,23 +5,20 @@
 </template>
 
 <script>
-
-import allWord_ from '@/components/wordBook_/AllWord';
+import allWord_ from "@/components/wordBook_/AllWord";
 
 export default {
-components:{
-    
-    allWord_,
-},
-data(){
-    return{
-    }
-},
-}
+  components: {
+    allWord_
+  },
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style lang="css" scoped>
-.container{
-    max-width: 82%
+.container {
+  max-width: 82%;
 }
 </style>

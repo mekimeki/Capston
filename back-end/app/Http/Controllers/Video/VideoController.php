@@ -103,11 +103,11 @@ class VideoController extends Controller
 
     public function originalUpload(Request $request){
        //return $request;
-       $m_id = $this->check->check($request);
-       
-       if(isset($m_id[0]['messages']) ){
-            return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
-       }
+      //  $m_id = $this->check->check($request);
+       $m_id = 1;
+      //  if(isset($m_id[0]['messages']) ){
+      //       return response()->json([ 'messages'=>$m_id[0]['messages'] ],200);
+      //  }
       
       $video = Video::create([
             'm_id'=> $m_id,
